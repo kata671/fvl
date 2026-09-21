@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>FAEM Generator — Fractal Vibration Lab</title>
+<meta name="description" content="Generator wzorów FAEM: superpozycja modów własnych, wymiar fraktalny, domeny, regresja Df vs energia na żywo."/>
+<meta name="theme-color" content="#08061a"/>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%2308061a'/%3E%3Ccircle cx='16' cy='16' r='9.5' fill='none' stroke='%238f6bff' stroke-width='1.3'/%3E%3Ccircle cx='16' cy='16' r='1.5' fill='%23e0c48c'/%3E%3C/svg%3E"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --bg:#08061a;--panel:rgba(34,24,66,.55);--panel-solid:#150f2c;--border:rgba(168,140,255,.15);
+  --border2:rgba(168,140,255,.32);--text:#f5f1fc;--muted:#ab9dd8;--dim:#6f6098;
+  --violet:#8f6bff;--violet-deep:#5a35d6;--violet2:#cbbaff;--gold:#e0c48c;--ok:#7fe3b4;--warn:#e0a373;
+  --radius:16px;--serif:"Fraunces",Georgia,serif;--sans:Inter,system-ui,sans-serif;--mono:"JetBrains Mono",ui-monospace,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+strong{color:var(--gold);font-weight:700}
+body{
+  background:var(--bg);color:var(--text);
+  font-family:var(--sans);min-height:100vh;line-height:1.6;
+  background-image:
+    radial-gradient(ellipse 70% 42% at 12% -6%,rgba(143,107,255,.16),transparent 52%),
+    radial-gradient(ellipse 55% 34% at 92% 6%,rgba(90,53,214,.13),transparent 48%),
+    radial-gradient(ellipse 50% 30% at 50% 105%,rgba(143,107,255,.06),transparent 42%);
+}
+a{color:var(--violet);text-decoration:none}
+.topbar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 26px;border-bottom:1px solid var(--border);
+  background:rgba(6,4,18,.82);backdrop-filter:blur(18px) saturate(1.3);position:sticky;top:0;z-index:20;
+}
+.topbar .brand{font-family:var(--serif);font-weight:600;font-size:15px}
+.topbar .brand span{color:var(--violet2)}
+.topbar .status{display:inline-flex;align-items:center;gap:7px;font-size:11.5px;color:var(--dim);margin-left:14px;font-family:var(--mono)}
+.topbar .status i{width:6px;height:6px;border-radius:50%;background:var(--ok);box-shadow:0 0 8px var(--ok);animation:blink 2.6s ease-in-out infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.35}}
+.topbar a.back{font-size:13px;color:var(--muted);font-weight:500;transition:color .2s}
+.topbar a.back:hover{color:var(--violet2)}
+
+.wrap{max-width:1120px;margin:0 auto;padding:36px 22px 56px;position:relative;z-index:1}
+.head-row{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap;margin-bottom:8px}
+h1{font-family:var(--serif);font-size:28px;font-weight:600;letter-spacing:-.01em}
+.sub{color:var(--muted);font-size:14.5px;margin-bottom:6px;max-width:600px;line-height:1.7}
+
+.legend{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);
+  border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin:26px 0 32px;
+}
+@media(max-width:720px){.legend{grid-template-columns:1fr}}
+.legend .cell{background:var(--panel-solid);padding:16px 18px}
+.legend .cell b{display:block;font-family:var(--mono);font-size:12px;color:var(--violet2);letter-spacing:.03em;margin-bottom:6px;font-weight:600}
+.legend .cell span{font-size:13px;color:var(--muted);line-height:1.55}
+
+.grid{display:grid;grid-template-columns:400px 1fr;gap:22px}
+@media(max-width:900px){.grid{grid-template-columns:1fr}}
+
+.panel{
+  background:linear-gradient(155deg,rgba(143,107,255,.05),var(--panel));backdrop-filter:blur(12px);
+  border:1px solid var(--border);border-radius:var(--radius);padding:18px;
+}
+.panel-title{font-family:var(--serif);font-size:14.5px;font-weight:600;color:var(--text);margin-bottom:14px;
+  display:flex;align-items:center;gap:8px;letter-spacing:.01em}
+.panel-title .dot{width:6px;height:6px;border-radius:50%;background:var(--violet)}
+
+.canvas-frame{position:relative;border-radius:12px;overflow:hidden;box-shadow:0 0 0 1px var(--border2),0 20px 50px -25px rgba(90,53,214,.5)}
+canvas.pattern{
+  width:100%;aspect-ratio:1;display:block;image-rendering:pixelated;background:#0b0818;
+}
+.canvas-frame::after{
+  content:"";position:absolute;inset:0;pointer-events:none;border-radius:12px;
+  box-shadow:inset 0 0 46px rgba(143,107,255,.1);
+}
+.corner{position:absolute;width:14px;height:14px;border:1.5px solid var(--violet2);opacity:.55;pointer-events:none}
+.corner.tl{top:8px;left:8px;border-right:none;border-bottom:none}
+.corner.tr{top:8px;right:8px;border-left:none;border-bottom:none}
+.corner.bl{bottom:8px;left:8px;border-right:none;border-top:none}
+.corner.br{bottom:8px;right:8px;border-left:none;border-top:none}
+
+.stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:14px}
+.stat{
+  background:rgba(0,0,0,.28);border:1px solid var(--border);border-radius:11px;
+  padding:13px 8px;text-align:center;transition:border-color .2s;
+}
+.stat:hover{border-color:var(--border2)}
+.stat .lbl{font-size:10px;color:var(--violet2);text-transform:uppercase;letter-spacing:.1em;margin-bottom:5px;font-weight:700}
+.stat .val{font-size:19px;font-family:var(--mono);font-weight:700;color:var(--text)}
+
+.section-lbl{font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--dim);font-weight:700;margin:20px 0 10px}
+.sliders{margin-top:2px}
+.slider-row{margin-bottom:16px}
+.slider-row label{display:flex;justify-content:space-between;font-size:12.5px;color:var(--muted);margin-bottom:8px;font-weight:600}
+.slider-row label .v{color:var(--gold);font-family:var(--mono);font-weight:700}
+input[type=range]{
+  width:100%;height:4px;border-radius:99px;accent-color:var(--violet);
+  background:linear-gradient(90deg,var(--violet-deep),var(--violet));cursor:pointer;
+}
+.btns{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+button{
+  border:none;border-radius:10px;padding:11px 16px;font-size:13px;font-weight:700;
+  cursor:pointer;font-family:inherit;flex:1;min-width:100px;transition:all .2s;
+}
+.btn-accent{background:linear-gradient(135deg,var(--violet),var(--violet-deep));color:#fbf9ff;box-shadow:0 6px 18px -6px rgba(90,53,214,.6)}
+.btn-accent:hover{transform:translateY(-1px);box-shadow:0 10px 26px -8px rgba(90,53,214,.75)}
+.btn-dark{background:rgba(143,107,255,.1);color:var(--text);border:1px solid var(--border2)}
+.btn-dark:hover{background:rgba(143,107,255,.18)}
+.btn-ghost{background:transparent;color:var(--muted);border:1px solid var(--border);flex:0}
+.btn-ghost:hover{color:var(--text);border-color:var(--border2)}
+
+.right-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;gap:8px;flex-wrap:wrap}
+.right-head h2{font-family:var(--serif);font-size:16px;font-weight:600}
+#plot{width:100%;height:320px;border-radius:11px;background:#0b0818;display:none}
+.empty{
+  height:296px;display:flex;align-items:center;justify-content:center;
+  color:var(--dim);font-size:13.5px;text-align:center;padding:32px;line-height:1.7;
+  border:1px dashed var(--border2);border-radius:11px;
+}
+.fit-info{
+  margin-top:16px;font-size:13.5px;line-height:1.6;padding:16px 18px;
+  border-radius:12px;background:linear-gradient(155deg,rgba(143,107,255,.06),rgba(0,0,0,.25));border:1px solid var(--border);
+}
+.fit-info.ok{border-color:rgba(217,196,140,.4);background:linear-gradient(155deg,rgba(224,196,140,.08),rgba(0,0,0,.25))}
+.fit-info.warn{border-color:rgba(224,163,115,.35)}
+.fit-info .mono{font-family:var(--mono);color:var(--gold);font-weight:700}
+.badge{
+  display:inline-block;font-size:11px;padding:3px 9px;border-radius:99px;
+  margin-left:6px;font-weight:700;letter-spacing:.02em;
+}
+.badge-ok{background:rgba(217,196,140,.15);color:var(--gold)}
+.badge-warn{background:rgba(224,163,115,.14);color:var(--warn)}
+.footnote{
+  margin-top:26px;font-size:12.5px;color:var(--dim);line-height:1.7;
+  border-top:1px solid var(--border);padding-top:18px;
+}
+.footnote strong{color:var(--violet2)}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div style="display:flex;align-items:center">
+    <div class="brand">Fractal <span>Vibration</span> Lab</div>
+    <span class="status"><i></i>generator aktywny</span>
+  </div>
+  <a class="back" href="kalkulator.html" style="margin-right:16px">Kalkulator →</a>
+  <a class="back" href="index.html">← Strona główna</a>
+</div>
+<div class="wrap">
+  <div class="head-row">
+    <div>
+      <h1>FAEM Generator</h1>
+      <p class="sub">Superpozycja modów własnych membrany kwadratowej — <strong>wymiar fraktalny</strong>, <strong>domeny</strong> i regresja log–log na żywo, w przeglądarce.</p>
+    </div>
+  </div>
+
+  <div class="legend">
+    <div class="cell"><b>Df</b><span>Wymiar fraktalny linii węzłowych, liczony metodą box-counting w oknach 2–26 px.</span></div>
+    <div class="cell"><b>domeny</b><span>Liczba spójnych obszarów tła po progowaniu Otsu i domykaniu morfologicznym.</span></div>
+    <div class="cell"><b>energia</b><span>N × rozpiętość częstotliwości modów — przybliżona miara wstrzykniętej energii.</span></div>
+  </div>
+
+  <div class="grid">
+    <div>
+      <div class="panel">
+        <div class="panel-title"><span class="dot"></span>Wzór</div>
+        <div class="canvas-frame">
+          <canvas id="canvas" class="pattern" width="200" height="200"></canvas>
+          <div class="corner tl"></div><div class="corner tr"></div><div class="corner bl"></div><div class="corner br"></div>
+        </div>
+        <div class="stats">
+          <div class="stat"><div class="lbl">Df</div><div class="val" id="vDf">—</div></div>
+          <div class="stat"><div class="lbl">domeny</div><div class="val" id="vDom">—</div></div>
+          <div class="stat"><div class="lbl">energia</div><div class="val" id="vE">—</div></div>
+        </div>
+
+        <div class="section-lbl">Parametry</div>
+        <div class="sliders">
+          <div class="slider-row">
+            <label>Liczba fal (N) <span class="v" id="lblN">14</span></label>
+            <input type="range" id="nModes" min="3" max="40" value="14"/>
+          </div>
+          <div class="slider-row">
+            <label>Tłumienie (α) <span class="v" id="lblA">1.50</span></label>
+            <input type="range" id="alpha" min="0.3" max="4" step="0.05" value="1.5"/>
+          </div>
+        </div>
+
+        <div class="section-lbl">Eksploracja</div>
+        <div class="btns">
+          <button class="btn-dark" id="btnPhase">↻ nowe fazy</button>
+          <button class="btn-accent" id="btnSave">+ zapisz punkt</button>
+        </div>
+        <div class="section-lbl">Zbiór danych</div>
+        <div class="btns">
+          <button class="btn-dark" id="btnExport">⬇ eksport CSV</button>
+          <button class="btn-ghost" id="btnClear">wyczyść</button>
+        </div>
+      </div>
+    </div>
+    <div class="panel" style="padding:22px;display:flex;flex-direction:column">
+      <div class="right-head">
+        <h2><span class="dot" style="display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--violet);margin-right:8px"></span>Df vs energia</h2>
+        <span id="nPoints" style="font-size:12px;color:var(--dim);font-family:var(--mono)">0 punktów</span>
+      </div>
+      <div id="empty" class="empty">Zmieniaj parametry i kliknij <strong>„zapisz punkt”</strong>, żeby budować zbiór. Regresja pojawi się od 3 punktów.</div>
+      <canvas id="plot"></canvas>
+      <div id="fitInfo" class="fit-info" style="display:none"></div>
+    </div>
+  </div>
+  <div class="footnote">
+    <strong>Df</strong> — box-counting · <strong>domeny</strong> — obszary między liniami węzłowymi (Otsu + domykanie) ·
+    <strong>energia</strong> ≈ N × rozpiętość częstotliwości. Narzędzie do eksploracji; R² &lt; 0,5 = słaba zależność.
+  </div>
+</div>
+<script>
+const K_ALL=(()=>{const s=new Set();for(let m=1;m<=12;m++)for(let n=1;n<=12;n++)s.add(Math.PI*Math.sqrt(m*m+n*n));return[...s].sort((a,b)=>a-b)})();
+function mulberry32(seed){return function(){seed|=0;seed=seed+0x6d2b79f5|0;let t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+function generatePattern(N,alpha,res,seed){
+  const rand=mulberry32(seed);const ks=K_ALL.slice(0,N);const phis=ks.map(()=>rand()*Math.PI*2);
+  const grid=new Float32Array(res*res);let maxAbs=0;
+  for(let j=0;j<res;j++){const y=j/(res-1)*2-1;
+    for(let i=0;i<res;i++){const x=i/(res-1)*2-1;const r=Math.sqrt(x*x+y*y);let v=0;
+      for(let n=0;n<ks.length;n++)v+=Math.cos(ks[n]*r+phis[n])*Math.exp(-alpha*r);
+      grid[j*res+i]=v;if(Math.abs(v)>maxAbs)maxAbs=Math.abs(v)}}
+  const bandwidth=ks.length>1?ks[ks.length-1]-ks[0]:ks[0];
+  return{grid,maxAbs,energy:ks.length*bandwidth}}
+function otsuThreshold(absGrid){
+  const bins=new Array(256).fill(0);let maxV=0;
+  for(let i=0;i<absGrid.length;i++)if(absGrid[i]>maxV)maxV=absGrid[i];if(!maxV)maxV=1;
+  for(let i=0;i<absGrid.length;i++)bins[Math.min(255,Math.floor(absGrid[i]/maxV*255))]++;
+  const total=absGrid.length;let sum=0;for(let t=0;t<256;t++)sum+=t*bins[t];
+  let sumB=0,wB=0,best=0,bestVar=-1;
+  for(let t=0;t<256;t++){wB+=bins[t];if(!wB)continue;const wF=total-wB;if(!wF)break;
+    sumB+=t*bins[t];const mB=sumB/wB,mF=(sum-sumB)/wF;const v=wB*wF*(mB-mF)*(mB-mF);
+    if(v>bestVar){bestVar=v;best=t}}
+  return best/255*maxV}
+function boxCountDf(binary,res){
+  const sizes=[2,3,4,6,9,13,18,26];const logx=[],logy=[];
+  for(const s of sizes){let count=0;
+    for(let j=0;j<res;j+=s)for(let i=0;i<res;i+=s){let found=false;
+      for(let jj=j;jj<Math.min(j+s,res)&&!found;jj++)for(let ii=i;ii<Math.min(i+s,res)&&!found;ii++)if(binary[jj*res+ii])found=true;
+      if(found)count++}
+    logx.push(Math.log(1/s));logy.push(Math.log(Math.max(count,1)))}
+  const n=logx.length;const mx=logx.reduce((a,b)=>a+b,0)/n;const my=logy.reduce((a,b)=>a+b,0)/n;
+  let num=0,den=0;for(let i=0;i<n;i++){num+=(logx[i]-mx)*(logy[i]-my);den+=(logx[i]-mx)**2}
+  return den===0?0:num/den}
+function countDomains(binary,res,closingIters,minAreaFrac){
+  let mask=binary.slice();
+  for(let it=0;it<closingIters;it++){const next=new Uint8Array(res*res);
+    for(let j=0;j<res;j++)for(let i=0;i<res;i++){let v=mask[j*res+i];
+      if(!v){if(i>0&&mask[j*res+i-1])v=1;else if(i<res-1&&mask[j*res+i+1])v=1;
+      else if(j>0&&mask[(j-1)*res+i])v=1;else if(j<res-1&&mask[(j+1)*res+i])v=1}
+      next[j*res+i]=v}mask=next}
+  const visited=new Uint8Array(res*res);const minArea=minAreaFrac*res*res;let domains=0;
+  const stack=new Int32Array(res*res);
+  for(let start=0;start<res*res;start++){if(mask[start]||visited[start])continue;
+    let sp=0;stack[sp++]=start;visited[start]=1;let area=0;
+    while(sp>0){const idx=stack[--sp];area++;const j=(idx/res)|0,i=idx%res;
+      for(const nb of[i>0?idx-1:-1,i<res-1?idx+1:-1,j>0?idx-res:-1,j<res-1?idx+res:-1])
+        if(nb>=0&&!mask[nb]&&!visited[nb]){visited[nb]=1;stack[sp++]=nb}}
+    if(area>minArea)domains++}
+  return domains}
+const RES=200;let seed=7,stats={Df:0,domains:0,energy:0},history=[];
+try{const raw=localStorage.getItem('faem_history');if(raw){const parsed=JSON.parse(raw);if(Array.isArray(parsed))history=parsed}}catch(_){}
+function persistHistory(){try{localStorage.setItem('faem_history',JSON.stringify(history))}catch(_){}}
+const canvas=document.getElementById("canvas"),ctx=canvas.getContext("2d");
+const plot=document.getElementById("plot"),pctx=plot.getContext("2d");
+function render(){
+  const N=+document.getElementById("nModes").value,alpha=+document.getElementById("alpha").value;
+  document.getElementById("lblN").textContent=`Liczba fal (N): ${N}`;
+  document.getElementById("lblA").textContent=`Tłumienie (α): ${alpha.toFixed(2)}`;
+  const{grid,maxAbs,energy}=generatePattern(N,alpha,RES,seed);
+  const absGrid=new Float32Array(RES*RES);for(let i=0;i<grid.length;i++)absGrid[i]=Math.abs(grid[i]);
+  const thresh=otsuThreshold(absGrid);const binary=new Uint8Array(RES*RES);
+  for(let i=0;i<grid.length;i++)binary[i]=absGrid[i]>thresh?1:0;
+  const Df=boxCountDf(binary,RES),domains=countDomains(binary,RES,2,0.003);
+  stats={Df,domains,energy};
+  document.getElementById("vDf").textContent=Df.toFixed(3);
+  document.getElementById("vDom").textContent=domains;
+  document.getElementById("vE").textContent=Math.round(energy);
+  const img=ctx.createImageData(RES,RES);
+  for(let i=0;i<RES*RES;i++){
+    const v=binary[i]?255:0;const t=Math.min(255,Math.abs(grid[i])/(maxAbs||1)*255*0.4);
+    img.data[i*4]=v?230:10+t*0.25;img.data[i*4+1]=v?218:6+t*0.15;img.data[i*4+2]=v?255:22+t*0.5;img.data[i*4+3]=255}
+  ctx.putImageData(img,0,0)}
+function linreg(xs,ys){
+  const n=xs.length;if(n<2)return null;let sx=0,sy=0,sxx=0,sxy=0;
+  for(let i=0;i<n;i++){sx+=xs[i];sy+=ys[i];sxx+=xs[i]*xs[i];sxy+=xs[i]*ys[i]}
+  const den=n*sxx-sx*sx;if(Math.abs(den)<1e-12)return null;
+  const slope=(n*sxy-sx*sy)/den,intercept=(sy-slope*sx)/n,yMean=sy/n;
+  let ssTot=0,ssRes=0;for(let i=0;i<n;i++){const pred=intercept+slope*xs[i];ssTot+=(ys[i]-yMean)**2;ssRes+=(ys[i]-pred)**2}
+  return{slope,intercept,r2:ssTot<1e-12?0:1-ssRes/ssTot}}
+function drawPlot(){
+  const empty=document.getElementById("empty"),fitInfo=document.getElementById("fitInfo");
+  document.getElementById("nPoints").textContent=history.length+" punktów";
+  if(!history.length){plot.style.display="none";empty.style.display="flex";fitInfo.style.display="none";return}
+  empty.style.display="none";plot.style.display="block";fitInfo.style.display="block";
+  const W=plot.clientWidth||500,H=300;plot.width=W;plot.height=H;
+  const pad={l:48,r:16,t:16,b:40};
+  const energies=history.map(h=>h.energy),dfs=history.map(h=>h.Df);
+  const logE=energies.map(e=>Math.log(Math.max(e,1e-6)));
+  let minLE=Math.min(...logE),maxLE=Math.max(...logE),minD=Math.min(...dfs),maxD=Math.max(...dfs);
+  if(maxLE-minLE<1e-6){minLE-=.5;maxLE+=.5}if(maxD-minD<1e-6){minD-=.05;maxD+=.05}
+  const dLE=(maxLE-minLE)*.1||.3,dD=(maxD-minD)*.12||.05;
+  minLE-=dLE;maxLE+=dLE;minD-=dD;maxD+=dD;
+  const xOf=le=>pad.l+((le-minLE)/(maxLE-minLE))*(W-pad.l-pad.r);
+  const yOf=d=>pad.t+(1-(d-minD)/(maxD-minD))*(H-pad.t-pad.b);
+  pctx.fillStyle="#0b0818";pctx.fillRect(0,0,W,H);
+  pctx.strokeStyle="rgba(143,107,255,0.1)";pctx.lineWidth=1;
+  for(let i=0;i<=4;i++){const y=pad.t+i/4*(H-pad.t-pad.b);pctx.beginPath();pctx.moveTo(pad.l,y);pctx.lineTo(W-pad.r,y);pctx.stroke();
+    const x=pad.l+i/4*(W-pad.l-pad.r);pctx.beginPath();pctx.moveTo(x,pad.t);pctx.lineTo(x,H-pad.b);pctx.stroke()}
+  const fit=linreg(logE,dfs);
+  if(fit&&history.length>=3){const y1=fit.intercept+fit.slope*minLE,y2=fit.intercept+fit.slope*maxLE;
+    pctx.strokeStyle="rgba(143,107,255,0.65)";pctx.lineWidth=2;pctx.beginPath();
+    pctx.moveTo(xOf(minLE),yOf(y1));pctx.lineTo(xOf(maxLE),yOf(y2));pctx.stroke()}
+  for(const h of history){const le=Math.log(Math.max(h.energy,1e-6));
+    pctx.fillStyle="#e0c48c";pctx.beginPath();pctx.arc(xOf(le),yOf(h.Df),5.5,0,Math.PI*2);pctx.fill();
+    pctx.strokeStyle="rgba(255,255,255,0.3)";pctx.lineWidth=1;pctx.stroke()}
+  pctx.fillStyle="#ab9dd8";pctx.font="11px Inter,system-ui";pctx.textAlign="center";
+  pctx.fillText("energia (log)",W/2,H-12);
+  pctx.save();pctx.translate(14,H/2);pctx.rotate(-Math.PI/2);pctx.fillText("Df",0,0);pctx.restore();
+  if(fit&&history.length>=3){const beta=-fit.slope,r2=fit.r2,good=r2>=0.5;
+    fitInfo.className="fit-info "+(good?"ok":"warn");
+    fitInfo.innerHTML=`β ≈ <span class="mono">${beta.toFixed(3)}</span> · R² = <span class="mono">${r2.toFixed(3)}</span>`+
+      `<span class="badge ${good?"badge-ok":"badge-warn"}">${good?"R² ≥ 0.5":"R² < 0.5"}</span>`+
+      `<br><span style="color:var(--dim);font-size:12px">Symulacja — nie dowód eksperymentalny.</span>`}
+  else{fitInfo.className="fit-info";fitInfo.innerHTML="Zapisz ≥ 3 punkty, żeby zobaczyć regresję."}}
+function savePoint(){history.push({energy:stats.energy,Df:stats.Df,domains:stats.domains,N:+document.getElementById("nModes").value,alpha:+document.getElementById("alpha").value,seed});persistHistory();drawPlot()}
+function clearHistory(){history=[];persistHistory();drawPlot()}
+function exportCSV(){
+  if(!history.length){alert("Brak punktów");return}
+  const rows=["energy,Df,domains,N,alpha,seed",...history.map(h=>[h.energy,h.Df,h.domains,h.N,h.alpha,h.seed].join(","))];
+  const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([rows.join("\n")],{type:"text/csv"}));
+  a.download="faem_points.csv";a.click()}
+document.getElementById("nModes").addEventListener("input",render);
+document.getElementById("alpha").addEventListener("input",render);
+document.getElementById("btnPhase").addEventListener("click",()=>{seed++;render()});
+document.getElementById("btnSave").addEventListener("click",savePoint);
+document.getElementById("btnClear").addEventListener("click",clearHistory);
+document.getElementById("btnExport").addEventListener("click",exportCSV);
+window.addEventListener("resize",()=>{if(history.length)drawPlot()});
+render();drawPlot();
+</script>
+
+<style>
+.cmdk-overlay{position:fixed;inset:0;z-index:300;background:rgba(5,3,15,.72);backdrop-filter:blur(4px);display:none;align-items:flex-start;justify-content:center;padding-top:12vh}
+.cmdk-overlay.open{display:flex}
+.cmdk-box{width:min(560px,90vw);background:var(--panel-solid,#150f2c);border:1px solid var(--border2,rgba(168,140,255,.32));border-radius:16px;box-shadow:0 30px 80px -20px rgba(0,0,0,.6);overflow:hidden}
+.cmdk-input-row{display:flex;align-items:center;gap:10px;padding:14px 16px;border-bottom:1px solid var(--border,rgba(168,140,255,.15))}
+.cmdk-input-row svg{opacity:.5;flex-shrink:0;color:var(--muted,#ab9dd8)}
+.cmdk-input{flex:1;background:transparent;border:none;outline:none;color:var(--text,#f5f1fc);font-family:var(--sans,Inter,sans-serif);font-size:15px}
+.cmdk-input::placeholder{color:var(--dim,#6f6098)}
+.cmdk-esc{font-family:var(--mono,monospace);font-size:10.5px;color:var(--dim,#6f6098);border:1px solid var(--border,rgba(168,140,255,.15));border-radius:5px;padding:2px 6px}
+.cmdk-list{max-height:320px;overflow-y:auto;padding:6px}
+.cmdk-item{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 12px;border-radius:10px;cursor:pointer;font-size:14px;color:var(--muted,#ab9dd8)}
+.cmdk-item .t{color:var(--text,#f5f1fc);font-weight:600;font-size:13.5px}
+.cmdk-item .d{font-size:11.5px;color:var(--dim,#6f6098);margin-top:2px}
+.cmdk-item.active{background:rgba(143,107,255,.14)}
+.cmdk-item.active .t{color:var(--violet2,#cbbaff)}
+.cmdk-tag{font-family:var(--mono,monospace);font-size:10px;color:var(--dim,#6f6098);border:1px solid var(--border,rgba(168,140,255,.15));border-radius:5px;padding:2px 6px;white-space:nowrap;flex-shrink:0}
+.cmdk-empty{padding:24px;text-align:center;color:var(--dim,#6f6098);font-size:13px}
+.cmdk-hint{position:fixed;bottom:18px;right:18px;z-index:150;font-family:var(--mono,monospace);font-size:11px;color:var(--dim,#6f6098);
+  background:rgba(6,4,18,.72);border:1px solid var(--border,rgba(168,140,255,.15));border-radius:9px;padding:7px 11px;backdrop-filter:blur(8px);
+  display:flex;align-items:center;gap:6px;cursor:pointer;transition:all .2s}
+.cmdk-hint:hover{color:var(--text,#f5f1fc);border-color:var(--border2,rgba(168,140,255,.32))}
+.cmdk-hint kbd{font-family:var(--mono,monospace);background:rgba(255,255,255,.08);border-radius:4px;padding:1px 5px}
+@media(max-width:640px){.cmdk-hint{display:none}}
+</style>
+
+<div class="cmdk-hint" id="cmdkHint">Szukaj <kbd>Ctrl</kbd>+<kbd>K</kbd></div>
+<div class="cmdk-overlay" id="cmdkOverlay">
+  <div class="cmdk-box">
+    <div class="cmdk-input-row">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input class="cmdk-input" id="cmdkInput" type="text" placeholder="Szukaj strony, narzędzia…" autocomplete="off"/>
+      <span class="cmdk-esc">ESC</span>
+    </div>
+    <div class="cmdk-list" id="cmdkList"></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  const DEST=[{"t": "Strona główna — FAEM", "d": "Pipeline i wprowadzenie", "tag": "strona", "href": "index.html"}, {"t": "Kalkulator laboratoryjny", "d": "Częstotliwości płytki, fala, tłumienie (Q)", "tag": "narzędzie", "href": "kalkulator.html"}, {"t": "Generator FAEM", "d": "Superpozycja modów, Df, domeny", "tag": "narzędzie", "href": "faem_generator.html"}, {"t": "Chladni — skalowanie nodalne", "d": "Analiza i atlas częstotliwości (z dźwiękiem)", "tag": "notatka", "href": "research/chladni-skalowanie-nodalne.html"}, {"t": "Struktura jako programowalna częstotliwość", "d": "Notatka koncepcyjna", "tag": "notatka", "href": "research/struktura-jako-programowalna-czestotliwosc.html"}, {"t": "Optyka — ograniczenia i rozwiązania", "d": "Przegląd", "tag": "notatka", "href": "research/optyka-ograniczenia-i-nowoczesne-rozwiazania.html"}, {"t": "Kontakt", "d": "Napisz do nas", "tag": "strona", "href": "index.html#contact"}];
+  const overlay=document.getElementById("cmdkOverlay"),input=document.getElementById("cmdkInput"),list=document.getElementById("cmdkList"),hint=document.getElementById("cmdkHint");
+  if(!overlay)return;
+  let items=DEST.slice(),active=0;
+  function render(){
+    if(!items.length){list.innerHTML='<div class="cmdk-empty">Brak wyników</div>';return}
+    list.innerHTML=items.map((d,i)=>`<div class="cmdk-item${i===active?" active":""}" data-i="${i}"><div><div class="t">${d.t}</div><div class="d">${d.d}</div></div><span class="cmdk-tag">${d.tag}</span></div>`).join("");
+    const el=list.querySelector(".cmdk-item.active");if(el)el.scrollIntoView({block:"nearest"});
+  }
+  function open(){overlay.classList.add("open");input.value="";items=DEST.slice();active=0;render();setTimeout(()=>input.focus(),10)}
+  function close(){overlay.classList.remove("open")}
+  function go(i){const it=items[i];if(it)location.href=it.href}
+  hint.addEventListener("click",open);
+  document.addEventListener("keydown",e=>{
+    if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==="k"){e.preventDefault();overlay.classList.contains("open")?close():open()}
+    else if(e.key==="Escape"&&overlay.classList.contains("open"))close();
+    else if(overlay.classList.contains("open")){
+      if(e.key==="ArrowDown"){e.preventDefault();active=Math.min(active+1,items.length-1);render()}
+      else if(e.key==="ArrowUp"){e.preventDefault();active=Math.max(active-1,0);render()}
+      else if(e.key==="Enter"){e.preventDefault();go(active)}
+    }
+  });
+  input.addEventListener("input",()=>{
+    const q=input.value.toLowerCase().trim();
+    items=DEST.filter(d=>d.t.toLowerCase().includes(q)||d.d.toLowerCase().includes(q)||d.tag.toLowerCase().includes(q));
+    active=0;render();
+  });
+  list.addEventListener("click",e=>{const it=e.target.closest(".cmdk-item");if(it)go(+it.dataset.i)});
+  overlay.addEventListener("click",e=>{if(e.target===overlay)close()});
+})();
+</script>
+</body>
+</html>
