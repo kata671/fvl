@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Optyka — ograniczenia i nowoczesne rozwiązania technologiczne | Fractal Vibration Lab</title>
+  <meta name="theme-color" content="#0a0818">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0a0818;
+      --panel: rgba(30,22,58,.55);
+      --border: rgba(157,130,255,.14);
+      --border2: rgba(157,130,255,.3);
+      --text: #f2eefb;
+      --muted: #a99bd6;
+      --dim: #6b5c94;
+      --accent: #8b6bff;
+      --accent2: #c6b6ff;
+      --gold: #d9bf82;
+      --radius: 18px;
+      --serif: "Fraunces", Georgia, serif;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family: Inter, system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      min-height: 100vh;
+    }
+    body::before {
+      content: "";
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background:
+        radial-gradient(ellipse 80% 50% at 10% -10%, rgba(139,107,255,.14), transparent 50%),
+        radial-gradient(ellipse 60% 40% at 90% 10%, rgba(90,60,200,.09), transparent 45%);
+    }
+    .subnav{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:36px}
+    .subnav a{font-size:12.5px;color:var(--dim);padding:6px 12px;border:1px solid var(--border);border-radius:99px;text-decoration:none}
+    .subnav a.here{color:var(--accent2);border-color:var(--border2);background:rgba(139,107,255,.08)}
+    .subnav a:hover{color:var(--text)}
+    .wrap {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 60px 24px 80px;
+      position: relative;
+      z-index: 1;
+    }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { color: var(--accent2); }
+    .back {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 40px;
+      transition: color .2s;
+    }
+    .back:hover { color: var(--accent); }
+    .lab-name {
+      font-size: 12px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--accent);
+      font-weight: 600;
+      margin-bottom: 14px;
+    }
+    h1 {
+      font-family: var(--serif);
+      font-size: clamp(26px, 5vw, 34px);
+      font-weight: 600;
+      letter-spacing: -.01em;
+      line-height: 1.25;
+      margin-bottom: 12px;
+    }
+    .subtitle {
+      color: var(--muted);
+      font-size: 15px;
+      margin-bottom: 40px;
+    }
+    h2 {
+      font-family: var(--serif);
+      font-size: 19px;
+      font-weight: 600;
+      color: var(--text);
+      margin: 40px 0 14px;
+    }
+    p { margin-bottom: 16px; color: var(--text); }
+    ul {
+      margin: 12px 0 24px 20px;
+      color: var(--muted);
+    }
+    li { margin-bottom: 8px; }
+    strong { color: #fff; font-weight: 600; }
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 22px 24px;
+      margin: 28px 0;
+    }
+    .panel.highlight {
+      border-color: rgba(111,216,255,.28);
+      background: linear-gradient(145deg, rgba(111,216,255,.06), var(--panel));
+    }
+    footer {
+      margin-top: 56px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+      font-size: 13px;
+      color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <a href="../index.html" class="back">← Fractal Vibration Lab</a>
+
+    <div class="subnav">
+      <a href="chladni-skalowanie-nodalne.html">Chladni</a>
+      <a href="struktura-jako-programowalna-czestotliwosc.html">Struktura</a>
+      <a class="here" href="optyka-ograniczenia-i-nowoczesne-rozwiazania.html">Optyka</a>
+      <a href="../kalkulator.html">Kalkulator</a>
+      <a href="../faem_generator.html">Generator</a>
+    </div>
+
+    <div class="lab-name">Fractal Vibration Lab · Research Note</div>
+    <h1>Optyka — ograniczenia i nowoczesne rozwiązania technologiczne</h1>
+    <p class="subtitle">Notatka koncepcyjna</p>
+
+    <p>
+      Klasyczna optyka opiera się na falach elektromagnetycznych i geometrii soczewek, zwierciadeł oraz apertur.
+      Przez dekady rozwój systemów optycznych był ograniczony przez fundamentalne prawa fizyki:
+      dyfrakcję, aberracje, straty materiałowe i ograniczenia rozdzielczości.
+      Współczesne technologie nie eliminują tych ograniczeń całkowicie, lecz uczą się je omijać,
+      rekompensować lub przekształcać w nowe możliwości.
+    </p>
+
+    <h2>1. Fundamentalne ograniczenia optyki</h2>
+
+    <p><strong>Granica dyfrakcyjna</strong><br>
+    Rozdzielczość układu optycznego jest ograniczona przez dyfrakcję. Kryterium Rayleigha pokazuje,
+      że minimalna odległość rozróżnialnych punktów zależy od długości fali i apertury.
+      To twarde ograniczenie dla mikroskopii, teleskopów i systemów obrazowania.</p>
+
+    <p><strong>Aberracje optyczne</strong><br>
+    Sferyczna, chromatyczna, koma, astygmatyzm — wynikają z geometrii powierzchni i dyspersji materiałów.
+      Klasyczne korekty wymagają złożonych układów wielosoczewkowych, które zwiększają masę, koszt i straty światła.</p>
+
+    <p><strong>Straty i dyspersja materiałowa</strong><br>
+    Każdy materiał optyczny wprowadza absorpcję, rozpraszanie i zależność współczynnika załamania od długości fali.
+      W zakresie UV, IR i THz dostępność materiałów jest szczególnie ograniczona.</p>
+
+    <p><strong>Apertura i etendue</strong><br>
+    Ilość światła, którą system może zebrać i przekazać, jest ograniczona przez etendue.
+      Nie da się dowolnie zwiększyć jasności obrazu bez zmiany geometrii lub źródła.</p>
+
+    <h2>2. Nowoczesne strategie omijania ograniczeń</h2>
+
+    <div class="panel">
+      <p style="margin:0"><strong>Metamateriały i metasurface’y</strong><br>
+      Struktury o podfalowej geometrii pozwalają lokalnie kontrolować fazę, amplitudę i polaryzację fali.
+      Dzięki temu można realizować soczewki płaskie, multifokalne i aberracjo-korygujące o grubości rzędu długości fali.</p>
+    </div>
+
+    <div class="panel">
+      <p style="margin:0"><strong>Optyka dyfrakcyjna i frezowana komputerowo</strong><br>
+      Elementy DOE (Diffractive Optical Elements) oraz frezowane frezarkami CNC / litografią pozwalają
+      kształtować front falowy w sposób niedostępny dla klasycznych soczewek refrakcyjnych.</p>
+    </div>
+
+    <div class="panel">
+      <p style="margin:0"><strong>Superrozdzielczość i metody obliczeniowe</strong><br>
+      Techniki STED, structured illumination, ptychografia oraz algorytmy rekonstrukcji obrazu
+      pozwalają przekraczać klasyczną granicę dyfrakcyjną poprzez łączenie wielu pomiarów i wiedzy a priori.</p>
+    </div>
+
+    <div class="panel">
+      <p style="margin:0"><strong>Adaptive optics</strong><br>
+      Dynamiczna korekcja frontu falowego (zwierciadła deformowalne, SLM) kompensuje aberracje
+      atmosferyczne i systemowe w czasie rzeczywistym — kluczowa w astronomii i mikroskopii biologicznej.</p>
+    </div>
+
+    <div class="panel">
+      <p style="margin:0"><strong>Nanofotonika i plasmonika</strong><br>
+      Koncentrują pola optyczne poniżej granicy dyfrakcyjnej, umożliwiając czujniki o ekstremalnej czułości
+      i manipulację światłem w skali nanometrów.</p>
+    </div>
+
+    <h2>3. Geometria jako narzędzie optyczne</h2>
+
+    <p>
+      Wspólnym mianownikiem nowoczesnych rozwiązań jest przejście od „materiał + kształt klasyczny”
+      do <strong>struktury jako aktywnego stopnia swobody</strong>.
+      Podobnie jak w przypadku anten fraktalnych i metasurface’ów radiowych,
+      geometria przestaje być tylko nośnikiem, a staje się programowalnym elementem systemu.
+    </p>
+
+    <p>
+      Fraktale, struktury samopodobne i geometrie wieloskalowe pojawiają się coraz częściej
+      w projektowaniu elementów optycznych: od absorberów szerokopasmowych,
+      przez soczewki o kontrolowanej dyspersji, po powierzchnie o projektowanym widmie rozpraszania.
+    </p>
+
+    <div class="panel highlight">
+      <p style="margin:0">
+        Optyka XXI wieku nie eliminuje praw fizyki — uczy się je programować.
+        Ograniczenia dyfrakcyjne, materiałowe i geometryczne pozostają,
+        lecz dzięki strukturze, algorytmom i nowym materiałom stają się parametrami projektowymi,
+        a nie ścianą nie do przebicia.
+      </p>
+    </div>
+
+    <h2>4. Powiązanie z Fractal Vibration Lab</h2>
+
+    <p>
+      Podejście lab’a — traktowanie geometrii (w tym fraktalnej) jako programowalnego regulatora
+      odpowiedzi częstotliwościowej — ma bezpośrednie analogie w optyce.
+      Te same idee: samopodobieństwo, wieloskalowość, struktura jako stopień swobody —
+      przenoszą się z drgań mechanicznych i fal radiowych na zakres optyczny i terahercowy.
+    </p>
+
+    <footer>
+      Fractal Vibration Lab<br>
+      Exploring structure as a programmable degree of freedom for frequency
+    </footer>
+  </div>
+
+<style>
+.cmdk-overlay{position:fixed;inset:0;z-index:300;background:rgba(5,3,15,.72);backdrop-filter:blur(4px);display:none;align-items:flex-start;justify-content:center;padding-top:12vh}
+.cmdk-overlay.open{display:flex}
+.cmdk-box{width:min(560px,90vw);background:var(--panel-solid,#150f2c);border:1px solid var(--border2,rgba(168,140,255,.32));border-radius:16px;box-shadow:0 30px 80px -20px rgba(0,0,0,.6);overflow:hidden}
+.cmdk-input-row{display:flex;align-items:center;gap:10px;padding:14px 16px;border-bottom:1px solid var(--border,rgba(168,140,255,.15))}
+.cmdk-input-row svg{opacity:.5;flex-shrink:0;color:var(--muted,#ab9dd8)}
+.cmdk-input{flex:1;background:transparent;border:none;outline:none;color:var(--text,#f5f1fc);font-family:var(--sans,Inter,sans-serif);font-size:15px}
+.cmdk-input::placeholder{color:var(--dim,#6f6098)}
+.cmdk-esc{font-family:var(--mono,monospace);font-size:10.5px;color:var(--dim,#6f6098);border:1px solid var(--border,rgba(168,140,255,.15));border-radius:5px;padding:2px 6px}
+.cmdk-list{max-height:320px;overflow-y:auto;padding:6px}
+.cmdk-item{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 12px;border-radius:10px;cursor:pointer;font-size:14px;color:var(--muted,#ab9dd8)}
+.cmdk-item .t{color:var(--text,#f5f1fc);font-weight:600;font-size:13.5px}
+.cmdk-item .d{font-size:11.5px;color:var(--dim,#6f6098);margin-top:2px}
+.cmdk-item.active{background:rgba(143,107,255,.14)}
+.cmdk-item.active .t{color:var(--violet2,#cbbaff)}
+.cmdk-tag{font-family:var(--mono,monospace);font-size:10px;color:var(--dim,#6f6098);border:1px solid var(--border,rgba(168,140,255,.15));border-radius:5px;padding:2px 6px;white-space:nowrap;flex-shrink:0}
+.cmdk-empty{padding:24px;text-align:center;color:var(--dim,#6f6098);font-size:13px}
+.cmdk-hint{position:fixed;bottom:18px;right:18px;z-index:150;font-family:var(--mono,monospace);font-size:11px;color:var(--dim,#6f6098);
+  background:rgba(6,4,18,.72);border:1px solid var(--border,rgba(168,140,255,.15));border-radius:9px;padding:7px 11px;backdrop-filter:blur(8px);
+  display:flex;align-items:center;gap:6px;cursor:pointer;transition:all .2s}
+.cmdk-hint:hover{color:var(--text,#f5f1fc);border-color:var(--border2,rgba(168,140,255,.32))}
+.cmdk-hint kbd{font-family:var(--mono,monospace);background:rgba(255,255,255,.08);border-radius:4px;padding:1px 5px}
+@media(max-width:640px){.cmdk-hint{display:none}}
+</style>
+
+<div class="cmdk-hint" id="cmdkHint">Szukaj <kbd>Ctrl</kbd>+<kbd>K</kbd></div>
+<div class="cmdk-overlay" id="cmdkOverlay">
+  <div class="cmdk-box">
+    <div class="cmdk-input-row">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input class="cmdk-input" id="cmdkInput" type="text" placeholder="Szukaj strony, narzędzia…" autocomplete="off"/>
+      <span class="cmdk-esc">ESC</span>
+    </div>
+    <div class="cmdk-list" id="cmdkList"></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  const DEST=[{"t": "Strona główna — FAEM", "d": "Pipeline i wprowadzenie", "tag": "strona", "href": "../index.html"}, {"t": "Kalkulator laboratoryjny", "d": "Częstotliwości płytki, fala, tłumienie (Q)", "tag": "narzędzie", "href": "../kalkulator.html"}, {"t": "Generator FAEM", "d": "Superpozycja modów, Df, domeny", "tag": "narzędzie", "href": "../faem_generator.html"}, {"t": "Chladni — skalowanie nodalne", "d": "Analiza i atlas częstotliwości (z dźwiękiem)", "tag": "notatka", "href": "chladni-skalowanie-nodalne.html"}, {"t": "Struktura jako programowalna częstotliwość", "d": "Notatka koncepcyjna", "tag": "notatka", "href": "struktura-jako-programowalna-czestotliwosc.html"}, {"t": "Optyka — ograniczenia i rozwiązania", "d": "Przegląd", "tag": "notatka", "href": "optyka-ograniczenia-i-nowoczesne-rozwiazania.html"}, {"t": "Kontakt", "d": "Napisz do nas", "tag": "strona", "href": "../index.html#contact"}];
+  const overlay=document.getElementById("cmdkOverlay"),input=document.getElementById("cmdkInput"),list=document.getElementById("cmdkList"),hint=document.getElementById("cmdkHint");
+  if(!overlay)return;
+  let items=DEST.slice(),active=0;
+  function render(){
+    if(!items.length){list.innerHTML='<div class="cmdk-empty">Brak wyników</div>';return}
+    list.innerHTML=items.map((d,i)=>`<div class="cmdk-item${i===active?" active":""}" data-i="${i}"><div><div class="t">${d.t}</div><div class="d">${d.d}</div></div><span class="cmdk-tag">${d.tag}</span></div>`).join("");
+    const el=list.querySelector(".cmdk-item.active");if(el)el.scrollIntoView({block:"nearest"});
+  }
+  function open(){overlay.classList.add("open");input.value="";items=DEST.slice();active=0;render();setTimeout(()=>input.focus(),10)}
+  function close(){overlay.classList.remove("open")}
+  function go(i){const it=items[i];if(it)location.href=it.href}
+  hint.addEventListener("click",open);
+  document.addEventListener("keydown",e=>{
+    if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==="k"){e.preventDefault();overlay.classList.contains("open")?close():open()}
+    else if(e.key==="Escape"&&overlay.classList.contains("open"))close();
+    else if(overlay.classList.contains("open")){
+      if(e.key==="ArrowDown"){e.preventDefault();active=Math.min(active+1,items.length-1);render()}
+      else if(e.key==="ArrowUp"){e.preventDefault();active=Math.max(active-1,0);render()}
+      else if(e.key==="Enter"){e.preventDefault();go(active)}
+    }
+  });
+  input.addEventListener("input",()=>{
+    const q=input.value.toLowerCase().trim();
+    items=DEST.filter(d=>d.t.toLowerCase().includes(q)||d.d.toLowerCase().includes(q)||d.tag.toLowerCase().includes(q));
+    active=0;render();
+  });
+  list.addEventListener("click",e=>{const it=e.target.closest(".cmdk-item");if(it)go(+it.dataset.i)});
+  overlay.addEventListener("click",e=>{if(e.target===overlay)close()});
+})();
+</script>
+</body>
+</html>
