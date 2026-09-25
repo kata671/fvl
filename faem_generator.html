@@ -73,7 +73,7 @@ a{color:var(--violet);text-decoration:none}
 .lang-switch button{background:transparent;border:none;color:var(--dim);font-size:11px;font-weight:600;padding:5px 10px;cursor:pointer;font-family:inherit}
 .lang-switch button.active{background:rgba(143,107,255,.18);color:var(--violet2)}
 
-.wrap{max-width:1180px;margin:0 auto;padding:28px 22px 56px;position:relative;z-index:1}
+.wrap{max-width:1180px;margin:0 auto;padding:18px 22px 56px;position:relative;z-index:1}
 .head-row{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap;margin-bottom:8px}
 h1{font-family:var(--serif);font-size:26px;font-weight:600;letter-spacing:-.01em}
 .sub{color:var(--muted);font-size:14px;margin-bottom:6px;max-width:620px;line-height:1.7}
@@ -364,33 +364,17 @@ input[type=range]{
   </div>
 </div>
 <div class="wrap">
-  <div class="head-row">
+  <div class="head-row" style="margin-bottom:14px">
     <div>
       <h1 data-i18n="title">FAEM Generator</h1>
-      <p class="sub" data-i18n="subtitle">Superpozycja modów własnych (kwadrat / koło) — <strong>wymiar fraktalny</strong>, <strong>domeny</strong>, dźwięk, upload obrazu i regresja na żywo.</p>
+      <p class="sub" data-i18n="subtitle" style="margin-bottom:0">Superpozycja modów własnych (kwadrat / koło) — <strong>wymiar fraktalny</strong>, <strong>domeny</strong>, dźwięk, upload obrazu i regresja na żywo.</p>
     </div>
   </div>
 
-  <div class="legend">
-    <div class="cell"><b>Df</b><span data-i18n="leg_df">Wymiar fraktalny linii węzłowych (box-counting, okna 2–26 px).</span></div>
-    <div class="cell"><b data-i18n="leg_dom_t">domeny</b><span data-i18n="leg_dom">Liczba spójnych obszarów tła po progowaniu Otsu i domykaniu morfologicznym.</span></div>
-    <div class="cell"><b data-i18n="leg_e_t">energia</b><span data-i18n="leg_e">N × rozpiętość częstotliwości modów — przybliżona miara wstrzykniętej energii.</span></div>
-  </div>
-
-
-  <div class="howto" id="howtoBox">
-    <div class="howto-title" data-i18n="howto_t">Jak używać</div>
-    <ol class="howto-list">
-      <li data-i18n="howto_1">Wybierz geometrię (kwadrat / koło) i suwaki N oraz α — wzór liczy się na żywo.</li>
-      <li data-i18n="howto_2">Kliknij „dźwięk”, żeby usłyszeć ton powiązany z modami; „nowe fazy” losuje fazy.</li>
-      <li data-i18n="howto_3">Zapisz kilka punktów → regresja Df vs energia. Eksport CSV / PNG albo udostępnij link.</li>
-      <li data-i18n="howto_4">Albo wrzuć własne zdjęcie Chladniego — Df i domeny policzą się automatycznie. Poniżej: szybkie demo.</li>
-    </ol>
-    <div class="demo-row">
-      <button type="button" class="preset-chip" id="demo1" data-i18n="demo1">Demo: gęsty wzór</button>
-      <button type="button" class="preset-chip" id="demo2" data-i18n="demo2">Demo: rzadki wzór</button>
-      <button type="button" class="preset-chip" id="demo3" data-i18n="demo3">Demo: koło</button>
-    </div>
+  <div class="demo-row" style="margin:0 0 16px;display:flex;gap:8px;flex-wrap:wrap">
+    <button type="button" class="preset-chip" id="demo1" data-i18n="demo1">Demo: gęsty wzór</button>
+    <button type="button" class="preset-chip" id="demo2" data-i18n="demo2">Demo: rzadki wzór</button>
+    <button type="button" class="preset-chip" id="demo3" data-i18n="demo3">Demo: koło</button>
   </div>
 
   <div class="grid">
@@ -495,6 +479,23 @@ input[type=range]{
       <div id="fitInfo" class="fit-info" style="display:none"></div>
     </div>
   </div>
+
+  <div class="legend" style="margin-top:22px">
+    <div class="cell"><b>Df</b><span data-i18n="leg_df">Wymiar fraktalny linii węzłowych (box-counting, okna 2–26 px).</span></div>
+    <div class="cell"><b data-i18n="leg_dom_t">domeny</b><span data-i18n="leg_dom">Liczba spójnych obszarów tła po progowaniu Otsu i domykaniu morfologicznym.</span></div>
+    <div class="cell"><b data-i18n="leg_e_t">energia</b><span data-i18n="leg_e">N × rozpiętość częstotliwości modów — przybliżona miara wstrzykniętej energii.</span></div>
+  </div>
+
+  <div class="howto" id="howtoBox" style="margin-top:16px">
+    <div class="howto-title" data-i18n="howto_t">Jak używać</div>
+    <ol class="howto-list">
+      <li data-i18n="howto_1">Wybierz geometrię (kwadrat / koło) i suwaki N oraz α — wzór liczy się na żywo.</li>
+      <li data-i18n="howto_2">Kliknij „dźwięk”, żeby usłyszeć ton powiązany z modami; „nowe fazy” losuje fazy.</li>
+      <li data-i18n="howto_3">Zapisz kilka punktów → regresja Df vs energia. Eksport CSV / PNG albo udostępnij link.</li>
+      <li data-i18n="howto_4">Albo wrzuć własne zdjęcie Chladniego — Df i domeny policzą się automatycznie.</li>
+    </ol>
+  </div>
+
   <div class="footnote">
     <strong>Df</strong> — box-counting · <strong data-i18n="fn_dom">domeny</strong> — Otsu + domykanie ·
     <strong data-i18n="fn_e">energia</strong> ≈ N × Δk. <span data-i18n="fn_note">Narzędzie do eksploracji; R² &lt; 0,5 = słaba zależność.</span>
