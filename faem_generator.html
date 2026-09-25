@@ -555,8 +555,10 @@ const K_SQ=(()=>{const s=new Set();for(let m=1;m<=12;m++)for(let n=1;n<=12;n++)s
 const K_CI=[2.4048,3.8317,5.1356,5.5201,6.3802,7.0156,7.5883,8.4172,8.6537,8.7715,9.7610,9.9361,10.1735,11.0647,11.0864,11.6198,11.7915,12.2251,12.3386,13.0152,13.3237,13.5893,14.3725,14.7959].map(x=>x);
 
 
-/* ─── animated spectral viz ─── */
-let vizMode='spectral', animPhase=0, animId=null, lastFrame={grid:null,maxAbs:1,binary:null,energy:0,Df:0,domains:0};
+
+/* ─── animated spectral viz (paint every frame; metrics on param change) ─── */
+let vizMode='spectral', animPhase=0, animId=null;
+let cachedGrid=null, cachedMaxAbs=1, cachedBinary=null, cachedShape=null, cachedKey='';
 
 function hslToRgb(h,s,l){
   h=((h%360)+360)%360;s=Math.max(0,Math.min(1,s));l=Math.max(0,Math.min(1,l));
@@ -568,46 +570,34 @@ function hslToRgb(h,s,l){
 }
 
 function paintSpectral(targetCtx, grid, maxAbs, binary, phase){
+  if(!targetCtx||!grid)return;
   const img=targetCtx.createImageData(RES,RES);
   const inv=1/(maxAbs||1);
   for(let i=0;i<RES*RES;i++){
-    const g=grid[i]*inv;
-    const a=Math.abs(g);
-    const ang=(Math.atan2(g,0.15)+Math.PI)/(Math.PI*2);
-    let r,gch,b,al=255;
+    const gv=grid[i]*inv;
+    const a=Math.abs(gv);
+    let r,gch,b;
     if(vizMode==='nodes'){
       const v=binary[i]?1:0;
       const glow=a*0.5;
       r=v?240:8+glow*40; gch=v?200:6+glow*20; b=v?255:30+glow*80;
     }else if(vizMode==='field'){
-      const t=(g+1)*0.5;
-      const [rr,gg,bb]=hslToRgb(210+t*100,0.75,0.18+a*0.45);
-      r=rr;gch=gg;b=bb;
+      const tt=(gv+1)*0.5;
+      const rgb=hslToRgb(210+tt*100,0.75,0.18+a*0.45);
+      r=rgb[0];gch=rgb[1];b=rgb[2];
     }else if(vizMode==='plasma'){
       const w=0.5+0.5*Math.sin(a*6+phase*2);
-      const [rr,gg,bb]=hslToRgb(280+a*140+phase*40+w*30,0.85,0.2+a*0.5);
-      r=rr;gch=gg;b=bb;
+      const rgb=hslToRgb(280+a*140+phase*40+w*30,0.85,0.2+a*0.5);
+      r=rgb[0];gch=rgb[1];b=rgb[2];
     }else{
-      // spectral
-      const hue=200+a*160+phase*30+(g>0?20:-10);
-      const [rr,gg,bb]=hslToRgb(hue,0.8,0.15+a*0.55);
-      r=rr;gch=gg;b=bb;
+      const hue=200+a*160+phase*30+(gv>0?20:-10);
+      const rgb=hslToRgb(hue,0.8,0.15+a*0.55);
+      r=rgb[0];gch=rgb[1];b=rgb[2];
       if(binary[i]){r=Math.min(255,r+40);gch=Math.min(255,gch+30);b=Math.min(255,b+50)}
     }
-    img.data[i*4]=r;img.data[i*4+1]=gch;img.data[i*4+2]=b;img.data[i*4+3]=al;
+    img.data[i*4]=r;img.data[i*4+1]=gch;img.data[i*4+2]=b;img.data[i*4+3]=255;
   }
   targetCtx.putImageData(img,0,0);
-}
-
-function computeFrame(sh){
-  const N=+document.getElementById("nModes").value,alpha=+document.getElementById("alpha").value;
-  // animate phases by shifting seed-derived phases via phase offset in pattern
-  const {grid,maxAbs,energy,ks}=generatePatternAnimated(N,alpha,RES,seed,sh,animPhase);
-  const absGrid=new Float32Array(RES*RES);for(let i=0;i<grid.length;i++)absGrid[i]=Math.abs(grid[i]);
-  const thresh=otsuThreshold(absGrid);const binary=new Uint8Array(RES*RES);
-  for(let i=0;i<grid.length;i++)binary[i]=absGrid[i]>thresh?1:0;
-  const Df=boxCountDf(binary,RES),domains=countDomains(binary,RES,2,0.003);
-  return {grid,maxAbs,binary,energy,Df,domains,ks};
 }
 
 function generatePatternAnimated(N,alpha,res,seed,shape,phase){
@@ -619,12 +609,12 @@ function generatePatternAnimated(N,alpha,res,seed,shape,phase){
     const y=j/(res-1)*2-1;
     for(let i=0;i<res;i++){
       const x=i/(res-1)*2-1;
-      const r=Math.sqrt(x*x+y*y);
-      if(shape==='circle'&&r>1){grid[j*res+i]=0;continue}
+      const rr=Math.sqrt(x*x+y*y);
+      if(shape==='circle'&&rr>1){grid[j*res+i]=0;continue}
       let v=0;
       for(let n=0;n<ks.length;n++){
         const drift=phase*(0.4+0.15*(n%5));
-        v+=Math.cos(ks[n]*r+phis[n]+drift)*Math.exp(-alpha*r);
+        v+=Math.cos(ks[n]*rr+phis[n]+drift)*Math.exp(-alpha*rr);
       }
       grid[j*res+i]=v;if(Math.abs(v)>maxAbs)maxAbs=Math.abs(v);
     }
@@ -633,38 +623,70 @@ function generatePatternAnimated(N,alpha,res,seed,shape,phase){
   return{grid,maxAbs,energy:ks.length*bandwidth,ks};
 }
 
+function recomputeMetrics(sh){
+  const N=+document.getElementById("nModes").value,alpha=+document.getElementById("alpha").value;
+  const key=N+'|'+alpha+'|'+seed+'|'+sh;
+  // use phase 0 for stable metrics
+  const {grid,maxAbs,energy,ks}=generatePatternAnimated(N,alpha,RES,seed,sh,0);
+  const absGrid=new Float32Array(RES*RES);for(let i=0;i<grid.length;i++)absGrid[i]=Math.abs(grid[i]);
+  const thresh=otsuThreshold(absGrid);const binary=new Uint8Array(RES*RES);
+  for(let i=0;i<grid.length;i++)binary[i]=absGrid[i]>thresh?1:0;
+  const Df=boxCountDf(binary,RES),domains=countDomains(binary,RES,2,0.003);
+  lastKs=ks;
+  return {grid,maxAbs,binary,energy,Df,domains,key};
+}
+
 function animLoop(ts){
-  animPhase=(ts||0)*0.0012;
+  animPhase=(ts||0)*0.0015;
   if(mode==='upload'){animId=requestAnimationFrame(animLoop);return}
-  if(dualMode){
-    const sq=computeFrame('square'), ci=computeFrame('circle');
-    paintSpectral(document.getElementById('canvasSq').getContext('2d'),sq.grid,sq.maxAbs,sq.binary,animPhase);
-    paintSpectral(document.getElementById('canvasCi').getContext('2d'),ci.grid,ci.maxAbs,ci.binary,animPhase+0.7);
-    document.getElementById('vDfSq').textContent=sq.Df.toFixed(3);
-    document.getElementById('vDomSq').textContent=sq.domains;
-    document.getElementById('vESq').textContent=Math.round(sq.energy);
-    document.getElementById('vDfCi').textContent=ci.Df.toFixed(3);
-    document.getElementById('vDomCi').textContent=ci.domains;
-    document.getElementById('vECi').textContent=Math.round(ci.energy);
-    document.getElementById('modeInfo').textContent='mode: dual · live';
-  }else{
-    const fr=computeFrame(shape);
-    lastFrame=fr; lastKs=fr.ks||lastKs;
-    stats={Df:fr.Df,domains:fr.domains,energy:fr.energy};
-    document.getElementById("vDf").textContent=fr.Df.toFixed(3);
-    document.getElementById("vDom").textContent=fr.domains;
-    document.getElementById("vE").textContent=Math.round(fr.energy);
-    document.getElementById("lblN").textContent=document.getElementById("nModes").value;
-    document.getElementById("lblA").textContent=(+document.getElementById("alpha").value).toFixed(2);
-    document.getElementById("modeInfo").textContent=`mode: live · ${shape} · ${vizMode}`;
-    paintSpectral(ctx,fr.grid,fr.maxAbs,fr.binary,animPhase);
-  }
+  try{
+    const N=+document.getElementById("nModes").value,alpha=+document.getElementById("alpha").value;
+    if(typeof dualMode!=='undefined' && dualMode){
+      const sq=generatePatternAnimated(N,alpha,RES,seed,'square',animPhase);
+      const ci=generatePatternAnimated(N,alpha,RES,seed,'circle',animPhase+0.7);
+      // binary from cached metrics approx: recompute light threshold only for paint accent
+      const binSq=cachedBinary||new Uint8Array(RES*RES);
+      const binCi=cachedBinary||new Uint8Array(RES*RES);
+      const cSq=document.getElementById('canvasSq');
+      const cCi=document.getElementById('canvasCi');
+      if(cSq)paintSpectral(cSq.getContext('2d'),sq.grid,sq.maxAbs,binSq,animPhase);
+      if(cCi)paintSpectral(cCi.getContext('2d'),ci.grid,ci.maxAbs,binCi,animPhase+0.7);
+    }else{
+      const fr=generatePatternAnimated(N,alpha,RES,seed,shape,animPhase);
+      const bin=cachedBinary||new Uint8Array(RES*RES);
+      if(typeof ctx!=='undefined'&&ctx)paintSpectral(ctx,fr.grid,fr.maxAbs,bin,animPhase);
+    }
+  }catch(e){console.warn(e)}
   animId=requestAnimationFrame(animLoop);
 }
 
 function startAnim(){
   if(animId)cancelAnimationFrame(animId);
   animId=requestAnimationFrame(animLoop);
+}
+
+function refreshMetrics(){
+  if(mode==='upload')return;
+  if(typeof dualMode!=='undefined' && dualMode){
+    const sq=recomputeMetrics('square');
+    const ci=recomputeMetrics('circle');
+    const el=id=>{const e=document.getElementById(id);return e;};
+    if(el('vDfSq')){el('vDfSq').textContent=sq.Df.toFixed(3);el('vDomSq').textContent=sq.domains;el('vESq').textContent=Math.round(sq.energy);}
+    if(el('vDfCi')){el('vDfCi').textContent=ci.Df.toFixed(3);el('vDomCi').textContent=ci.domains;el('vECi').textContent=Math.round(ci.energy);}
+    cachedBinary=sq.binary;
+    stats={Df:sq.Df,domains:sq.domains,energy:sq.energy};
+    document.getElementById('modeInfo').textContent='mode: dual · live';
+  }else{
+    const fr=recomputeMetrics(shape);
+    cachedBinary=fr.binary;cachedGrid=fr.grid;cachedMaxAbs=fr.maxAbs;
+    stats={Df:fr.Df,domains:fr.domains,energy:fr.energy};
+    document.getElementById("vDf").textContent=fr.Df.toFixed(3);
+    document.getElementById("vDom").textContent=fr.domains;
+    document.getElementById("vE").textContent=Math.round(fr.energy);
+    document.getElementById("modeInfo").textContent=`mode: live · ${shape} · ${vizMode}`;
+  }
+  document.getElementById("lblN").textContent=document.getElementById("nModes").value;
+  document.getElementById("lblA").textContent=(+document.getElementById("alpha").value).toFixed(2);
 }
 
 function mulberry32(seed){return function(){seed|=0;seed=seed+0x6d2b79f5|0;let t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
@@ -770,10 +792,8 @@ function playSound(){
 /* ─── render ─── */
 function render(){
   if(mode==='upload')return;
-  document.getElementById("lblN").textContent=document.getElementById("nModes").value;
-  document.getElementById("lblA").textContent=(+document.getElementById("alpha").value).toFixed(2);
-  // animation loop handles painting; force one compute for stats if needed
-  if(!animId)startAnim();
+  refreshMetrics();
+  startAnim();
 }
 
 function analyzeImageData(imageData){
@@ -1049,7 +1069,7 @@ function toggleDual(){
   document.getElementById('btnCompare').classList.toggle('btn-accent', dualMode);
   document.getElementById('btnCompare').classList.toggle('btn-dark', !dualMode);
   if(dualMode){mode='synthetic';}
-  startAnim();
+  refreshMetrics();startAnim();
   const frame=document.getElementById('mainFrame');
   if(frame){frame.classList.remove('morph');void frame.offsetWidth;frame.classList.add('morph');}
 }
