@@ -1,0 +1,19 @@
+{
+  "name": "Fractal Vibration Lab — FAEM",
+  "short_name": "FAEM Lab",
+  "description": "Fractal Acoustic–Energy Mapping: Chladni complexity, generator, lab calculator",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#08061a",
+  "theme_color": "#08061a",
+  "lang": "pl",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='96' fill='%2308061a'/%3E%3Ccircle cx='256' cy='256' r='140' fill='none' stroke='%238f6bff' stroke-width='18'/%3E%3Ccircle cx='256' cy='256' r='70' fill='none' stroke='%23cbbaff' stroke-width='12' opacity='0.85'/%3E%3Ccircle cx='256' cy='256' r='22' fill='%23e0c48c'/%3E%3C/svg%3E",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

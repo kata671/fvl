@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>Kalkulator — Fractal Vibration Lab</title>
 <meta name="description" content="Kalkulator częstotliwości rezonansowych płytki (Kirchhoff-Love) oraz konwerter fala–częstotliwość–prędkość dźwięku."/>
+<link rel="manifest" href="manifest.webmanifest"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="theme-color" content="#08061a"/>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%2308061a'/%3E%3Ccircle cx='16' cy='16' r='9.5' fill='none' stroke='%238f6bff' stroke-width='1.3'/%3E%3Ccircle cx='16' cy='16' r='1.5' fill='%23e0c48c'/%3E%3C/svg%3E"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
@@ -35,6 +37,7 @@ a{color:var(--violet);text-decoration:none}
 .topbar .brand span{color:var(--violet2)}
 .topbar a.back{font-size:13px;color:var(--muted);font-weight:500;transition:color .2s}
 .topbar a.back:hover{color:var(--violet2)}
+.lang-switch button.active{background:rgba(143,107,255,.18)!important;color:var(--violet2)!important}
 
 .wrap{max-width:960px;margin:0 auto;padding:36px 22px 60px;position:relative;z-index:1}
 h1{font-family:var(--serif);font-size:28px;font-weight:600;letter-spacing:-.01em;margin-bottom:8px}
@@ -153,16 +156,19 @@ td.freq{color:var(--text);font-weight:700}
 <div class="topbar">
   <div class="brand">Fractal <span>Vibration</span> Lab</div>
   <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">
-    <a class="back" href="faem_generator.html">Generator →</a>
-    <a class="back" href="index.html">← Strona główna</a>
+    <a class="back" href="faem_generator.html" data-i18n="nav_gen">Generator →</a>
+    <a class="back" href="index.html" data-i18n="nav_home">← Strona główna</a>
+    <div class="lang-switch" role="group" aria-label="Language" style="display:flex;border:1px solid var(--border2);border-radius:8px;overflow:hidden;background:rgba(143,107,255,.05)">
+      <button type="button" id="btnPL" class="active" onclick="setLang('pl')" style="background:transparent;border:none;color:var(--dim);font-size:11px;font-weight:600;padding:5px 10px;cursor:pointer;font-family:inherit">PL</button>
+      <button type="button" id="btnEN" onclick="setLang('en')" style="background:transparent;border:none;color:var(--dim);font-size:11px;font-weight:600;padding:5px 10px;cursor:pointer;font-family:inherit">EN</button>
+    </div>
   </div>
 </div>
 <div class="wrap">
   <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap">
     <div>
-      <h1>Kalkulator laboratoryjny</h1>
-      <p class="sub">Trzy narzędzia do zaprojektowania eksperymentu <strong>przed</strong> włączeniem generatora funkcyjnego:
-        częstotliwości rezonansowe płytki, przelicznik fala–częstotliwość–prędkość i czas wybrzmiewania.</p>
+      <h1 data-i18n="title">Kalkulator laboratoryjny</h1>
+      <p class="sub" data-i18n="sub">Trzy narzędzia do zaprojektowania eksperymentu <strong>przed</strong> włączeniem generatora funkcyjnego: częstotliwości rezonansowe płytki, przelicznik fala–częstotliwość–prędkość i czas wybrzmiewania.</p>
     </div>
     <button class="btn-ghost-inline" id="shareBtn" type="button" style="white-space:nowrap;margin-top:6px">🔗 udostępnij te obliczenia</button>
   </div>
@@ -1027,7 +1033,7 @@ updateDecay();
 
 <script>
 (function(){
-  const DEST=[{"t": "Strona główna — FAEM", "d": "Pipeline i wprowadzenie", "tag": "strona", "href": "index.html"}, {"t": "Kalkulator laboratoryjny", "d": "Częstotliwości płytki, fala, tłumienie (Q)", "tag": "narzędzie", "href": "kalkulator.html"}, {"t": "Generator FAEM", "d": "Superpozycja modów, Df, domeny", "tag": "narzędzie", "href": "faem_generator.html"}, {"t": "Chladni — skalowanie nodalne", "d": "Analiza i atlas częstotliwości (z dźwiękiem)", "tag": "notatka", "href": "chladni-skalowanie-nodalne.html"}, {"t": "Struktura jako programowalna częstotliwość", "d": "Notatka koncepcyjna", "tag": "notatka", "href": "struktura-jako-programowalna-czestotliwosc.html"}, {"t": "Optyka — ograniczenia i rozwiązania", "d": "Przegląd", "tag": "notatka", "href": "optyka-ograniczenia-i-nowoczesne-rozwiazania.html"}, {"t": "Kontakt", "d": "Napisz do nas", "tag": "strona", "href": "index.html#contact"}];
+  const DEST=[{"t": "Strona główna — FAEM", "d": "Pipeline i wprowadzenie", "tag": "strona", "href": "index.html"}, {"t": "Generator FAEM", "d": "Kwadrat/koło, Df, domeny, dźwięk, upload", "tag": "narzędzie", "href": "faem_generator.html"}, {"t": "Kalkulator laboratoryjny", "d": "Częstotliwości płytki, fala, tłumienie (Q)", "tag": "narzędzie", "href": "kalkulator.html"}, {"t": "Chladni — skalowanie nodalne", "d": "Analiza i atlas częstotliwości (z dźwiękiem)", "tag": "notatka", "href": "chladni-skalowanie-nodalne.html"}, {"t": "Struktura jako programowalna częstotliwość", "d": "Notatka koncepcyjna", "tag": "notatka", "href": "struktura-jako-programowalna-czestotliwosc.html"}, {"t": "Optyka — ograniczenia i rozwiązania", "d": "Przegląd", "tag": "notatka", "href": "optyka-ograniczenia-i-nowoczesne-rozwiazania.html"}, {"t": "Kontakt", "d": "Napisz do nas", "tag": "strona", "href": "index.html#contact"}];
   const overlay=document.getElementById("cmdkOverlay"),input=document.getElementById("cmdkInput"),list=document.getElementById("cmdkList"),hint=document.getElementById("cmdkHint");
   if(!overlay)return;
   let items=DEST.slice(),active=0;
@@ -1058,5 +1064,69 @@ updateDecay();
   overlay.addEventListener("click",e=>{if(e.target===overlay)close()});
 })();
 </script>
+
+<script>
+if('serviceWorker' in navigator){
+  window.addEventListener('load',()=>{navigator.serviceWorker.register('./sw.js').catch(()=>{});});
+}
+</script>
+
+
+<script>
+(function(){
+const I18N={
+pl:{
+nav_gen:"Generator →",nav_home:"← Strona główna",
+title:"Kalkulator laboratoryjny",
+sub:"Trzy narzędzia do zaprojektowania eksperymentu <strong>przed</strong> włączeniem generatora funkcyjnego: częstotliwości rezonansowe płytki, przelicznik fala–częstotliwość–prędkość i czas wybrzmiewania.",
+share:"🔗 udostępnij te obliczenia",
+tab_plate:"Częstotliwości płytki",tab_wave:"Fala ↔ częstotliwość ↔ prędkość",tab_decay:"Tłumienie (Q)",
+shape_lbl:"Kształt płyty",shape_rect:"◻ Prostokątna",shape_circ:"◯ Okrągła",surprise:"🎲 zaskocz mnie",
+geo:"Geometria i materiał",side_a:"Bok a",side_b:"Bok b",square_chk:"płyta kwadratowa (b = a)",radius:"Promień R",
+thickness:"Grubość h",material:"Materiał",mat_steel:"Stal",mat_alu:"Aluminium",mat_brass:"Mosiądz",mat_glass:"Szkło",mat_pmma:"Pleksi (PMMA)",mat_custom:"Własny…",
+mode:"Tryb drgań (m, n)",modes_table:"Pierwsze tryby (posortowane rosnąco)",compare:"Porównanie materiałów — ta sama geometria i tryb, zmienia się tylko materiał",
+listen:"odsłuchaj",result_f:"f (m,n)"
+},
+en:{
+nav_gen:"Generator →",nav_home:"← Home",
+title:"Lab calculator",
+sub:"Three tools to design an experiment <strong>before</strong> turning on a function generator: plate resonant frequencies, wave–frequency–speed converter, and ring-down / Q.",
+share:"🔗 share these calculations",
+tab_plate:"Plate frequencies",tab_wave:"Wave ↔ frequency ↔ speed",tab_decay:"Damping (Q)",
+shape_lbl:"Plate shape",shape_rect:"◻ Rectangular",shape_circ:"◯ Circular",surprise:"🎲 surprise me",
+geo:"Geometry & material",side_a:"Side a",side_b:"Side b",square_chk:"square plate (b = a)",radius:"Radius R",
+thickness:"Thickness h",material:"Material",mat_steel:"Steel",mat_alu:"Aluminium",mat_brass:"Brass",mat_glass:"Glass",mat_pmma:"Acrylic (PMMA)",mat_custom:"Custom…",
+mode:"Vibration mode (m, n)",modes_table:"Lowest modes (sorted ascending)",compare:"Material comparison — same geometry and mode, only material changes",
+listen:"play",result_f:"f (m,n)"
+}
+};
+let lang=localStorage.getItem('faem_lang')||'pl';
+function t(k){return (I18N[lang]||I18N.pl)[k]||k}
+window.setLang=function(l){
+  lang=l;localStorage.setItem('faem_lang',l);
+  const pl=document.getElementById('btnPL'),en=document.getElementById('btnEN');
+  if(pl)pl.classList.toggle('active',l==='pl');
+  if(en)en.classList.toggle('active',l==='en');
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const k=el.getAttribute('data-i18n');
+    const v=t(k);
+    if(k==='sub')el.innerHTML=v; else el.textContent=v;
+  });
+  // tabs
+  const tabs=document.querySelectorAll('#mainTabs .tab');
+  if(tabs[0])tabs[0].textContent=t('tab_plate');
+  if(tabs[1])tabs[1].textContent=t('tab_wave');
+  if(tabs[2])tabs[2].textContent=t('tab_decay');
+  const sr=document.getElementById('shapeRect'),sc=document.getElementById('shapeCirc');
+  if(sr)sr.textContent=t('shape_rect');
+  if(sc)sc.textContent=t('shape_circ');
+  const sb=document.getElementById('surpriseBtn'); if(sb)sb.textContent=t('surprise');
+  const sh=document.getElementById('shareBtn'); if(sh)sh.textContent=t('share');
+};
+document.addEventListener('DOMContentLoaded',()=>setLang(lang));
+setLang(lang);
+})();
+</script>
+
 </body>
 </html>

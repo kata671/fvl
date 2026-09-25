@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>Fractal Vibration Lab — FAEM</title>
 <meta name="description" content="FAEM — Fractal Acoustic–Energy Mapping. Pipeline badawczy do ilościowego opisu złożoności wzorów drgań."/>
+<link rel="manifest" href="manifest.webmanifest"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="theme-color" content="#0a0818"/>
 <link rel="canonical" href="https://fractalvibrationlab.com/"/>
 <meta property="og:type" content="website"/>
@@ -433,7 +435,7 @@ note3_tag:"Przegląd",note3_t:"Optyka — ograniczenia i nowoczesne rozwiązania
 note_go:"Czytaj",
 contact_eyebrow:"Kontakt",contact_h2:"Napisz do nas",
 footer_tag:"Open research · PL / EN",footer_lic:"Treść: CC BY 4.0 · Kod generatora: MIT",
-ft_gen:"Generator",ft_chladni:"Chladni"
+ft_gen:"Generator",ft_kalk:"Kalkulator",ft_chladni:"Chladni"
 },
 en:{
 nav_faem:"FAEM",nav_gen:"Generator",nav_kalk:"Calculator",nav_chladni:"Chladni",nav_struktura:"Structure",nav_optyka:"Optics",nav_contact:"Contact",
@@ -461,7 +463,7 @@ note3_tag:"Survey",note3_t:"Optics — limits and modern workarounds",note3_p:"D
 note_go:"Read",
 contact_eyebrow:"Contact",contact_h2:"Get in touch",
 footer_tag:"Open research · PL / EN",footer_lic:"Content: CC BY 4.0 · Generator code: MIT",
-ft_gen:"Generator",ft_chladni:"Chladni"
+ft_gen:"Generator",ft_kalk:"Calculator",ft_chladni:"Chladni"
 }};
 function setLang(lang){
   document.documentElement.lang=lang;
@@ -587,7 +589,7 @@ function setLang(lang){
 
 <script>
 (function(){
-  const DEST=[{"t": "Strona główna — FAEM", "d": "Pipeline i wprowadzenie", "tag": "strona", "href": "index.html"}, {"t": "Kalkulator laboratoryjny", "d": "Częstotliwości płytki, fala, tłumienie (Q)", "tag": "narzędzie", "href": "kalkulator.html"}, {"t": "Generator FAEM", "d": "Superpozycja modów, Df, domeny", "tag": "narzędzie", "href": "faem_generator.html"}, {"t": "Chladni — skalowanie nodalne", "d": "Analiza i atlas częstotliwości (z dźwiękiem)", "tag": "notatka", "href": "chladni-skalowanie-nodalne.html"}, {"t": "Struktura jako programowalna częstotliwość", "d": "Notatka koncepcyjna", "tag": "notatka", "href": "struktura-jako-programowalna-czestotliwosc.html"}, {"t": "Optyka — ograniczenia i rozwiązania", "d": "Przegląd", "tag": "notatka", "href": "optyka-ograniczenia-i-nowoczesne-rozwiazania.html"}, {"t": "Kontakt", "d": "Napisz do nas", "tag": "strona", "href": "index.html#contact"}];
+  const DEST=[{"t": "Strona główna — FAEM", "d": "Pipeline i wprowadzenie", "tag": "strona", "href": "index.html"}, {"t": "Generator FAEM", "d": "Kwadrat/koło, Df, domeny, dźwięk, upload", "tag": "narzędzie", "href": "faem_generator.html"}, {"t": "Kalkulator laboratoryjny", "d": "Częstotliwości płytki, fala, tłumienie (Q)", "tag": "narzędzie", "href": "kalkulator.html"}, {"t": "Chladni — skalowanie nodalne", "d": "Analiza i atlas częstotliwości (z dźwiękiem)", "tag": "notatka", "href": "chladni-skalowanie-nodalne.html"}, {"t": "Struktura jako programowalna częstotliwość", "d": "Notatka koncepcyjna", "tag": "notatka", "href": "struktura-jako-programowalna-czestotliwosc.html"}, {"t": "Optyka — ograniczenia i rozwiązania", "d": "Przegląd", "tag": "notatka", "href": "optyka-ograniczenia-i-nowoczesne-rozwiazania.html"}, {"t": "Kontakt", "d": "Napisz do nas", "tag": "strona", "href": "index.html#contact"}];
   const overlay=document.getElementById("cmdkOverlay"),input=document.getElementById("cmdkInput"),list=document.getElementById("cmdkList"),hint=document.getElementById("cmdkHint");
   if(!overlay)return;
   let items=DEST.slice(),active=0;
@@ -618,5 +620,12 @@ function setLang(lang){
   overlay.addEventListener("click",e=>{if(e.target===overlay)close()});
 })();
 </script>
+
+<script>
+if('serviceWorker' in navigator){
+  window.addEventListener('load',()=>{navigator.serviceWorker.register('./sw.js').catch(()=>{});});
+}
+</script>
+
 </body>
 </html>

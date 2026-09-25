@@ -6,6 +6,10 @@
 <title>FAEM Generator — Fractal Vibration Lab</title>
 <meta name="description" content="Generator wzorów FAEM: superpozycja modów własnych (kwadrat/koło), wymiar fraktalny, domeny, dźwięk, upload obrazu, presety, eksport PNG/CSV."/>
 <meta name="theme-color" content="#08061a"/>
+<link rel="manifest" href="manifest.webmanifest"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="mobile-web-app-capable" content="yes"/>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%2308061a'/%3E%3Ccircle cx='16' cy='16' r='9.5' fill='none' stroke='%238f6bff' stroke-width='1.3'/%3E%3Ccircle cx='16' cy='16' r='1.5' fill='%23e0c48c'/%3E%3C/svg%3E"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
@@ -155,6 +159,16 @@ button, .btn-file{
 .badge-warn{background:rgba(224,163,115,.14);color:var(--warn)}
 .footnote{margin-top:22px;font-size:12px;color:var(--dim);line-height:1.7;border-top:1px solid var(--border);padding-top:16px}
 .footnote strong{color:var(--violet2)}
+
+.howto{
+  margin:0 0 22px;padding:16px 18px;border:1px solid var(--border);border-radius:var(--radius);
+  background:linear-gradient(155deg,rgba(143,107,255,.06),rgba(0,0,0,.2));
+}
+.howto-title{font-family:var(--serif);font-size:15px;font-weight:600;margin-bottom:10px;color:var(--text)}
+.howto-list{margin:0 0 12px 18px;color:var(--muted);font-size:13px;line-height:1.65}
+.howto-list li{margin-bottom:4px}
+.demo-row{display:flex;gap:8px;flex-wrap:wrap}
+
 .mode-badge{font-size:11px;color:var(--dim);font-family:var(--mono);margin-top:6px}
 </style>
 </head>
@@ -185,6 +199,22 @@ button, .btn-file{
     <div class="cell"><b>Df</b><span data-i18n="leg_df">Wymiar fraktalny linii węzłowych (box-counting, okna 2–26 px).</span></div>
     <div class="cell"><b data-i18n="leg_dom_t">domeny</b><span data-i18n="leg_dom">Liczba spójnych obszarów tła po progowaniu Otsu i domykaniu morfologicznym.</span></div>
     <div class="cell"><b data-i18n="leg_e_t">energia</b><span data-i18n="leg_e">N × rozpiętość częstotliwości modów — przybliżona miara wstrzykniętej energii.</span></div>
+  </div>
+
+
+  <div class="howto" id="howtoBox">
+    <div class="howto-title" data-i18n="howto_t">Jak używać</div>
+    <ol class="howto-list">
+      <li data-i18n="howto_1">Wybierz geometrię (kwadrat / koło) i suwaki N oraz α — wzór liczy się na żywo.</li>
+      <li data-i18n="howto_2">Kliknij „dźwięk”, żeby usłyszeć ton powiązany z modami; „nowe fazy” losuje fazy.</li>
+      <li data-i18n="howto_3">Zapisz kilka punktów → regresja Df vs energia. Eksport CSV / PNG albo udostępnij link.</li>
+      <li data-i18n="howto_4">Albo wrzuć własne zdjęcie Chladniego — Df i domeny policzą się automatycznie. Poniżej: szybkie demo.</li>
+    </ol>
+    <div class="demo-row">
+      <button type="button" class="preset-chip" id="demo1" data-i18n="demo1">Demo: gęsty wzór</button>
+      <button type="button" class="preset-chip" id="demo2" data-i18n="demo2">Demo: rzadki wzór</button>
+      <button type="button" class="preset-chip" id="demo3" data-i18n="demo3">Demo: koło</button>
+    </div>
   </div>
 
   <div class="grid">
@@ -639,6 +669,20 @@ document.getElementById("btnPng").addEventListener("click",exportPNG);
 document.getElementById("btnShare").addEventListener("click",shareConfig);
 window.addEventListener("resize",()=>{if(history.length)drawPlot()});
 
+
+/* demos: synthetic patterns treated as images */
+function runDemo(n, a, sh){
+  mode='synthetic'; shape=sh;
+  document.getElementById('nModes').value=n;
+  document.getElementById('alpha').value=a;
+  document.getElementById('shapeSquare').classList.toggle('active', sh==='square');
+  document.getElementById('shapeCircle').classList.toggle('active', sh==='circle');
+  seed=(seed+3)|0; render();
+}
+document.getElementById('demo1').addEventListener('click',()=>runDemo(28,0.9,'square'));
+document.getElementById('demo2').addEventListener('click',()=>runDemo(6,1.8,'square'));
+document.getElementById('demo3').addEventListener('click',()=>runDemo(18,1.2,'circle'));
+
 buildPresets();
 setLang(lang);
 render();drawPlot();
@@ -684,8 +728,8 @@ render();drawPlot();
 (function(){
   const DEST=[
     {"t":"Strona główna — FAEM","d":"Pipeline i wprowadzenie","tag":"strona","href":"index.html"},
+    {"t":"Generator FAEM","d":"Kwadrat/koło, Df, domeny, dźwięk, upload","tag":"narzędzie","href":"faem_generator.html"},
     {"t":"Kalkulator laboratoryjny","d":"Częstotliwości płytki, fala, tłumienie (Q)","tag":"narzędzie","href":"kalkulator.html"},
-    {"t":"Generator FAEM","d":"Superpozycja modów, Df, domeny, dźwięk","tag":"narzędzie","href":"faem_generator.html"},
     {"t":"Chladni — skalowanie nodalne","d":"Analiza i atlas częstotliwości","tag":"notatka","href":"chladni-skalowanie-nodalne.html"},
     {"t":"Struktura jako programowalna częstotliwość","d":"Notatka koncepcyjna","tag":"notatka","href":"struktura-jako-programowalna-czestotliwosc.html"},
     {"t":"Optyka — ograniczenia i rozwiązania","d":"Przegląd","tag":"notatka","href":"optyka-ograniczenia-i-nowoczesne-rozwiazania.html"},
@@ -721,5 +765,12 @@ render();drawPlot();
   overlay.addEventListener("click",e=>{if(e.target===overlay)close()});
 })();
 </script>
+
+<script>
+if('serviceWorker' in navigator){
+  window.addEventListener('load',()=>{navigator.serviceWorker.register('./sw.js').catch(()=>{});});
+}
+</script>
+
 </body>
 </html>
