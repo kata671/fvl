@@ -501,6 +501,14 @@ input[type=range]{
   </div>
 </div>
 
+<div class="mobile-bar" id="mobileBar">
+  <button type="button" id="mPhase">↻</button>
+  <button type="button" id="mSound">▶</button>
+  <button type="button" id="mCompare">⇄</button>
+  <button type="button" class="primary" id="mSave">+</button>
+</div>
+
+
 <script>
 /* ─── i18n ─── */
 const I18N={
@@ -1025,7 +1033,7 @@ function compareShapes(){
       <div class="cell"><h4>${t('compare_ci')}</h4>Df <b>${ci.Df.toFixed(3)}</b><br>domains <b>${ci.domains}</b><br>energy <b>${Math.round(ci.energy)}</b></div>
     </div>`;
 }
-document.getElementById('btnResetSynth').addEventListener('click', resetToSynth);
+const _brs=document.getElementById('btnResetSynth'); if(_brs)_brs.addEventListener('click', resetToSynth);
 
 let dualMode=false;
 const ctxSq=()=>document.getElementById('canvasSq').getContext('2d');
@@ -1080,7 +1088,7 @@ function pulseSave(){
   if(frame){frame.classList.remove('pop');void frame.offsetWidth;frame.classList.add('pop');}
 }
 
-document.getElementById('btnCompare').addEventListener('click', toggleDual);
+const _bc=document.getElementById('btnCompare'); if(_bc)_bc.addEventListener('click', toggleDual);
 
 document.getElementById("btnSound").addEventListener("click",()=>{playing?stopSound():playSound()});
 document.getElementById("btnSave").addEventListener("click",()=>{savePoint();pulseSave();});
@@ -1100,15 +1108,19 @@ function runDemo(n, a, sh){
   document.getElementById('shapeCircle').classList.toggle('active', sh==='circle');
   seed=(seed+3)|0; render();
 }
-document.getElementById('demo1').addEventListener('click',()=>runDemo(28,0.9,'square'));
-document.getElementById('demo2').addEventListener('click',()=>runDemo(6,1.8,'square'));
-document.getElementById('demo3').addEventListener('click',()=>runDemo(18,1.2,'circle'));
+['demo1',[28,0.9,'square'],'demo2',[6,1.8,'square'],'demo3',[18,1.2,'circle']].reduce((a,c,i,arr)=>{if(i%2===0){const el=document.getElementById(c);if(el)el.addEventListener('click',()=>runDemo(...arr[i+1]));}return a},0);
 
-// mobile bar
-document.getElementById('mPhase').addEventListener('click',()=>document.getElementById('btnPhase').click());
-document.getElementById('mSound').addEventListener('click',()=>document.getElementById('btnSound').click());
-document.getElementById('mCompare').addEventListener('click',()=>document.getElementById('btnCompare').click());
-document.getElementById('mSave').addEventListener('click',()=>document.getElementById('btnSave').click());
+// mobile bar (may be after this script in DOM — bind safely)
+function bindMobileBar(){
+  const map=[['mPhase','btnPhase'],['mSound','btnSound'],['mCompare','btnCompare'],['mSave','btnSave']];
+  map.forEach(([m,b])=>{
+    const el=document.getElementById(m), btn=document.getElementById(b);
+    if(el&&btn) el.addEventListener('click',()=>btn.click());
+  });
+}
+if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', bindMobileBar);
+else bindMobileBar();
+
 document.querySelectorAll('#vizToggle [data-viz]').forEach(btn=>{
   btn.addEventListener('click',()=>{
     vizMode=btn.getAttribute('data-viz');
@@ -1116,10 +1128,11 @@ document.querySelectorAll('#vizToggle [data-viz]').forEach(btn=>{
     btn.classList.add('active');
   });
 });
-startAnim();
-buildPresets();
-setLang(lang);
-render();drawPlot();
+
+// safe init
+try{ buildPresets(); }catch(e){ console.warn(e); }
+try{ setLang(lang); }catch(e){ console.warn(e); }
+try{ render(); drawPlot(); startAnim(); }catch(e){ console.warn(e); }
 </script>
 
 <!-- command palette (shared style) -->
@@ -1206,13 +1219,6 @@ if('serviceWorker' in navigator){
 }
 </script>
 
-
-<div class="mobile-bar" id="mobileBar">
-  <button type="button" id="mPhase">↻</button>
-  <button type="button" id="mSound">▶</button>
-  <button type="button" id="mCompare">⇄</button>
-  <button type="button" class="primary" id="mSave">+</button>
-</div>
 
 </body>
 </html>
