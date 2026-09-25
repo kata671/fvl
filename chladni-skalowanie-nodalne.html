@@ -6,7 +6,7 @@
 <title>Chladni — skalowanie nodalne | Fractal Vibration Lab</title>
 <meta name="description" content="Test prawa Chladniego na realnych zdjęciach płytki kwadratowej: metoda, wynik, atlas częstotliwości, sposób powtórzenia."/>
 <meta name="theme-color" content="#0a0818"/>
-<meta property="og:image" content="https://fractalvibrationlab.com/research/assets/chladni_law_test_plot.png"/>
+<meta property="og:image" content="https://fractalvibrationlab.com/chladni_law_test_plot.png"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
@@ -106,14 +106,14 @@ footer{margin-top:64px;padding-top:26px;border-top:1px solid var(--border);font-
 </head>
 <body>
 <div class="wrap">
-  <a href="../index.html" class="back">← Fractal Vibration Lab</a>
+  <a href="index.html" class="back">← Fractal Vibration Lab</a>
 
   <div class="subnav">
     <a class="here" href="chladni-skalowanie-nodalne.html">Chladni</a>
     <a href="struktura-jako-programowalna-czestotliwosc.html">Struktura</a>
     <a href="optyka-ograniczenia-i-nowoczesne-rozwiazania.html">Optyka</a>
-    <a href="../kalkulator.html">Kalkulator</a>
-    <a href="../faem_generator.html">Generator</a>
+    <a href="kalkulator.html">Kalkulator</a>
+    <a href="faem_generator.html">Generator</a>
   </div>
 
   <div class="lab-name">Fractal Vibration Lab · Analiza</div>
@@ -135,7 +135,7 @@ footer{margin-top:64px;padding-top:26px;border-top:1px solid var(--border);font-
   </div>
 
   <div class="plot-box">
-    <img src="assets/chladni_law_test_plot.png" alt="Wykres skalowania Chladniego: N vs f w skali log–log" width="800"/>
+    <img src="chladni_law_test_plot.png" alt="Wykres skalowania Chladniego: N vs f w skali log–log" width="800"/>
     <p class="plot-cap">N ~ f<sup>0.521</sup> (czerwona) vs teoria N ~ f<sup>0.5</sup> (szara).</p>
   </div>
 
@@ -203,8 +203,8 @@ footer{margin-top:64px;padding-top:26px;border-top:1px solid var(--border);font-
   <h2>Narzędzia</h2>
   <p class="muted">Generator wzorów: mody własne, Df, domeny, regresja na żywo, eksport CSV.</p>
   <div class="tool-row">
-    <a class="btn primary" href="../faem_generator.html">Otwórz generator</a>
-    <a class="btn" href="../kalkulator.html">Kalkulator laboratoryjny</a>
+    <a class="btn primary" href="faem_generator.html">Otwórz generator</a>
+    <a class="btn" href="kalkulator.html">Kalkulator laboratoryjny</a>
   </div>
 
   <h2>Dalej</h2>
@@ -292,7 +292,7 @@ footer{margin-top:64px;padding-top:26px;border-top:1px solid var(--border);font-
 
 <script>
 (function(){
-  const DEST=[{"t": "Strona główna — FAEM", "d": "Pipeline i wprowadzenie", "tag": "strona", "href": "../index.html"}, {"t": "Kalkulator laboratoryjny", "d": "Częstotliwości płytki, fala, tłumienie (Q)", "tag": "narzędzie", "href": "../kalkulator.html"}, {"t": "Generator FAEM", "d": "Superpozycja modów, Df, domeny", "tag": "narzędzie", "href": "../faem_generator.html"}, {"t": "Chladni — skalowanie nodalne", "d": "Analiza i atlas częstotliwości (z dźwiękiem)", "tag": "notatka", "href": "chladni-skalowanie-nodalne.html"}, {"t": "Struktura jako programowalna częstotliwość", "d": "Notatka koncepcyjna", "tag": "notatka", "href": "struktura-jako-programowalna-czestotliwosc.html"}, {"t": "Optyka — ograniczenia i rozwiązania", "d": "Przegląd", "tag": "notatka", "href": "optyka-ograniczenia-i-nowoczesne-rozwiazania.html"}, {"t": "Kontakt", "d": "Napisz do nas", "tag": "strona", "href": "../index.html#contact"}];
+  const DEST=[{"t": "Strona główna — FAEM", "d": "Pipeline i wprowadzenie", "tag": "strona", "href": "index.html"}, {"t": "Kalkulator laboratoryjny", "d": "Częstotliwości płytki, fala, tłumienie (Q)", "tag": "narzędzie", "href": "kalkulator.html"}, {"t": "Generator FAEM", "d": "Superpozycja modów, Df, domeny", "tag": "narzędzie", "href": "faem_generator.html"}, {"t": "Chladni — skalowanie nodalne", "d": "Analiza i atlas częstotliwości (z dźwiękiem)", "tag": "notatka", "href": "chladni-skalowanie-nodalne.html"}, {"t": "Struktura jako programowalna częstotliwość", "d": "Notatka koncepcyjna", "tag": "notatka", "href": "struktura-jako-programowalna-czestotliwosc.html"}, {"t": "Optyka — ograniczenia i rozwiązania", "d": "Przegląd", "tag": "notatka", "href": "optyka-ograniczenia-i-nowoczesne-rozwiazania.html"}, {"t": "Kontakt", "d": "Napisz do nas", "tag": "strona", "href": "index.html#contact"}];
   const overlay=document.getElementById("cmdkOverlay"),input=document.getElementById("cmdkInput"),list=document.getElementById("cmdkList"),hint=document.getElementById("cmdkHint");
   if(!overlay)return;
   let items=DEST.slice(),active=0;
