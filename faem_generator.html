@@ -24,10 +24,13 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet"/>
 <style>
 :root{
-  --bg:#08061a;--panel:rgba(34,24,66,.55);--panel-solid:#150f2c;--border:rgba(168,140,255,.15);
-  --border2:rgba(168,140,255,.32);--text:#f5f1fc;--muted:#ab9dd8;--dim:#6f6098;
-  --violet:#8f6bff;--violet-deep:#5a35d6;--violet2:#cbbaff;--gold:#e0c48c;--ok:#7fe3b4;--warn:#e0a373;
-  --radius:16px;--serif:"Fraunces",Georgia,serif;--sans:Inter,system-ui,sans-serif;--mono:"JetBrains Mono",ui-monospace,monospace;
+  --bg:#05040f;--bg2:#0a0820;--panel:rgba(28,20,56,.45);--panel-solid:#100c24;
+  --border:rgba(180,150,255,.12);--border2:rgba(180,150,255,.28);
+  --text:#f7f4ff;--muted:#b8aee0;--dim:#7a6fa8;
+  --violet:#9d7bff;--violet-deep:#6b3fff;--violet2:#d4c4ff;
+  --cyan:#5eead4;--magenta:#f472b6;--gold:#f0d49a;--ok:#6ee7b7;--warn:#fb923c;
+  --glow:rgba(157,123,255,.35);--glow-cyan:rgba(94,234,212,.25);
+  --radius:18px;--serif:"Fraunces",Georgia,serif;--sans:Inter,system-ui,sans-serif;--mono:"JetBrains Mono",ui-monospace,monospace;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 strong{color:var(--gold);font-weight:700}
@@ -35,9 +38,22 @@ body{
   background:var(--bg);color:var(--text);
   font-family:var(--sans);min-height:100vh;line-height:1.6;
   background-image:
-    radial-gradient(ellipse 70% 42% at 12% -6%,rgba(143,107,255,.16),transparent 52%),
-    radial-gradient(ellipse 55% 34% at 92% 6%,rgba(90,53,214,.13),transparent 48%),
-    radial-gradient(ellipse 50% 30% at 50% 105%,rgba(143,107,255,.06),transparent 42%);
+    radial-gradient(ellipse 80% 50% at 8% -8%,rgba(157,123,255,.22),transparent 55%),
+    radial-gradient(ellipse 60% 40% at 95% 5%,rgba(94,234,212,.1),transparent 50%),
+    radial-gradient(ellipse 50% 35% at 50% 110%,rgba(244,114,182,.08),transparent 45%),
+    radial-gradient(ellipse 40% 30% at 70% 40%,rgba(107,63,255,.06),transparent 60%);
+  overflow-x:hidden;
+}
+body::before{
+  content:"";position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.4;
+  background:
+    radial-gradient(circle at 20% 30%,rgba(157,123,255,.08) 0%,transparent 40%),
+    radial-gradient(circle at 80% 70%,rgba(94,234,212,.05) 0%,transparent 35%);
+  animation:bgDrift 18s ease-in-out infinite alternate;
+}
+@keyframes bgDrift{
+  0%{transform:translate(0,0) scale(1)}
+  100%{transform:translate(-2%,1%) scale(1.03)}
 }
 a{color:var(--violet);text-decoration:none}
 .topbar{
@@ -228,6 +244,107 @@ button, .btn-file{
   .stat .val{font-size:16px}
 }
 
+
+/* premium polish */
+.wrap{position:relative;z-index:1}
+.topbar{
+  background:rgba(5,4,15,.85)!important;
+  border-bottom:1px solid rgba(180,150,255,.18)!important;
+  box-shadow:0 8px 32px rgba(0,0,0,.35);
+}
+.panel{
+  background:linear-gradient(160deg,rgba(157,123,255,.08),rgba(16,12,36,.75))!important;
+  border:1px solid rgba(180,150,255,.2)!important;
+  box-shadow:0 20px 50px -20px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.04);
+  backdrop-filter:blur(20px) saturate(1.4)!important;
+}
+.canvas-frame{
+  box-shadow:0 0 0 1px rgba(180,150,255,.25),0 24px 60px -20px rgba(107,63,255,.55),0 0 80px -30px rgba(94,234,212,.2)!important;
+  transition:box-shadow .4s ease,transform .4s ease;
+}
+.canvas-frame:hover{box-shadow:0 0 0 1px rgba(212,196,255,.4),0 28px 70px -18px rgba(107,63,255,.65),0 0 100px -25px rgba(94,234,212,.3)!important}
+.stat{
+  background:linear-gradient(145deg,rgba(157,123,255,.1),rgba(0,0,0,.35))!important;
+  border:1px solid rgba(180,150,255,.18)!important;
+  transition:transform .25s ease,border-color .25s,box-shadow .25s;
+}
+.stat:hover{transform:translateY(-2px);border-color:rgba(212,196,255,.35)!important;box-shadow:0 8px 20px -8px var(--glow)}
+.stat .val{background:linear-gradient(135deg,var(--text),var(--violet2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.btn-accent{
+  background:linear-gradient(135deg,#a78bfa,#6b3fff 50%,#5b21b6)!important;
+  box-shadow:0 8px 28px -6px rgba(107,63,255,.7),inset 0 1px 0 rgba(255,255,255,.15)!important;
+  transition:transform .2s,box-shadow .2s!important;
+}
+.btn-accent:hover{transform:translateY(-2px)!important;box-shadow:0 14px 36px -8px rgba(107,63,255,.85)!important}
+.btn-dark{
+  background:rgba(157,123,255,.08)!important;
+  border:1px solid rgba(180,150,255,.28)!important;
+  transition:all .2s!important;
+}
+.btn-dark:hover{background:rgba(157,123,255,.16)!important;border-color:var(--cyan)!important;color:var(--cyan)!important}
+.shape-tabs button{
+  transition:all .25s cubic-bezier(.2,.8,.2,1)!important;
+}
+.shape-tabs button.active{
+  background:linear-gradient(135deg,rgba(157,123,255,.25),rgba(94,234,212,.1))!important;
+  border-color:rgba(212,196,255,.45)!important;
+  color:var(--text)!important;
+  box-shadow:0 0 24px -6px var(--glow);
+}
+.preset-chip{
+  transition:all .2s cubic-bezier(.2,.8,.2,1)!important;
+}
+.preset-chip:hover{transform:translateY(-1px);border-color:var(--cyan)!important;color:var(--cyan)!important}
+.preset-chip.active{
+  border-color:var(--gold)!important;color:var(--gold)!important;
+  background:rgba(240,212,154,.12)!important;
+  box-shadow:0 0 20px -6px rgba(240,212,154,.4);
+}
+.howto{
+  border:1px solid rgba(180,150,255,.2)!important;
+  background:linear-gradient(145deg,rgba(157,123,255,.1),rgba(94,234,212,.04),rgba(0,0,0,.3))!important;
+  box-shadow:0 12px 40px -20px rgba(0,0,0,.4);
+}
+h1{
+  background:linear-gradient(135deg,#fff 20%,var(--violet2) 60%,var(--cyan));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.topbar .status i{background:var(--cyan)!important;box-shadow:0 0 10px var(--cyan)!important}
+input[type=range]{
+  height:5px!important;
+  background:linear-gradient(90deg,var(--violet-deep),var(--cyan))!important;
+}
+.legend{
+  border:1px solid rgba(180,150,255,.18)!important;
+  box-shadow:0 12px 40px -24px rgba(0,0,0,.5);
+}
+.legend .cell{background:linear-gradient(160deg,rgba(157,123,255,.06),var(--panel-solid))!important}
+.dual-wrap canvas{
+  box-shadow:0 0 0 1px rgba(180,150,255,.25),0 16px 40px -16px rgba(107,63,255,.4)!important;
+  transition:transform .3s ease,box-shadow .3s;
+}
+.dual-wrap canvas:hover{transform:scale(1.02)}
+.mobile-bar{
+  background:rgba(5,4,15,.94)!important;
+  border-top:1px solid rgba(180,150,255,.22)!important;
+  box-shadow:0 -12px 40px rgba(0,0,0,.4);
+}
+.mobile-bar button.primary{
+  background:linear-gradient(135deg,#a78bfa,#6b3fff)!important;
+  box-shadow:0 4px 20px -4px rgba(107,63,255,.6);
+}
+/* live viz toggle */
+.viz-toggle{display:flex;gap:6px;margin:10px 0 4px;flex-wrap:wrap}
+.viz-toggle button{
+  flex:0 1 auto;padding:7px 12px;font-size:11px;border-radius:99px;
+  border:1px solid var(--border);background:transparent;color:var(--muted);
+  cursor:pointer;font-weight:600;transition:all .2s;
+}
+.viz-toggle button.active{
+  background:rgba(94,234,212,.12);border-color:var(--cyan);color:var(--cyan);
+  box-shadow:0 0 16px -4px var(--glow-cyan);
+}
+
 .mode-badge{font-size:11px;color:var(--dim);font-family:var(--mono);margin-top:6px}
 </style>
 </head>
@@ -313,6 +430,13 @@ button, .btn-file{
         </div>
         <div class="mode-badge" id="modeInfo">mode: synthetic · square</div>
 
+        <div class="section-lbl" data-i18n="sec_viz">Wizualizacja</div>
+        <div class="viz-toggle" id="vizToggle">
+          <button type="button" class="active" data-viz="spectral" data-i18n="viz_spectral">Spektrum</button>
+          <button type="button" data-viz="nodes" data-i18n="viz_nodes">Węzły</button>
+          <button type="button" data-viz="field" data-i18n="viz_field">Pole</button>
+          <button type="button" data-viz="plasma" data-i18n="viz_plasma">Plasma</button>
+        </div>
         <div class="section-lbl" data-i18n="sec_shape">Geometria</div>
         <div class="shape-tabs">
           <button type="button" class="active" id="shapeSquare" data-shape="square">◻ <span data-i18n="shape_sq">Kwadrat</span></button>
@@ -430,6 +554,119 @@ const K_SQ=(()=>{const s=new Set();for(let m=1;m<=12;m++)for(let n=1;n<=12;n++)s
 // approximate circular membrane eigenvalues (j_{m,n} zeros of Bessel J_m)
 const K_CI=[2.4048,3.8317,5.1356,5.5201,6.3802,7.0156,7.5883,8.4172,8.6537,8.7715,9.7610,9.9361,10.1735,11.0647,11.0864,11.6198,11.7915,12.2251,12.3386,13.0152,13.3237,13.5893,14.3725,14.7959].map(x=>x);
 
+
+/* ─── animated spectral viz ─── */
+let vizMode='spectral', animPhase=0, animId=null, lastFrame={grid:null,maxAbs:1,binary:null,energy:0,Df:0,domains:0};
+
+function hslToRgb(h,s,l){
+  h=((h%360)+360)%360;s=Math.max(0,Math.min(1,s));l=Math.max(0,Math.min(1,l));
+  const c=(1-Math.abs(2*l-1))*s, x=c*(1-Math.abs((h/60)%2-1)), m=l-c/2;
+  let r=0,g=0,b=0;
+  if(h<60){r=c;g=x}else if(h<120){r=x;g=c}else if(h<180){g=c;b=x}
+  else if(h<240){g=x;b=c}else if(h<300){r=x;b=c}else{r=c;b=x}
+  return [(r+m)*255,(g+m)*255,(b+m)*255];
+}
+
+function paintSpectral(targetCtx, grid, maxAbs, binary, phase){
+  const img=targetCtx.createImageData(RES,RES);
+  const inv=1/(maxAbs||1);
+  for(let i=0;i<RES*RES;i++){
+    const g=grid[i]*inv;
+    const a=Math.abs(g);
+    const ang=(Math.atan2(g,0.15)+Math.PI)/(Math.PI*2);
+    let r,gch,b,al=255;
+    if(vizMode==='nodes'){
+      const v=binary[i]?1:0;
+      const glow=a*0.5;
+      r=v?240:8+glow*40; gch=v?200:6+glow*20; b=v?255:30+glow*80;
+    }else if(vizMode==='field'){
+      const t=(g+1)*0.5;
+      const [rr,gg,bb]=hslToRgb(210+t*100,0.75,0.18+a*0.45);
+      r=rr;gch=gg;b=bb;
+    }else if(vizMode==='plasma'){
+      const w=0.5+0.5*Math.sin(a*6+phase*2);
+      const [rr,gg,bb]=hslToRgb(280+a*140+phase*40+w*30,0.85,0.2+a*0.5);
+      r=rr;gch=gg;b=bb;
+    }else{
+      // spectral
+      const hue=200+a*160+phase*30+(g>0?20:-10);
+      const [rr,gg,bb]=hslToRgb(hue,0.8,0.15+a*0.55);
+      r=rr;gch=gg;b=bb;
+      if(binary[i]){r=Math.min(255,r+40);gch=Math.min(255,gch+30);b=Math.min(255,b+50)}
+    }
+    img.data[i*4]=r;img.data[i*4+1]=gch;img.data[i*4+2]=b;img.data[i*4+3]=al;
+  }
+  targetCtx.putImageData(img,0,0);
+}
+
+function computeFrame(sh){
+  const N=+document.getElementById("nModes").value,alpha=+document.getElementById("alpha").value;
+  // animate phases by shifting seed-derived phases via phase offset in pattern
+  const {grid,maxAbs,energy,ks}=generatePatternAnimated(N,alpha,RES,seed,sh,animPhase);
+  const absGrid=new Float32Array(RES*RES);for(let i=0;i<grid.length;i++)absGrid[i]=Math.abs(grid[i]);
+  const thresh=otsuThreshold(absGrid);const binary=new Uint8Array(RES*RES);
+  for(let i=0;i<grid.length;i++)binary[i]=absGrid[i]>thresh?1:0;
+  const Df=boxCountDf(binary,RES),domains=countDomains(binary,RES,2,0.003);
+  return {grid,maxAbs,binary,energy,Df,domains,ks};
+}
+
+function generatePatternAnimated(N,alpha,res,seed,shape,phase){
+  const rand=mulberry32(seed);
+  const ks=(shape==='circle'?K_CI:K_SQ).slice(0,N);
+  const phis=ks.map(()=>rand()*Math.PI*2);
+  const grid=new Float32Array(res*res);let maxAbs=0;
+  for(let j=0;j<res;j++){
+    const y=j/(res-1)*2-1;
+    for(let i=0;i<res;i++){
+      const x=i/(res-1)*2-1;
+      const r=Math.sqrt(x*x+y*y);
+      if(shape==='circle'&&r>1){grid[j*res+i]=0;continue}
+      let v=0;
+      for(let n=0;n<ks.length;n++){
+        const drift=phase*(0.4+0.15*(n%5));
+        v+=Math.cos(ks[n]*r+phis[n]+drift)*Math.exp(-alpha*r);
+      }
+      grid[j*res+i]=v;if(Math.abs(v)>maxAbs)maxAbs=Math.abs(v);
+    }
+  }
+  const bandwidth=ks.length>1?ks[ks.length-1]-ks[0]:ks[0];
+  return{grid,maxAbs,energy:ks.length*bandwidth,ks};
+}
+
+function animLoop(ts){
+  animPhase=(ts||0)*0.0012;
+  if(mode==='upload'){animId=requestAnimationFrame(animLoop);return}
+  if(dualMode){
+    const sq=computeFrame('square'), ci=computeFrame('circle');
+    paintSpectral(document.getElementById('canvasSq').getContext('2d'),sq.grid,sq.maxAbs,sq.binary,animPhase);
+    paintSpectral(document.getElementById('canvasCi').getContext('2d'),ci.grid,ci.maxAbs,ci.binary,animPhase+0.7);
+    document.getElementById('vDfSq').textContent=sq.Df.toFixed(3);
+    document.getElementById('vDomSq').textContent=sq.domains;
+    document.getElementById('vESq').textContent=Math.round(sq.energy);
+    document.getElementById('vDfCi').textContent=ci.Df.toFixed(3);
+    document.getElementById('vDomCi').textContent=ci.domains;
+    document.getElementById('vECi').textContent=Math.round(ci.energy);
+    document.getElementById('modeInfo').textContent='mode: dual · live';
+  }else{
+    const fr=computeFrame(shape);
+    lastFrame=fr; lastKs=fr.ks||lastKs;
+    stats={Df:fr.Df,domains:fr.domains,energy:fr.energy};
+    document.getElementById("vDf").textContent=fr.Df.toFixed(3);
+    document.getElementById("vDom").textContent=fr.domains;
+    document.getElementById("vE").textContent=Math.round(fr.energy);
+    document.getElementById("lblN").textContent=document.getElementById("nModes").value;
+    document.getElementById("lblA").textContent=(+document.getElementById("alpha").value).toFixed(2);
+    document.getElementById("modeInfo").textContent=`mode: live · ${shape} · ${vizMode}`;
+    paintSpectral(ctx,fr.grid,fr.maxAbs,fr.binary,animPhase);
+  }
+  animId=requestAnimationFrame(animLoop);
+}
+
+function startAnim(){
+  if(animId)cancelAnimationFrame(animId);
+  animId=requestAnimationFrame(animLoop);
+}
+
 function mulberry32(seed){return function(){seed|=0;seed=seed+0x6d2b79f5|0;let t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
 
 function generatePattern(N,alpha,res,seed,shape){
@@ -532,27 +769,11 @@ function playSound(){
 
 /* ─── render ─── */
 function render(){
-  if(dualMode){renderDual();return;}
-  if(mode==='upload')return; // image analysis stays until cleared
-  const N=+document.getElementById("nModes").value,alpha=+document.getElementById("alpha").value;
-  document.getElementById("lblN").textContent=N;
-  document.getElementById("lblA").textContent=alpha.toFixed(2);
-  const{grid,maxAbs,energy,ks}=generatePattern(N,alpha,RES,seed,shape);
-  lastKs=ks;
-  const absGrid=new Float32Array(RES*RES);for(let i=0;i<grid.length;i++)absGrid[i]=Math.abs(grid[i]);
-  const thresh=otsuThreshold(absGrid);const binary=new Uint8Array(RES*RES);
-  for(let i=0;i<grid.length;i++)binary[i]=absGrid[i]>thresh?1:0;
-  const Df=boxCountDf(binary,RES),domains=countDomains(binary,RES,2,0.003);
-  stats={Df,domains,energy};
-  document.getElementById("vDf").textContent=Df.toFixed(3);
-  document.getElementById("vDom").textContent=domains;
-  document.getElementById("vE").textContent=Math.round(energy);
-  document.getElementById("modeInfo").textContent=`mode: synthetic · ${shape}`;
-  const img=ctx.createImageData(RES,RES);
-  for(let i=0;i<RES*RES;i++){
-    const v=binary[i]?255:0;const t=Math.min(255,Math.abs(grid[i])/(maxAbs||1)*255*0.4);
-    img.data[i*4]=v?230:10+t*0.25;img.data[i*4+1]=v?218:6+t*0.15;img.data[i*4+2]=v?255:22+t*0.5;img.data[i*4+3]=255}
-  ctx.putImageData(img,0,0);
+  if(mode==='upload')return;
+  document.getElementById("lblN").textContent=document.getElementById("nModes").value;
+  document.getElementById("lblA").textContent=(+document.getElementById("alpha").value).toFixed(2);
+  // animation loop handles painting; force one compute for stats if needed
+  if(!animId)startAnim();
 }
 
 function analyzeImageData(imageData){
@@ -827,8 +1048,8 @@ function toggleDual(){
   document.getElementById('singleWrap').classList.toggle('hide', dualMode);
   document.getElementById('btnCompare').classList.toggle('btn-accent', dualMode);
   document.getElementById('btnCompare').classList.toggle('btn-dark', !dualMode);
-  if(dualMode){mode='synthetic';renderDual();}
-  else render();
+  if(dualMode){mode='synthetic';}
+  startAnim();
   const frame=document.getElementById('mainFrame');
   if(frame){frame.classList.remove('morph');void frame.offsetWidth;frame.classList.add('morph');}
 }
@@ -868,6 +1089,14 @@ document.getElementById('mPhase').addEventListener('click',()=>document.getEleme
 document.getElementById('mSound').addEventListener('click',()=>document.getElementById('btnSound').click());
 document.getElementById('mCompare').addEventListener('click',()=>document.getElementById('btnCompare').click());
 document.getElementById('mSave').addEventListener('click',()=>document.getElementById('btnSave').click());
+document.querySelectorAll('#vizToggle [data-viz]').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    vizMode=btn.getAttribute('data-viz');
+    document.querySelectorAll('#vizToggle [data-viz]').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+  });
+});
+startAnim();
 buildPresets();
 setLang(lang);
 render();drawPlot();
