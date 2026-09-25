@@ -5,6 +5,14 @@
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>FAEM Generator — Fractal Vibration Lab</title>
 <meta name="description" content="Generator wzorów FAEM: superpozycja modów własnych (kwadrat/koło), wymiar fraktalny, domeny, dźwięk, upload obrazu, presety, eksport PNG/CSV."/>
+<meta property="og:type" content="website"/>
+<meta property="og:url" content="https://fractalvibrationlab.com/faem_generator.html"/>
+<meta property="og:title" content="FAEM Generator — Fractal Vibration Lab"/>
+<meta property="og:description" content="Live eigenmode patterns: square/circle, fractal dimension, domains, sound, image upload. Open research tool."/>
+<meta property="og:image" content="https://fractalvibrationlab.com/chladni_law_test_plot.png"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:title" content="FAEM Generator — Fractal Vibration Lab"/>
+<meta name="twitter:description" content="Square/circle eigenmodes, Df, domains, sound, upload — in the browser."/>
 <meta name="theme-color" content="#08061a"/>
 <link rel="manifest" href="manifest.webmanifest"/>
 <meta name="apple-mobile-web-app-capable" content="yes"/>
@@ -175,6 +183,51 @@ button, .btn-file{
 .howto-list li{margin-bottom:4px}
 .demo-row{display:flex;gap:8px;flex-wrap:wrap}
 
+
+/* dual side-by-side */
+.dual-wrap{display:none;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+.dual-wrap.on{display:grid}
+.dual-wrap .dual-cell{position:relative}
+.dual-wrap .dual-lab{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--violet2);font-weight:700;margin-bottom:6px;text-align:center}
+.dual-wrap canvas{width:100%;aspect-ratio:1;display:block;border-radius:10px;background:#0b0818;image-rendering:pixelated;box-shadow:0 0 0 1px var(--border2)}
+.single-wrap.hide{display:none}
+
+/* animations */
+@keyframes popIn{0%{transform:scale(.92);opacity:.4}100%{transform:scale(1);opacity:1}}
+@keyframes flashGold{0%{box-shadow:0 0 0 0 rgba(224,196,140,.55)}100%{box-shadow:0 0 0 12px rgba(224,196,140,0)}}
+@keyframes shapePulse{0%{transform:scale(1)}50%{transform:scale(1.03)}100%{transform:scale(1)}}
+.canvas-frame.pop{animation:popIn .35s ease}
+.stat.flash .val{animation:flashGold .6s ease}
+.preset-chip.active{animation:popIn .25s ease}
+.shape-tabs button.active{transition:all .25s}
+.canvas-frame.morph{animation:shapePulse .4s ease}
+
+/* mobile sticky bar */
+.mobile-bar{
+  display:none;position:fixed;left:0;right:0;bottom:0;z-index:50;
+  padding:10px 12px calc(10px + env(safe-area-inset-bottom));
+  background:rgba(6,4,18,.92);backdrop-filter:blur(16px) saturate(1.3);
+  border-top:1px solid var(--border2);
+  gap:8px;
+}
+.mobile-bar button{
+  flex:1;min-width:0;padding:12px 8px;font-size:12px;border-radius:12px;
+  border:1px solid var(--border2);background:rgba(143,107,255,.12);color:var(--text);
+  font-weight:700;font-family:inherit;cursor:pointer;
+}
+.mobile-bar button.primary{background:linear-gradient(135deg,var(--violet),var(--violet-deep));border-color:transparent;color:#fff}
+@media(max-width:720px){
+  .mobile-bar{display:flex}
+  .wrap{padding-bottom:96px}
+  button,.btn-file{padding:12px 14px;font-size:13px;min-height:44px}
+  input[type=range]{height:8px}
+  .shape-tabs button{padding:12px;font-size:13px}
+  .preset-chip{padding:8px 12px;font-size:12px}
+  .topbar{padding:12px 14px}
+  .legend{margin:14px 0 16px}
+  .stat .val{font-size:16px}
+}
+
 .mode-badge{font-size:11px;color:var(--dim);font-family:var(--mono);margin-top:6px}
 </style>
 </head>
@@ -227,9 +280,31 @@ button, .btn-file{
     <div>
       <div class="panel">
         <div class="panel-title"><span class="dot"></span><span data-i18n="panel_pattern">Wzór</span></div>
-        <div class="canvas-frame">
-          <canvas id="canvas" class="pattern" width="200" height="200"></canvas>
-          <div class="corner tl"></div><div class="corner tr"></div><div class="corner bl"></div><div class="corner br"></div>
+        <div class="single-wrap" id="singleWrap">
+          <div class="canvas-frame" id="mainFrame">
+            <canvas id="canvas" class="pattern" width="200" height="200"></canvas>
+            <div class="corner tl"></div><div class="corner tr"></div><div class="corner bl"></div><div class="corner br"></div>
+          </div>
+        </div>
+        <div class="dual-wrap" id="dualWrap">
+          <div class="dual-cell">
+            <div class="dual-lab">□ <span data-i18n="compare_sq">Kwadrat</span></div>
+            <canvas id="canvasSq" width="200" height="200"></canvas>
+            <div class="stats" style="margin-top:8px">
+              <div class="stat"><div class="lbl">Df</div><div class="val" id="vDfSq">—</div></div>
+              <div class="stat"><div class="lbl" data-i18n="lbl_dom">domeny</div><div class="val" id="vDomSq">—</div></div>
+              <div class="stat"><div class="lbl" data-i18n="lbl_e">energia</div><div class="val" id="vESq">—</div></div>
+            </div>
+          </div>
+          <div class="dual-cell">
+            <div class="dual-lab">○ <span data-i18n="compare_ci">Koło</span></div>
+            <canvas id="canvasCi" width="200" height="200"></canvas>
+            <div class="stats" style="margin-top:8px">
+              <div class="stat"><div class="lbl">Df</div><div class="val" id="vDfCi">—</div></div>
+              <div class="stat"><div class="lbl" data-i18n="lbl_dom">domeny</div><div class="val" id="vDomCi">—</div></div>
+              <div class="stat"><div class="lbl" data-i18n="lbl_e">energia</div><div class="val" id="vECi">—</div></div>
+            </div>
+          </div>
         </div>
         <div class="stats">
           <div class="stat"><div class="lbl">Df</div><div class="val" id="vDf">—</div></div>
@@ -273,7 +348,7 @@ button, .btn-file{
         </div>
         <div class="btns" style="margin-top:8px">
           <button class="btn-dark" id="btnResetSynth" type="button" data-i18n="btn_reset">↺ wróć do syntezy</button>
-          <button class="btn-dark" id="btnCompare" type="button" data-i18n="btn_compare">⇄ porównaj □/○</button>
+          <button class="btn-dark" id="btnCompare" type="button" data-i18n="btn_compare">⇄ side-by-side</button>
         </div>
         <div id="compareBox" class="compare-box" style="display:none"></div>
 
@@ -318,7 +393,7 @@ pl:{
   empty:'Zmieniaj parametry i kliknij <strong>„zapisz punkt”</strong>, żeby budować zbiór. Regresja od 3 punktów.',
   fn_dom:"domeny",fn_e:"energia",fn_note:"Narzędzie do eksploracji; R² < 0,5 = słaba zależność.",
   points:"punktów",copied:"Skopiowano link!",no_points:"Brak punktów",sim_note:"Symulacja — nie dowód eksperymentalny.",
-  need3:"Zapisz ≥ 3 punkty, żeby zobaczyć regresję.",upload_ok:"Obraz załadowany — Df i domeny policzone.",btn_reset:"↺ wróć do syntezy",btn_compare:"⇄ porównaj □/○",compare_title:"Porównanie przy tych samych N i α",compare_sq:"Kwadrat",compare_ci:"Koło",howto_t:"Jak używać",howto_1:"Wybierz geometrię (kwadrat / koło) i suwaki N oraz α — wzór liczy się na żywo.",howto_2:"Kliknij „dźwięk”, żeby usłyszeć ton powiązany z modami; „nowe fazy” losuje fazy.",howto_3:"Zapisz kilka punktów → regresja Df vs energia. Eksport CSV / PNG albo udostępnij link.",howto_4:"Albo wrzuć własne zdjęcie Chladniego — Df i domeny policzą się automatycznie. Poniżej: szybkie demo.",demo1:"Demo: gęsty wzór",demo2:"Demo: rzadki wzór",demo3:"Demo: koło"
+  need3:"Zapisz ≥ 3 punkty, żeby zobaczyć regresję.",upload_ok:"Obraz załadowany — Df i domeny policzone.",btn_reset:"↺ wróć do syntezy",btn_compare:"⇄ side-by-side",compare_title:"Porównanie przy tych samych N i α",compare_sq:"Kwadrat",compare_ci:"Koło",howto_t:"Jak używać",howto_1:"Wybierz geometrię (kwadrat / koło) i suwaki N oraz α — wzór liczy się na żywo.",howto_2:"Kliknij „dźwięk”, żeby usłyszeć ton powiązany z modami; „nowe fazy” losuje fazy.",howto_3:"Zapisz kilka punktów → regresja Df vs energia. Eksport CSV / PNG albo udostępnij link.",howto_4:"Albo wrzuć własne zdjęcie Chladniego — Df i domeny policzą się automatycznie. Poniżej: szybkie demo.",demo1:"Demo: gęsty wzór",demo2:"Demo: rzadki wzór",demo3:"Demo: koło"
 },
 en:{
   status:"generator active",nav_calc:"Calculator →",nav_home:"← Home",
@@ -333,7 +408,7 @@ en:{
   empty:'Change parameters and click <strong>“save point”</strong> to build a set. Regression from 3 points.',
   fn_dom:"domains",fn_e:"energy",fn_note:"Exploration tool; R² < 0.5 = weak dependence.",
   points:"points",copied:"Link copied!",no_points:"No points",sim_note:"Simulation — not experimental proof.",
-  need3:"Save ≥ 3 points to see regression.",upload_ok:"Image loaded — Df and domains computed.",btn_reset:"↺ back to synthesis",btn_compare:"⇄ compare □/○",compare_title:"Comparison at same N and α",compare_sq:"Square",compare_ci:"Circle",howto_t:"How to use",howto_1:"Pick geometry (square / circle) and sliders N and α — the pattern updates live.",howto_2:"Click “sound” to hear a tone linked to the modes; “new phases” randomizes phases.",howto_3:"Save a few points → Df vs energy regression. Export CSV / PNG or share a link.",howto_4:"Or drop your own Chladni photo — Df and domains are computed automatically. Demos below.",demo1:"Demo: dense pattern",demo2:"Demo: sparse pattern",demo3:"Demo: circle"
+  need3:"Save ≥ 3 points to see regression.",upload_ok:"Image loaded — Df and domains computed.",btn_reset:"↺ back to synthesis",btn_compare:"⇄ side-by-side",compare_title:"Comparison at same N and α",compare_sq:"Square",compare_ci:"Circle",howto_t:"How to use",howto_1:"Pick geometry (square / circle) and sliders N and α — the pattern updates live.",howto_2:"Click “sound” to hear a tone linked to the modes; “new phases” randomizes phases.",howto_3:"Save a few points → Df vs energy regression. Export CSV / PNG or share a link.",howto_4:"Or drop your own Chladni photo — Df and domains are computed automatically. Demos below.",demo1:"Demo: dense pattern",demo2:"Demo: sparse pattern",demo3:"Demo: circle"
 }
 };
 let lang=localStorage.getItem('faem_lang')||'pl';
@@ -457,6 +532,7 @@ function playSound(){
 
 /* ─── render ─── */
 function render(){
+  if(dualMode){renderDual();return;}
   if(mode==='upload')return; // image analysis stays until cleared
   const N=+document.getElementById("nModes").value,alpha=+document.getElementById("alpha").value;
   document.getElementById("lblN").textContent=N;
@@ -649,12 +725,16 @@ document.getElementById('shapeSquare').addEventListener('click',()=>{
   shape='square';mode='synthetic';document.getElementById('fileInput').value='';
   document.getElementById('shapeSquare').classList.add('active');
   document.getElementById('shapeCircle').classList.remove('active');
+  const f=document.getElementById('mainFrame');if(f){f.classList.remove('morph');void f.offsetWidth;f.classList.add('morph');}
+  if(dualMode)toggleDual();
   render();
 });
 document.getElementById('shapeCircle').addEventListener('click',()=>{
   shape='circle';mode='synthetic';
   document.getElementById('shapeCircle').classList.add('active');
   document.getElementById('shapeSquare').classList.remove('active');
+  const f=document.getElementById('mainFrame');if(f){f.classList.remove('morph');void f.offsetWidth;f.classList.add('morph');}
+  if(dualMode)toggleDual();
   render();
 });
 
@@ -705,10 +785,64 @@ function compareShapes(){
     </div>`;
 }
 document.getElementById('btnResetSynth').addEventListener('click', resetToSynth);
-document.getElementById('btnCompare').addEventListener('click', compareShapes);
+
+let dualMode=false;
+const ctxSq=()=>document.getElementById('canvasSq').getContext('2d');
+const ctxCi=()=>document.getElementById('canvasCi').getContext('2d');
+
+function paintGrid(targetCtx, grid, maxAbs, binary){
+  const img=targetCtx.createImageData(RES,RES);
+  for(let i=0;i<RES*RES;i++){
+    const v=binary[i]?255:0;const tt=Math.min(255,Math.abs(grid[i])/(maxAbs||1)*255*0.4);
+    img.data[i*4]=v?230:10+tt*0.25;img.data[i*4+1]=v?218:6+tt*0.15;img.data[i*4+2]=v?255:22+tt*0.5;img.data[i*4+3]=255;
+  }
+  targetCtx.putImageData(img,0,0);
+}
+
+function analyzeAndPaint(sh, targetCtx, ids){
+  const N=+document.getElementById("nModes").value,alpha=+document.getElementById("alpha").value;
+  const {grid,maxAbs,energy}=generatePattern(N,alpha,RES,seed,sh);
+  const absGrid=new Float32Array(RES*RES);for(let i=0;i<grid.length;i++)absGrid[i]=Math.abs(grid[i]);
+  const thresh=otsuThreshold(absGrid);const binary=new Uint8Array(RES*RES);
+  for(let i=0;i<grid.length;i++)binary[i]=absGrid[i]>thresh?1:0;
+  const Df=boxCountDf(binary,RES),domains=countDomains(binary,RES,2,0.003);
+  paintGrid(targetCtx,grid,maxAbs,binary);
+  if(ids){
+    document.getElementById(ids.df).textContent=Df.toFixed(3);
+    document.getElementById(ids.dom).textContent=domains;
+    document.getElementById(ids.e).textContent=Math.round(energy);
+  }
+  return {Df,domains,energy};
+}
+
+function renderDual(){
+  analyzeAndPaint('square', ctxSq(), {df:'vDfSq',dom:'vDomSq',e:'vESq'});
+  analyzeAndPaint('circle', ctxCi(), {df:'vDfCi',dom:'vDomCi',e:'vECi'});
+  document.getElementById('modeInfo').textContent='mode: dual · square | circle';
+}
+
+function toggleDual(){
+  dualMode=!dualMode;
+  document.getElementById('dualWrap').classList.toggle('on', dualMode);
+  document.getElementById('singleWrap').classList.toggle('hide', dualMode);
+  document.getElementById('btnCompare').classList.toggle('btn-accent', dualMode);
+  document.getElementById('btnCompare').classList.toggle('btn-dark', !dualMode);
+  if(dualMode){mode='synthetic';renderDual();}
+  else render();
+  const frame=document.getElementById('mainFrame');
+  if(frame){frame.classList.remove('morph');void frame.offsetWidth;frame.classList.add('morph');}
+}
+
+function pulseSave(){
+  document.querySelectorAll('.stat').forEach(s=>{s.classList.remove('flash');void s.offsetWidth;s.classList.add('flash');});
+  const frame=document.getElementById('mainFrame');
+  if(frame){frame.classList.remove('pop');void frame.offsetWidth;frame.classList.add('pop');}
+}
+
+document.getElementById('btnCompare').addEventListener('click', toggleDual);
 
 document.getElementById("btnSound").addEventListener("click",()=>{playing?stopSound():playSound()});
-document.getElementById("btnSave").addEventListener("click",savePoint);
+document.getElementById("btnSave").addEventListener("click",()=>{savePoint();pulseSave();});
 document.getElementById("btnClear").addEventListener("click",clearHistory);
 document.getElementById("btnExport").addEventListener("click",exportCSV);
 document.getElementById("btnPng").addEventListener("click",exportPNG);
@@ -729,6 +863,11 @@ document.getElementById('demo1').addEventListener('click',()=>runDemo(28,0.9,'sq
 document.getElementById('demo2').addEventListener('click',()=>runDemo(6,1.8,'square'));
 document.getElementById('demo3').addEventListener('click',()=>runDemo(18,1.2,'circle'));
 
+// mobile bar
+document.getElementById('mPhase').addEventListener('click',()=>document.getElementById('btnPhase').click());
+document.getElementById('mSound').addEventListener('click',()=>document.getElementById('btnSound').click());
+document.getElementById('mCompare').addEventListener('click',()=>document.getElementById('btnCompare').click());
+document.getElementById('mSave').addEventListener('click',()=>document.getElementById('btnSave').click());
 buildPresets();
 setLang(lang);
 render();drawPlot();
@@ -817,6 +956,14 @@ if('serviceWorker' in navigator){
   window.addEventListener('load',()=>{navigator.serviceWorker.register('./sw.js').catch(()=>{});});
 }
 </script>
+
+
+<div class="mobile-bar" id="mobileBar">
+  <button type="button" id="mPhase">↻</button>
+  <button type="button" id="mSound">▶</button>
+  <button type="button" id="mCompare">⇄</button>
+  <button type="button" class="primary" id="mSave">+</button>
+</div>
 
 </body>
 </html>
