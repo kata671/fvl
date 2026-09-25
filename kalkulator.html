@@ -184,7 +184,7 @@ td.freq{color:var(--text);font-weight:700}
     <div class="panel">
       <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:14px;flex-wrap:wrap">
         <div>
-          <div class="section-lbl">Kształt płyty</div>
+          <div class="section-lbl" data-i18n="shape_lbl">Kształt płyty</div>
           <div class="tabs" style="margin-bottom:0">
             <button class="tab active" id="shapeRect" data-shape="rect">◻ Prostokątna</button>
             <button class="tab" id="shapeCirc" data-shape="circ">◯ Okrągła</button>
@@ -196,7 +196,7 @@ td.freq{color:var(--text);font-weight:700}
 
       <div class="divider" style="margin-top:20px"></div>
       <div id="rectFields">
-      <div class="section-lbl">Geometria i materiał</div>
+      <div class="section-lbl" data-i18n="geo">Geometria i materiał</div>
       <div class="field-grid">
         <div class="field">
           <label>Bok a <span class="unit">(mm)</span></label>
@@ -207,16 +207,16 @@ td.freq{color:var(--text);font-weight:700}
           <input type="number" id="pB" value="200" min="10" step="1"/>
         </div>
       </div>
-      <label class="checkline"><input type="checkbox" id="pSquare" checked/> płyta kwadratowa (b = a)</label>
+      <label class="checkline"><input type="checkbox" id="pSquare" checked/> <span data-i18n="square_chk">płyta kwadratowa (b = a)</span></label>
       </div>
       <div id="circFields" style="display:none">
-        <div class="section-lbl">Geometria</div>
+        <div class="section-lbl" data-i18n="geo_only">Geometria</div>
         <div class="field">
           <label>Promień R <span class="unit">(mm)</span></label>
           <input type="number" id="pR" value="100" min="10" step="1"/>
         </div>
       </div>
-      <div class="section-lbl">Materiał</div>
+      <div class="section-lbl" data-i18n="material">Materiał</div>
       <div class="field-grid">
         <div class="field">
           <label>Grubość h <span class="unit">(mm)</span></label>
@@ -309,7 +309,7 @@ td.freq{color:var(--text);font-weight:700}
   <!-- ============ WIDOK 2: FALA ============ -->
   <div class="view" id="view-wave">
     <div class="panel">
-      <div class="section-lbl">Ośrodek</div>
+      <div class="section-lbl" data-i18n="wave_medium">Ośrodek</div>
       <div class="field">
         <label>Prędkość dźwięku w ośrodku</label>
         <select id="wMedium">
@@ -344,7 +344,7 @@ td.freq{color:var(--text);font-weight:700}
       </div>
 
       <div class="divider"></div>
-      <div class="section-lbl">Trójkąt v = f · λ — edytuj dowolne pole</div>
+      <div class="section-lbl" data-i18n="wave_tri">Trójkąt v = f · λ — edytuj dowolne pole</div>
       <div class="triangle">
         <div class="tri-field">
           <label>Częstotliwość f <span class="lockbadge" id="lockF"></span></label>
@@ -384,7 +384,7 @@ td.freq{color:var(--text);font-weight:700}
   <!-- ============ WIDOK 3: TŁUMIENIE (Q) ============ -->
   <div class="view" id="view-decay">
     <div class="panel">
-      <div class="section-lbl">Parametry rezonansu</div>
+      <div class="section-lbl" data-i18n="decay_params">Parametry rezonansu</div>
       <div class="field-grid">
         <div class="field">
           <label>Częstotliwość f₀ <span class="unit">(Hz)</span></label>
@@ -395,10 +395,10 @@ td.freq{color:var(--text);font-weight:700}
           <input type="number" id="dQ" value="200" min="0.5" step="1"/>
         </div>
       </div>
-      <button class="btn-ghost-inline" id="dUseFreq" type="button">↙ użyj f z kalkulatora płytki</button>
+      <button class="btn-ghost-inline" id="dUseFreq" type="button" data-i18n="decay_use">↙ użyj f z kalkulatora płytki</button>
 
       <div class="divider"></div>
-      <div class="section-lbl">Obwiednia zaniku</div>
+      <div class="section-lbl" data-i18n="decay_env">Obwiednia zaniku</div>
       <div class="viz-frame" style="aspect-ratio:auto;height:180px">
         <svg id="dSvg" viewBox="0 0 600 180" preserveAspectRatio="none"></svg>
         <div class="viz-corner tl"></div><div class="viz-corner tr"></div><div class="viz-corner bl"></div><div class="viz-corner br"></div>
@@ -413,7 +413,7 @@ td.freq{color:var(--text);font-weight:700}
 
       <div class="result-hero" style="margin-top:20px">
         <div>
-          <div class="lbl">Dźwięk zanikający</div>
+          <div class="lbl" data-i18n="decay_sound">Dźwięk zanikający</div>
           <div class="val" id="dPlayInfo" style="font-size:15px;color:var(--muted);font-weight:500">odsłuchaj obliczony zanik (maks. 4 s)</div>
         </div>
         <button class="play-btn" id="dPlay"><span class="dot"></span><span id="dPlayLbl">odsłuchaj</span></button>
@@ -1082,10 +1082,13 @@ sub:"Trzy narzędzia do zaprojektowania eksperymentu <strong>przed</strong> wł�
 share:"🔗 udostępnij te obliczenia",
 tab_plate:"Częstotliwości płytki",tab_wave:"Fala ↔ częstotliwość ↔ prędkość",tab_decay:"Tłumienie (Q)",
 shape_lbl:"Kształt płyty",shape_rect:"◻ Prostokątna",shape_circ:"◯ Okrągła",surprise:"🎲 zaskocz mnie",
-geo:"Geometria i materiał",side_a:"Bok a",side_b:"Bok b",square_chk:"płyta kwadratowa (b = a)",radius:"Promień R",
+geo:"Geometria i materiał",geo_only:"Geometria",side_a:"Bok a",side_b:"Bok b",square_chk:"płyta kwadratowa (b = a)",radius:"Promień R",
 thickness:"Grubość h",material:"Materiał",mat_steel:"Stal",mat_alu:"Aluminium",mat_brass:"Mosiądz",mat_glass:"Szkło",mat_pmma:"Pleksi (PMMA)",mat_custom:"Własny…",
 mode:"Tryb drgań (m, n)",modes_table:"Pierwsze tryby (posortowane rosnąco)",compare:"Porównanie materiałów — ta sama geometria i tryb, zmienia się tylko materiał",
-listen:"odsłuchaj",result_f:"f (m,n)"
+listen:"odsłuchaj",result_f:"f (m,n)",
+wave_medium:"Ośrodek",wave_tri:"Trójkąt v = f · λ — edytuj dowolne pole",wave_hint:"Ustaw dowolne dwie wielkości — trzecia dolicza się automatycznie.",
+decay_params:"Parametry rezonansu",decay_use:"↙ użyj f z kalkulatora płytki",decay_env:"Obwiednia zaniku",
+decay_sound:"Dźwięk zanikający",decay_play:"odsłuchaj obliczony zanik (maks. 4 s)"
 },
 en:{
 nav_gen:"Generator →",nav_home:"← Home",
@@ -1094,10 +1097,13 @@ sub:"Three tools to design an experiment <strong>before</strong> turning on a fu
 share:"🔗 share these calculations",
 tab_plate:"Plate frequencies",tab_wave:"Wave ↔ frequency ↔ speed",tab_decay:"Damping (Q)",
 shape_lbl:"Plate shape",shape_rect:"◻ Rectangular",shape_circ:"◯ Circular",surprise:"🎲 surprise me",
-geo:"Geometry & material",side_a:"Side a",side_b:"Side b",square_chk:"square plate (b = a)",radius:"Radius R",
+geo:"Geometry & material",geo_only:"Geometry",side_a:"Side a",side_b:"Side b",square_chk:"square plate (b = a)",radius:"Radius R",
 thickness:"Thickness h",material:"Material",mat_steel:"Steel",mat_alu:"Aluminium",mat_brass:"Brass",mat_glass:"Glass",mat_pmma:"Acrylic (PMMA)",mat_custom:"Custom…",
 mode:"Vibration mode (m, n)",modes_table:"Lowest modes (sorted ascending)",compare:"Material comparison — same geometry and mode, only material changes",
-listen:"play",result_f:"f (m,n)"
+listen:"play",result_f:"f (m,n)",
+wave_medium:"Medium",wave_tri:"Triangle v = f · λ — edit any field",wave_hint:"Set any two quantities — the third is computed automatically.",
+decay_params:"Resonance parameters",decay_use:"↙ use f from plate calculator",decay_env:"Decay envelope",
+decay_sound:"Decaying tone",decay_play:"play computed decay (max 4 s)"
 }
 };
 let lang=localStorage.getItem('faem_lang')||'pl';
@@ -1112,7 +1118,6 @@ window.setLang=function(l){
     const v=t(k);
     if(k==='sub')el.innerHTML=v; else el.textContent=v;
   });
-  // tabs
   const tabs=document.querySelectorAll('#mainTabs .tab');
   if(tabs[0])tabs[0].textContent=t('tab_plate');
   if(tabs[1])tabs[1].textContent=t('tab_wave');
@@ -1122,6 +1127,11 @@ window.setLang=function(l){
   if(sc)sc.textContent=t('shape_circ');
   const sb=document.getElementById('surpriseBtn'); if(sb)sb.textContent=t('surprise');
   const sh=document.getElementById('shareBtn'); if(sh)sh.textContent=t('share');
+  const sel=document.getElementById('pMaterial');
+  if(sel){
+    const map={steel:'mat_steel',alu:'mat_alu',brass:'mat_brass',glass:'mat_glass',pmma:'mat_pmma',custom:'mat_custom'};
+    [...sel.options].forEach(o=>{if(map[o.value])o.textContent=t(map[o.value]);});
+  }
 };
 document.addEventListener('DOMContentLoaded',()=>setLang(lang));
 setLang(lang);

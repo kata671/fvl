@@ -138,6 +138,12 @@ button, .btn-file{
 }
 .upload-zone:hover,.upload-zone.drag{border-color:var(--violet);color:var(--muted);background:rgba(143,107,255,.06)}
 .upload-zone input{display:none}
+.compare-box{margin-top:10px;padding:12px;border:1px solid var(--border);border-radius:11px;background:rgba(0,0,0,.25);font-size:12.5px;color:var(--muted);line-height:1.6}
+.compare-box b{color:var(--gold);font-family:var(--mono)}
+.compare-box .row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px}
+.compare-box .cell{padding:10px;border-radius:9px;background:rgba(143,107,255,.06);border:1px solid var(--border)}
+.compare-box .cell h4{font-size:11px;color:var(--violet2);margin:0 0 6px;text-transform:uppercase;letter-spacing:.06em}
+
 
 .right-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;gap:8px;flex-wrap:wrap}
 .right-head h2{font-family:var(--serif);font-size:15px;font-weight:600}
@@ -265,6 +271,11 @@ button, .btn-file{
           <span data-i18n="upload_hint">Upuść PNG/JPG lub kliknij — automatyczne Df + domeny</span>
           <input type="file" id="fileInput" accept="image/*"/>
         </div>
+        <div class="btns" style="margin-top:8px">
+          <button class="btn-dark" id="btnResetSynth" type="button" data-i18n="btn_reset">↺ wróć do syntezy</button>
+          <button class="btn-dark" id="btnCompare" type="button" data-i18n="btn_compare">⇄ porównaj □/○</button>
+        </div>
+        <div id="compareBox" class="compare-box" style="display:none"></div>
 
         <div class="section-lbl" data-i18n="sec_data">Zbiór danych</div>
         <div class="btns">
@@ -307,7 +318,7 @@ pl:{
   empty:'Zmieniaj parametry i kliknij <strong>„zapisz punkt”</strong>, żeby budować zbiór. Regresja od 3 punktów.',
   fn_dom:"domeny",fn_e:"energia",fn_note:"Narzędzie do eksploracji; R² < 0,5 = słaba zależność.",
   points:"punktów",copied:"Skopiowano link!",no_points:"Brak punktów",sim_note:"Symulacja — nie dowód eksperymentalny.",
-  need3:"Zapisz ≥ 3 punkty, żeby zobaczyć regresję.",upload_ok:"Obraz załadowany — Df i domeny policzone."
+  need3:"Zapisz ≥ 3 punkty, żeby zobaczyć regresję.",upload_ok:"Obraz załadowany — Df i domeny policzone.",btn_reset:"↺ wróć do syntezy",btn_compare:"⇄ porównaj □/○",compare_title:"Porównanie przy tych samych N i α",compare_sq:"Kwadrat",compare_ci:"Koło",howto_t:"Jak używać",howto_1:"Wybierz geometrię (kwadrat / koło) i suwaki N oraz α — wzór liczy się na żywo.",howto_2:"Kliknij „dźwięk”, żeby usłyszeć ton powiązany z modami; „nowe fazy” losuje fazy.",howto_3:"Zapisz kilka punktów → regresja Df vs energia. Eksport CSV / PNG albo udostępnij link.",howto_4:"Albo wrzuć własne zdjęcie Chladniego — Df i domeny policzą się automatycznie. Poniżej: szybkie demo.",demo1:"Demo: gęsty wzór",demo2:"Demo: rzadki wzór",demo3:"Demo: koło"
 },
 en:{
   status:"generator active",nav_calc:"Calculator →",nav_home:"← Home",
@@ -322,7 +333,7 @@ en:{
   empty:'Change parameters and click <strong>“save point”</strong> to build a set. Regression from 3 points.',
   fn_dom:"domains",fn_e:"energy",fn_note:"Exploration tool; R² < 0.5 = weak dependence.",
   points:"points",copied:"Link copied!",no_points:"No points",sim_note:"Simulation — not experimental proof.",
-  need3:"Save ≥ 3 points to see regression.",upload_ok:"Image loaded — Df and domains computed."
+  need3:"Save ≥ 3 points to see regression.",upload_ok:"Image loaded — Df and domains computed.",btn_reset:"↺ back to synthesis",btn_compare:"⇄ compare □/○",compare_title:"Comparison at same N and α",compare_sq:"Square",compare_ci:"Circle",howto_t:"How to use",howto_1:"Pick geometry (square / circle) and sliders N and α — the pattern updates live.",howto_2:"Click “sound” to hear a tone linked to the modes; “new phases” randomizes phases.",howto_3:"Save a few points → Df vs energy regression. Export CSV / PNG or share a link.",howto_4:"Or drop your own Chladni photo — Df and domains are computed automatically. Demos below.",demo1:"Demo: dense pattern",demo2:"Demo: sparse pattern",demo3:"Demo: circle"
 }
 };
 let lang=localStorage.getItem('faem_lang')||'pl';
@@ -635,7 +646,7 @@ zone.addEventListener('drop',e=>{e.preventDefault();zone.classList.remove('drag'
 
 /* ─── shape tabs ─── */
 document.getElementById('shapeSquare').addEventListener('click',()=>{
-  shape='square';mode='synthetic';
+  shape='square';mode='synthetic';document.getElementById('fileInput').value='';
   document.getElementById('shapeSquare').classList.add('active');
   document.getElementById('shapeCircle').classList.remove('active');
   render();
@@ -661,6 +672,41 @@ document.getElementById('shapeCircle').addEventListener('click',()=>{
 document.getElementById("nModes").addEventListener("input",()=>{mode='synthetic';render()});
 document.getElementById("alpha").addEventListener("input",()=>{mode='synthetic';render()});
 document.getElementById("btnPhase").addEventListener("click",()=>{seed++;mode='synthetic';render()});
+
+function resetToSynth(){
+  mode='synthetic';
+  document.getElementById('fileInput').value='';
+  const box=document.getElementById('compareBox');
+  if(box){box.style.display='none';box.innerHTML='';}
+  render();
+}
+function measureShape(sh,N,alpha,sd){
+  const {grid,maxAbs,energy,ks}=generatePattern(N,alpha,RES,sd,sh);
+  const absGrid=new Float32Array(RES*RES);
+  for(let i=0;i<grid.length;i++)absGrid[i]=Math.abs(grid[i]);
+  const thresh=otsuThreshold(absGrid);
+  const binary=new Uint8Array(RES*RES);
+  for(let i=0;i<grid.length;i++)binary[i]=absGrid[i]>thresh?1:0;
+  return {Df:boxCountDf(binary,RES),domains:countDomains(binary,RES,2,0.003),energy};
+}
+function compareShapes(){
+  const N=+document.getElementById('nModes').value;
+  const alpha=+document.getElementById('alpha').value;
+  const sd=seed;
+  const sq=measureShape('square',N,alpha,sd);
+  const ci=measureShape('circle',N,alpha,sd);
+  const box=document.getElementById('compareBox');
+  box.style.display='block';
+  box.innerHTML=`<div style="font-weight:600;color:var(--text);margin-bottom:4px">${t('compare_title')}</div>
+    <div style="font-size:11px;color:var(--dim)">N=${N} · α=${alpha.toFixed(2)} · seed=${sd}</div>
+    <div class="row">
+      <div class="cell"><h4>${t('compare_sq')}</h4>Df <b>${sq.Df.toFixed(3)}</b><br>domains <b>${sq.domains}</b><br>energy <b>${Math.round(sq.energy)}</b></div>
+      <div class="cell"><h4>${t('compare_ci')}</h4>Df <b>${ci.Df.toFixed(3)}</b><br>domains <b>${ci.domains}</b><br>energy <b>${Math.round(ci.energy)}</b></div>
+    </div>`;
+}
+document.getElementById('btnResetSynth').addEventListener('click', resetToSynth);
+document.getElementById('btnCompare').addEventListener('click', compareShapes);
+
 document.getElementById("btnSound").addEventListener("click",()=>{playing?stopSound():playSound()});
 document.getElementById("btnSave").addEventListener("click",savePoint);
 document.getElementById("btnClear").addEventListener("click",clearHistory);
