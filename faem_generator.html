@@ -4,7 +4,7 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>FAEM Generator — Fractal Vibration Lab</title>
-<meta name="description" content="Generator wzorów FAEM: superpozycja modów własnych, wymiar fraktalny, domeny, regresja Df vs energia na żywo."/>
+<meta name="description" content="Generator wzorów FAEM: superpozycja modów własnych (kwadrat/koło), wymiar fraktalny, domeny, dźwięk, upload obrazu, presety, eksport PNG/CSV."/>
 <meta name="theme-color" content="#08061a"/>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%2308061a'/%3E%3Ccircle cx='16' cy='16' r='9.5' fill='none' stroke='%238f6bff' stroke-width='1.3'/%3E%3Ccircle cx='16' cy='16' r='1.5' fill='%23e0c48c'/%3E%3C/svg%3E"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
@@ -38,38 +38,40 @@ a{color:var(--violet);text-decoration:none}
 .topbar .status{display:inline-flex;align-items:center;gap:7px;font-size:11.5px;color:var(--dim);margin-left:14px;font-family:var(--mono)}
 .topbar .status i{width:6px;height:6px;border-radius:50%;background:var(--ok);box-shadow:0 0 8px var(--ok);animation:blink 2.6s ease-in-out infinite}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.35}}
+.topbar-nav{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
 .topbar a.back{font-size:13px;color:var(--muted);font-weight:500;transition:color .2s}
 .topbar a.back:hover{color:var(--violet2)}
+.lang-switch{display:flex;border:1px solid var(--border2);border-radius:8px;overflow:hidden;background:rgba(143,107,255,.05)}
+.lang-switch button{background:transparent;border:none;color:var(--dim);font-size:11px;font-weight:600;padding:5px 10px;cursor:pointer;font-family:inherit}
+.lang-switch button.active{background:rgba(143,107,255,.18);color:var(--violet2)}
 
-.wrap{max-width:1120px;margin:0 auto;padding:36px 22px 56px;position:relative;z-index:1}
+.wrap{max-width:1180px;margin:0 auto;padding:28px 22px 56px;position:relative;z-index:1}
 .head-row{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap;margin-bottom:8px}
-h1{font-family:var(--serif);font-size:28px;font-weight:600;letter-spacing:-.01em}
-.sub{color:var(--muted);font-size:14.5px;margin-bottom:6px;max-width:600px;line-height:1.7}
+h1{font-family:var(--serif);font-size:26px;font-weight:600;letter-spacing:-.01em}
+.sub{color:var(--muted);font-size:14px;margin-bottom:6px;max-width:620px;line-height:1.7}
 
 .legend{
   display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);
-  border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin:26px 0 32px;
+  border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin:20px 0 24px;
 }
 @media(max-width:720px){.legend{grid-template-columns:1fr}}
-.legend .cell{background:var(--panel-solid);padding:16px 18px}
-.legend .cell b{display:block;font-family:var(--mono);font-size:12px;color:var(--violet2);letter-spacing:.03em;margin-bottom:6px;font-weight:600}
-.legend .cell span{font-size:13px;color:var(--muted);line-height:1.55}
+.legend .cell{background:var(--panel-solid);padding:14px 16px}
+.legend .cell b{display:block;font-family:var(--mono);font-size:11.5px;color:var(--violet2);letter-spacing:.03em;margin-bottom:5px;font-weight:600}
+.legend .cell span{font-size:12.5px;color:var(--muted);line-height:1.5}
 
-.grid{display:grid;grid-template-columns:400px 1fr;gap:22px}
-@media(max-width:900px){.grid{grid-template-columns:1fr}}
+.grid{display:grid;grid-template-columns:420px 1fr;gap:20px}
+@media(max-width:960px){.grid{grid-template-columns:1fr}}
 
 .panel{
   background:linear-gradient(155deg,rgba(143,107,255,.05),var(--panel));backdrop-filter:blur(12px);
-  border:1px solid var(--border);border-radius:var(--radius);padding:18px;
+  border:1px solid var(--border);border-radius:var(--radius);padding:16px;
 }
-.panel-title{font-family:var(--serif);font-size:14.5px;font-weight:600;color:var(--text);margin-bottom:14px;
+.panel-title{font-family:var(--serif);font-size:14px;font-weight:600;color:var(--text);margin-bottom:12px;
   display:flex;align-items:center;gap:8px;letter-spacing:.01em}
 .panel-title .dot{width:6px;height:6px;border-radius:50%;background:var(--violet)}
 
 .canvas-frame{position:relative;border-radius:12px;overflow:hidden;box-shadow:0 0 0 1px var(--border2),0 20px 50px -25px rgba(90,53,214,.5)}
-canvas.pattern{
-  width:100%;aspect-ratio:1;display:block;image-rendering:pixelated;background:#0b0818;
-}
+canvas.pattern{width:100%;aspect-ratio:1;display:block;image-rendering:pixelated;background:#0b0818}
 .canvas-frame::after{
   content:"";position:absolute;inset:0;pointer-events:none;border-radius:12px;
   box-shadow:inset 0 0 46px rgba(143,107,255,.1);
@@ -80,28 +82,29 @@ canvas.pattern{
 .corner.bl{bottom:8px;left:8px;border-right:none;border-top:none}
 .corner.br{bottom:8px;right:8px;border-left:none;border-top:none}
 
-.stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:14px}
+.stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:12px}
 .stat{
   background:rgba(0,0,0,.28);border:1px solid var(--border);border-radius:11px;
-  padding:13px 8px;text-align:center;transition:border-color .2s;
+  padding:11px 6px;text-align:center;transition:border-color .2s;
 }
 .stat:hover{border-color:var(--border2)}
-.stat .lbl{font-size:10px;color:var(--violet2);text-transform:uppercase;letter-spacing:.1em;margin-bottom:5px;font-weight:700}
-.stat .val{font-size:19px;font-family:var(--mono);font-weight:700;color:var(--text)}
+.stat .lbl{font-size:10px;color:var(--violet2);text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px;font-weight:700}
+.stat .val{font-size:18px;font-family:var(--mono);font-weight:700;color:var(--text)}
 
-.section-lbl{font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--dim);font-weight:700;margin:20px 0 10px}
+.section-lbl{font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--dim);font-weight:700;margin:16px 0 8px}
 .sliders{margin-top:2px}
-.slider-row{margin-bottom:16px}
-.slider-row label{display:flex;justify-content:space-between;font-size:12.5px;color:var(--muted);margin-bottom:8px;font-weight:600}
+.slider-row{margin-bottom:12px}
+.slider-row label{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-bottom:6px;font-weight:600}
 .slider-row label .v{color:var(--gold);font-family:var(--mono);font-weight:700}
 input[type=range]{
   width:100%;height:4px;border-radius:99px;accent-color:var(--violet);
   background:linear-gradient(90deg,var(--violet-deep),var(--violet));cursor:pointer;
 }
-.btns{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
-button{
-  border:none;border-radius:10px;padding:11px 16px;font-size:13px;font-weight:700;
-  cursor:pointer;font-family:inherit;flex:1;min-width:100px;transition:all .2s;
+.btns{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+button, .btn-file{
+  border:none;border-radius:10px;padding:10px 14px;font-size:12.5px;font-weight:700;
+  cursor:pointer;font-family:inherit;flex:1;min-width:90px;transition:all .2s;
+  display:inline-flex;align-items:center;justify-content:center;gap:6px;
 }
 .btn-accent{background:linear-gradient(135deg,var(--violet),var(--violet-deep));color:#fbf9ff;box-shadow:0 6px 18px -6px rgba(90,53,214,.6)}
 .btn-accent:hover{transform:translateY(-1px);box-shadow:0 10px 26px -8px rgba(90,53,214,.75)}
@@ -109,123 +112,230 @@ button{
 .btn-dark:hover{background:rgba(143,107,255,.18)}
 .btn-ghost{background:transparent;color:var(--muted);border:1px solid var(--border);flex:0}
 .btn-ghost:hover{color:var(--text);border-color:var(--border2)}
+.btn-file{background:rgba(143,107,255,.1);color:var(--text);border:1px solid var(--border2)}
+.btn-file:hover{background:rgba(143,107,255,.18)}
+.btn-play.playing{border-color:rgba(224,196,140,.55);color:var(--gold);background:rgba(224,196,140,.1)}
 
-.right-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;gap:8px;flex-wrap:wrap}
-.right-head h2{font-family:var(--serif);font-size:16px;font-weight:600}
-#plot{width:100%;height:320px;border-radius:11px;background:#0b0818;display:none}
+.shape-tabs{display:flex;gap:6px;margin-bottom:10px}
+.shape-tabs button{flex:1;padding:8px;font-size:12px;border-radius:9px;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;font-weight:600}
+.shape-tabs button.active{background:rgba(143,107,255,.14);color:var(--text);border-color:var(--border2)}
+
+.preset-row{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+.preset-chip{
+  font-size:11px;padding:5px 10px;border-radius:8px;border:1px solid var(--border);
+  background:rgba(0,0,0,.2);color:var(--muted);cursor:pointer;font-weight:600;transition:all .15s;
+}
+.preset-chip:hover{border-color:var(--border2);color:var(--text)}
+.preset-chip.active{border-color:var(--gold);color:var(--gold);background:rgba(224,196,140,.1)}
+
+.upload-zone{
+  border:1px dashed var(--border2);border-radius:11px;padding:14px;text-align:center;
+  font-size:12.5px;color:var(--dim);margin-top:8px;cursor:pointer;transition:all .2s;
+}
+.upload-zone:hover,.upload-zone.drag{border-color:var(--violet);color:var(--muted);background:rgba(143,107,255,.06)}
+.upload-zone input{display:none}
+
+.right-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;gap:8px;flex-wrap:wrap}
+.right-head h2{font-family:var(--serif);font-size:15px;font-weight:600}
+#plot{width:100%;height:300px;border-radius:11px;background:#0b0818;display:none}
 .empty{
-  height:296px;display:flex;align-items:center;justify-content:center;
-  color:var(--dim);font-size:13.5px;text-align:center;padding:32px;line-height:1.7;
+  height:276px;display:flex;align-items:center;justify-content:center;
+  color:var(--dim);font-size:13px;text-align:center;padding:28px;line-height:1.7;
   border:1px dashed var(--border2);border-radius:11px;
 }
 .fit-info{
-  margin-top:16px;font-size:13.5px;line-height:1.6;padding:16px 18px;
+  margin-top:14px;font-size:13px;line-height:1.6;padding:14px 16px;
   border-radius:12px;background:linear-gradient(155deg,rgba(143,107,255,.06),rgba(0,0,0,.25));border:1px solid var(--border);
 }
 .fit-info.ok{border-color:rgba(217,196,140,.4);background:linear-gradient(155deg,rgba(224,196,140,.08),rgba(0,0,0,.25))}
 .fit-info.warn{border-color:rgba(224,163,115,.35)}
 .fit-info .mono{font-family:var(--mono);color:var(--gold);font-weight:700}
-.badge{
-  display:inline-block;font-size:11px;padding:3px 9px;border-radius:99px;
-  margin-left:6px;font-weight:700;letter-spacing:.02em;
-}
+.badge{display:inline-block;font-size:11px;padding:3px 9px;border-radius:99px;margin-left:6px;font-weight:700}
 .badge-ok{background:rgba(217,196,140,.15);color:var(--gold)}
 .badge-warn{background:rgba(224,163,115,.14);color:var(--warn)}
-.footnote{
-  margin-top:26px;font-size:12.5px;color:var(--dim);line-height:1.7;
-  border-top:1px solid var(--border);padding-top:18px;
-}
+.footnote{margin-top:22px;font-size:12px;color:var(--dim);line-height:1.7;border-top:1px solid var(--border);padding-top:16px}
 .footnote strong{color:var(--violet2)}
+.mode-badge{font-size:11px;color:var(--dim);font-family:var(--mono);margin-top:6px}
 </style>
 </head>
 <body>
 <div class="topbar">
   <div style="display:flex;align-items:center">
     <div class="brand">Fractal <span>Vibration</span> Lab</div>
-    <span class="status"><i></i>generator aktywny</span>
+    <span class="status"><i></i><span data-i18n="status">generator aktywny</span></span>
   </div>
-  <a class="back" href="kalkulator.html" style="margin-right:16px">Kalkulator →</a>
-  <a class="back" href="index.html">← Strona główna</a>
+  <div class="topbar-nav">
+    <a class="back" href="kalkulator.html" data-i18n="nav_calc">Kalkulator →</a>
+    <a class="back" href="index.html" data-i18n="nav_home">← Strona główna</a>
+    <div class="lang-switch" role="group" aria-label="Language">
+      <button type="button" id="btnPL" class="active" onclick="setLang('pl')">PL</button>
+      <button type="button" id="btnEN" onclick="setLang('en')">EN</button>
+    </div>
+  </div>
 </div>
 <div class="wrap">
   <div class="head-row">
     <div>
-      <h1>FAEM Generator</h1>
-      <p class="sub">Superpozycja modów własnych membrany kwadratowej — <strong>wymiar fraktalny</strong>, <strong>domeny</strong> i regresja log–log na żywo, w przeglądarce.</p>
+      <h1 data-i18n="title">FAEM Generator</h1>
+      <p class="sub" data-i18n="subtitle">Superpozycja modów własnych (kwadrat / koło) — <strong>wymiar fraktalny</strong>, <strong>domeny</strong>, dźwięk, upload obrazu i regresja na żywo.</p>
     </div>
   </div>
 
   <div class="legend">
-    <div class="cell"><b>Df</b><span>Wymiar fraktalny linii węzłowych, liczony metodą box-counting w oknach 2–26 px.</span></div>
-    <div class="cell"><b>domeny</b><span>Liczba spójnych obszarów tła po progowaniu Otsu i domykaniu morfologicznym.</span></div>
-    <div class="cell"><b>energia</b><span>N × rozpiętość częstotliwości modów — przybliżona miara wstrzykniętej energii.</span></div>
+    <div class="cell"><b>Df</b><span data-i18n="leg_df">Wymiar fraktalny linii węzłowych (box-counting, okna 2–26 px).</span></div>
+    <div class="cell"><b data-i18n="leg_dom_t">domeny</b><span data-i18n="leg_dom">Liczba spójnych obszarów tła po progowaniu Otsu i domykaniu morfologicznym.</span></div>
+    <div class="cell"><b data-i18n="leg_e_t">energia</b><span data-i18n="leg_e">N × rozpiętość częstotliwości modów — przybliżona miara wstrzykniętej energii.</span></div>
   </div>
 
   <div class="grid">
     <div>
       <div class="panel">
-        <div class="panel-title"><span class="dot"></span>Wzór</div>
+        <div class="panel-title"><span class="dot"></span><span data-i18n="panel_pattern">Wzór</span></div>
         <div class="canvas-frame">
           <canvas id="canvas" class="pattern" width="200" height="200"></canvas>
           <div class="corner tl"></div><div class="corner tr"></div><div class="corner bl"></div><div class="corner br"></div>
         </div>
         <div class="stats">
           <div class="stat"><div class="lbl">Df</div><div class="val" id="vDf">—</div></div>
-          <div class="stat"><div class="lbl">domeny</div><div class="val" id="vDom">—</div></div>
-          <div class="stat"><div class="lbl">energia</div><div class="val" id="vE">—</div></div>
+          <div class="stat"><div class="lbl" data-i18n="lbl_dom">domeny</div><div class="val" id="vDom">—</div></div>
+          <div class="stat"><div class="lbl" data-i18n="lbl_e">energia</div><div class="val" id="vE">—</div></div>
+        </div>
+        <div class="mode-badge" id="modeInfo">mode: synthetic · square</div>
+
+        <div class="section-lbl" data-i18n="sec_shape">Geometria</div>
+        <div class="shape-tabs">
+          <button type="button" class="active" id="shapeSquare" data-shape="square">◻ <span data-i18n="shape_sq">Kwadrat</span></button>
+          <button type="button" id="shapeCircle" data-shape="circle">◯ <span data-i18n="shape_ci">Koło</span></button>
         </div>
 
-        <div class="section-lbl">Parametry</div>
+        <div class="section-lbl" data-i18n="sec_params">Parametry</div>
         <div class="sliders">
           <div class="slider-row">
-            <label>Liczba fal (N) <span class="v" id="lblN">14</span></label>
+            <label><span data-i18n="lbl_n">Liczba fal (N)</span> <span class="v" id="lblN">14</span></label>
             <input type="range" id="nModes" min="3" max="40" value="14"/>
           </div>
           <div class="slider-row">
-            <label>Tłumienie (α) <span class="v" id="lblA">1.50</span></label>
+            <label><span data-i18n="lbl_a">Tłumienie (α)</span> <span class="v" id="lblA">1.50</span></label>
             <input type="range" id="alpha" min="0.3" max="4" step="0.05" value="1.5"/>
           </div>
         </div>
 
-        <div class="section-lbl">Eksploracja</div>
+        <div class="section-lbl" data-i18n="sec_explore">Eksploracja</div>
         <div class="btns">
-          <button class="btn-dark" id="btnPhase">↻ nowe fazy</button>
-          <button class="btn-accent" id="btnSave">+ zapisz punkt</button>
+          <button class="btn-dark" id="btnPhase">↻ <span data-i18n="btn_phase">nowe fazy</span></button>
+          <button class="btn-dark btn-play" id="btnSound">▶ <span data-i18n="btn_sound">dźwięk</span></button>
+          <button class="btn-accent" id="btnSave">+ <span data-i18n="btn_save">zapisz punkt</span></button>
         </div>
-        <div class="section-lbl">Zbiór danych</div>
+
+        <div class="section-lbl" data-i18n="sec_presets">Presety</div>
+        <div class="preset-row" id="presetRow"></div>
+
+        <div class="section-lbl" data-i18n="sec_upload">Własny obraz</div>
+        <div class="upload-zone" id="uploadZone">
+          <span data-i18n="upload_hint">Upuść PNG/JPG lub kliknij — automatyczne Df + domeny</span>
+          <input type="file" id="fileInput" accept="image/*"/>
+        </div>
+
+        <div class="section-lbl" data-i18n="sec_data">Zbiór danych</div>
         <div class="btns">
-          <button class="btn-dark" id="btnExport">⬇ eksport CSV</button>
-          <button class="btn-ghost" id="btnClear">wyczyść</button>
+          <button class="btn-dark" id="btnExport">⬇ CSV</button>
+          <button class="btn-dark" id="btnPng">⬇ PNG</button>
+          <button class="btn-dark" id="btnShare">🔗 <span data-i18n="btn_share">udostępnij</span></button>
+          <button class="btn-ghost" id="btnClear" data-i18n="btn_clear">wyczyść</button>
         </div>
       </div>
     </div>
-    <div class="panel" style="padding:22px;display:flex;flex-direction:column">
+    <div class="panel" style="padding:20px;display:flex;flex-direction:column">
       <div class="right-head">
         <h2><span class="dot" style="display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--violet);margin-right:8px"></span>Df vs energia</h2>
         <span id="nPoints" style="font-size:12px;color:var(--dim);font-family:var(--mono)">0 punktów</span>
       </div>
-      <div id="empty" class="empty">Zmieniaj parametry i kliknij <strong>„zapisz punkt”</strong>, żeby budować zbiór. Regresja pojawi się od 3 punktów.</div>
+      <div id="empty" class="empty" data-i18n="empty">Zmieniaj parametry i kliknij <strong>„zapisz punkt”</strong>, żeby budować zbiór. Regresja od 3 punktów.</div>
       <canvas id="plot"></canvas>
       <div id="fitInfo" class="fit-info" style="display:none"></div>
     </div>
   </div>
   <div class="footnote">
-    <strong>Df</strong> — box-counting · <strong>domeny</strong> — obszary między liniami węzłowymi (Otsu + domykanie) ·
-    <strong>energia</strong> ≈ N × rozpiętość częstotliwości. Narzędzie do eksploracji; R² &lt; 0,5 = słaba zależność.
+    <strong>Df</strong> — box-counting · <strong data-i18n="fn_dom">domeny</strong> — Otsu + domykanie ·
+    <strong data-i18n="fn_e">energia</strong> ≈ N × Δk. <span data-i18n="fn_note">Narzędzie do eksploracji; R² &lt; 0,5 = słaba zależność.</span>
   </div>
 </div>
+
 <script>
-const K_ALL=(()=>{const s=new Set();for(let m=1;m<=12;m++)for(let n=1;n<=12;n++)s.add(Math.PI*Math.sqrt(m*m+n*n));return[...s].sort((a,b)=>a-b)})();
+/* ─── i18n ─── */
+const I18N={
+pl:{
+  status:"generator aktywny",nav_calc:"Kalkulator →",nav_home:"← Strona główna",
+  title:"FAEM Generator",subtitle:"Superpozycja modów własnych (kwadrat / koło) — <strong>wymiar fraktalny</strong>, <strong>domeny</strong>, dźwięk, upload obrazu i regresja na żywo.",
+  leg_df:"Wymiar fraktalny linii węzłowych (box-counting, okna 2–26 px).",leg_dom_t:"domeny",leg_dom:"Liczba spójnych obszarów tła po progowaniu Otsu i domykaniu morfologicznym.",
+  leg_e_t:"energia",leg_e:"N × rozpiętość częstotliwości modów — przybliżona miara wstrzykniętej energii.",
+  panel_pattern:"Wzór",lbl_dom:"domeny",lbl_e:"energia",sec_shape:"Geometria",shape_sq:"Kwadrat",shape_ci:"Koło",
+  sec_params:"Parametry",lbl_n:"Liczba fal (N)",lbl_a:"Tłumienie (α)",sec_explore:"Eksploracja",
+  btn_phase:"nowe fazy",btn_sound:"dźwięk",btn_save:"zapisz punkt",sec_presets:"Presety",
+  sec_upload:"Własny obraz",upload_hint:"Upuść PNG/JPG lub kliknij — automatyczne Df + domeny",
+  sec_data:"Zbiór danych",btn_share:"udostępnij",btn_clear:"wyczyść",
+  empty:'Zmieniaj parametry i kliknij <strong>„zapisz punkt”</strong>, żeby budować zbiór. Regresja od 3 punktów.',
+  fn_dom:"domeny",fn_e:"energia",fn_note:"Narzędzie do eksploracji; R² < 0,5 = słaba zależność.",
+  points:"punktów",copied:"Skopiowano link!",no_points:"Brak punktów",sim_note:"Symulacja — nie dowód eksperymentalny.",
+  need3:"Zapisz ≥ 3 punkty, żeby zobaczyć regresję.",upload_ok:"Obraz załadowany — Df i domeny policzone."
+},
+en:{
+  status:"generator active",nav_calc:"Calculator →",nav_home:"← Home",
+  title:"FAEM Generator",subtitle:"Eigenmode superposition (square / circle) — <strong>fractal dimension</strong>, <strong>domains</strong>, sound, image upload and live regression.",
+  leg_df:"Fractal dimension of nodal lines (box-counting, windows 2–26 px).",leg_dom_t:"domains",leg_dom:"Number of connected background regions after Otsu thresholding and morphological closing.",
+  leg_e_t:"energy",leg_e:"N × frequency span of modes — approximate injected energy measure.",
+  panel_pattern:"Pattern",lbl_dom:"domains",lbl_e:"energy",sec_shape:"Geometry",shape_sq:"Square",shape_ci:"Circle",
+  sec_params:"Parameters",lbl_n:"Wave count (N)",lbl_a:"Damping (α)",sec_explore:"Explore",
+  btn_phase:"new phases",btn_sound:"sound",btn_save:"save point",sec_presets:"Presets",
+  sec_upload:"Own image",upload_hint:"Drop PNG/JPG or click — auto Df + domains",
+  sec_data:"Dataset",btn_share:"share",btn_clear:"clear",
+  empty:'Change parameters and click <strong>“save point”</strong> to build a set. Regression from 3 points.',
+  fn_dom:"domains",fn_e:"energy",fn_note:"Exploration tool; R² < 0.5 = weak dependence.",
+  points:"points",copied:"Link copied!",no_points:"No points",sim_note:"Simulation — not experimental proof.",
+  need3:"Save ≥ 3 points to see regression.",upload_ok:"Image loaded — Df and domains computed."
+}
+};
+let lang=localStorage.getItem('faem_lang')||'pl';
+function t(k){return (I18N[lang]||I18N.pl)[k]||k}
+function setLang(l){
+  lang=l;localStorage.setItem('faem_lang',l);
+  document.getElementById('btnPL').classList.toggle('active',l==='pl');
+  document.getElementById('btnEN').classList.toggle('active',l==='en');
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const k=el.getAttribute('data-i18n');
+    if(k==='subtitle'||k==='empty')el.innerHTML=t(k);else el.textContent=t(k);
+  });
+  document.getElementById('nPoints').textContent=history.length+' '+t('points');
+  drawPlot();
+}
+
+/* ─── physics / analysis ─── */
+const K_SQ=(()=>{const s=new Set();for(let m=1;m<=12;m++)for(let n=1;n<=12;n++)s.add(Math.PI*Math.sqrt(m*m+n*n));return[...s].sort((a,b)=>a-b)})();
+// approximate circular membrane eigenvalues (j_{m,n} zeros of Bessel J_m)
+const K_CI=[2.4048,3.8317,5.1356,5.5201,6.3802,7.0156,7.5883,8.4172,8.6537,8.7715,9.7610,9.9361,10.1735,11.0647,11.0864,11.6198,11.7915,12.2251,12.3386,13.0152,13.3237,13.5893,14.3725,14.7959].map(x=>x);
+
 function mulberry32(seed){return function(){seed|=0;seed=seed+0x6d2b79f5|0;let t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
-function generatePattern(N,alpha,res,seed){
-  const rand=mulberry32(seed);const ks=K_ALL.slice(0,N);const phis=ks.map(()=>rand()*Math.PI*2);
+
+function generatePattern(N,alpha,res,seed,shape){
+  const rand=mulberry32(seed);
+  const ks=(shape==='circle'?K_CI:K_SQ).slice(0,N);
+  const phis=ks.map(()=>rand()*Math.PI*2);
   const grid=new Float32Array(res*res);let maxAbs=0;
-  for(let j=0;j<res;j++){const y=j/(res-1)*2-1;
-    for(let i=0;i<res;i++){const x=i/(res-1)*2-1;const r=Math.sqrt(x*x+y*y);let v=0;
+  for(let j=0;j<res;j++){
+    const y=j/(res-1)*2-1;
+    for(let i=0;i<res;i++){
+      const x=i/(res-1)*2-1;
+      const r=Math.sqrt(x*x+y*y);
+      if(shape==='circle'&&r>1){grid[j*res+i]=0;continue}
+      let v=0;
       for(let n=0;n<ks.length;n++)v+=Math.cos(ks[n]*r+phis[n])*Math.exp(-alpha*r);
-      grid[j*res+i]=v;if(Math.abs(v)>maxAbs)maxAbs=Math.abs(v)}}
+      grid[j*res+i]=v;if(Math.abs(v)>maxAbs)maxAbs=Math.abs(v);
+    }
+  }
   const bandwidth=ks.length>1?ks[ks.length-1]-ks[0]:ks[0];
-  return{grid,maxAbs,energy:ks.length*bandwidth}}
+  return{grid,maxAbs,energy:ks.length*bandwidth,ks};
+}
+
 function otsuThreshold(absGrid){
   const bins=new Array(256).fill(0);let maxV=0;
   for(let i=0;i<absGrid.length;i++)if(absGrid[i]>maxV)maxV=absGrid[i];if(!maxV)maxV=1;
@@ -235,7 +345,9 @@ function otsuThreshold(absGrid){
   for(let t=0;t<256;t++){wB+=bins[t];if(!wB)continue;const wF=total-wB;if(!wF)break;
     sumB+=t*bins[t];const mB=sumB/wB,mF=(sum-sumB)/wF;const v=wB*wF*(mB-mF)*(mB-mF);
     if(v>bestVar){bestVar=v;best=t}}
-  return best/255*maxV}
+  return best/255*maxV;
+}
+
 function boxCountDf(binary,res){
   const sizes=[2,3,4,6,9,13,18,26];const logx=[],logy=[];
   for(const s of sizes){let count=0;
@@ -245,7 +357,9 @@ function boxCountDf(binary,res){
     logx.push(Math.log(1/s));logy.push(Math.log(Math.max(count,1)))}
   const n=logx.length;const mx=logx.reduce((a,b)=>a+b,0)/n;const my=logy.reduce((a,b)=>a+b,0)/n;
   let num=0,den=0;for(let i=0;i<n;i++){num+=(logx[i]-mx)*(logy[i]-my);den+=(logx[i]-mx)**2}
-  return den===0?0:num/den}
+  return den===0?0:num/den;
+}
+
 function countDomains(binary,res,closingIters,minAreaFrac){
   let mask=binary.slice();
   for(let it=0;it<closingIters;it++){const next=new Uint8Array(res*res);
@@ -261,17 +375,53 @@ function countDomains(binary,res,closingIters,minAreaFrac){
       for(const nb of[i>0?idx-1:-1,i<res-1?idx+1:-1,j>0?idx-res:-1,j<res-1?idx+res:-1])
         if(nb>=0&&!mask[nb]&&!visited[nb]){visited[nb]=1;stack[sp++]=nb}}
     if(area>minArea)domains++}
-  return domains}
-const RES=200;let seed=7,stats={Df:0,domains:0,energy:0},history=[];
-try{const raw=localStorage.getItem('faem_history');if(raw){const parsed=JSON.parse(raw);if(Array.isArray(parsed))history=parsed}}catch(_){}
+  return domains;
+}
+
+/* ─── state ─── */
+const RES=200;
+let seed=7, shape='square', mode='synthetic', lastKs=[], stats={Df:0,domains:0,energy:0}, history=[];
+try{const raw=localStorage.getItem('faem_history');if(raw){const p=JSON.parse(raw);if(Array.isArray(p))history=p}}catch(_){}
 function persistHistory(){try{localStorage.setItem('faem_history',JSON.stringify(history))}catch(_){}}
+
 const canvas=document.getElementById("canvas"),ctx=canvas.getContext("2d");
 const plot=document.getElementById("plot"),pctx=plot.getContext("2d");
+
+/* ─── audio ─── */
+let audioCtx=null, osc=null, gain=null, playing=false;
+function ensureAudio(){
+  if(!audioCtx){audioCtx=new (window.AudioContext||window.webkitAudioContext)();
+    gain=audioCtx.createGain();gain.gain.value=0.08;gain.connect(audioCtx.destination)}
+  if(audioCtx.state==='suspended')audioCtx.resume();
+}
+function stopSound(){
+  if(osc){try{osc.stop()}catch(_){}osc=null}
+  playing=false;
+  document.getElementById('btnSound').classList.remove('playing');
+}
+function playSound(){
+  ensureAudio();
+  stopSound();
+  const base=120+(lastKs[0]||2.4)*40;
+  osc=audioCtx.createOscillator();
+  osc.type='sine';
+  osc.frequency.value=Math.min(1800,Math.max(80,base));
+  osc.connect(gain);
+  osc.start();
+  playing=true;
+  document.getElementById('btnSound').classList.add('playing');
+  // soft auto-stop after 2.5s
+  setTimeout(()=>{if(playing)stopSound()},2500);
+}
+
+/* ─── render ─── */
 function render(){
+  if(mode==='upload')return; // image analysis stays until cleared
   const N=+document.getElementById("nModes").value,alpha=+document.getElementById("alpha").value;
-  document.getElementById("lblN").textContent=`Liczba fal (N): ${N}`;
-  document.getElementById("lblA").textContent=`Tłumienie (α): ${alpha.toFixed(2)}`;
-  const{grid,maxAbs,energy}=generatePattern(N,alpha,RES,seed);
+  document.getElementById("lblN").textContent=N;
+  document.getElementById("lblA").textContent=alpha.toFixed(2);
+  const{grid,maxAbs,energy,ks}=generatePattern(N,alpha,RES,seed,shape);
+  lastKs=ks;
   const absGrid=new Float32Array(RES*RES);for(let i=0;i<grid.length;i++)absGrid[i]=Math.abs(grid[i]);
   const thresh=otsuThreshold(absGrid);const binary=new Uint8Array(RES*RES);
   for(let i=0;i<grid.length;i++)binary[i]=absGrid[i]>thresh?1:0;
@@ -280,26 +430,64 @@ function render(){
   document.getElementById("vDf").textContent=Df.toFixed(3);
   document.getElementById("vDom").textContent=domains;
   document.getElementById("vE").textContent=Math.round(energy);
+  document.getElementById("modeInfo").textContent=`mode: synthetic · ${shape}`;
   const img=ctx.createImageData(RES,RES);
   for(let i=0;i<RES*RES;i++){
     const v=binary[i]?255:0;const t=Math.min(255,Math.abs(grid[i])/(maxAbs||1)*255*0.4);
     img.data[i*4]=v?230:10+t*0.25;img.data[i*4+1]=v?218:6+t*0.15;img.data[i*4+2]=v?255:22+t*0.5;img.data[i*4+3]=255}
-  ctx.putImageData(img,0,0)}
+  ctx.putImageData(img,0,0);
+}
+
+function analyzeImageData(imageData){
+  const w=imageData.width,h=imageData.height;
+  // downscale to RES via simple sampling into grayscale
+  const gray=new Float32Array(RES*RES);
+  for(let j=0;j<RES;j++)for(let i=0;i<RES;i++){
+    const sx=Math.floor(i/RES*w),sy=Math.floor(j/RES*h);
+    const idx=(sy*w+sx)*4;
+    gray[j*RES+i]=(imageData.data[idx]+imageData.data[idx+1]+imageData.data[idx+2])/3;
+  }
+  // invert if mostly bright (sand-on-dark usually dark bg)
+  let mean=0;for(let i=0;i<gray.length;i++)mean+=gray[i];mean/=gray.length;
+  if(mean>128)for(let i=0;i<gray.length;i++)gray[i]=255-gray[i];
+  const absGrid=gray;
+  const thresh=otsuThreshold(absGrid);
+  const binary=new Uint8Array(RES*RES);
+  for(let i=0;i<absGrid.length;i++)binary[i]=absGrid[i]>thresh?1:0;
+  const Df=boxCountDf(binary,RES),domains=countDomains(binary,RES,2,0.003);
+  stats={Df,domains,energy:0};
+  document.getElementById("vDf").textContent=Df.toFixed(3);
+  document.getElementById("vDom").textContent=domains;
+  document.getElementById("vE").textContent="—";
+  document.getElementById("modeInfo").textContent="mode: uploaded image";
+  // draw binary + soft original
+  const img=ctx.createImageData(RES,RES);
+  for(let i=0;i<RES*RES;i++){
+    const g=Math.max(0,Math.min(255,gray[i]));
+    const v=binary[i];
+    img.data[i*4]=v?230:g*0.15;img.data[i*4+1]=v?218:g*0.1;img.data[i*4+2]=v?255:g*0.25;img.data[i*4+3]=255;
+  }
+  ctx.putImageData(img,0,0);
+  mode='upload';
+}
+
+/* ─── plot ─── */
 function linreg(xs,ys){
   const n=xs.length;if(n<2)return null;let sx=0,sy=0,sxx=0,sxy=0;
   for(let i=0;i<n;i++){sx+=xs[i];sy+=ys[i];sxx+=xs[i]*xs[i];sxy+=xs[i]*ys[i]}
   const den=n*sxx-sx*sx;if(Math.abs(den)<1e-12)return null;
   const slope=(n*sxy-sx*sy)/den,intercept=(sy-slope*sx)/n,yMean=sy/n;
   let ssTot=0,ssRes=0;for(let i=0;i<n;i++){const pred=intercept+slope*xs[i];ssTot+=(ys[i]-yMean)**2;ssRes+=(ys[i]-pred)**2}
-  return{slope,intercept,r2:ssTot<1e-12?0:1-ssRes/ssTot}}
+  return{slope,intercept,r2:ssTot<1e-12?0:1-ssRes/ssTot};
+}
 function drawPlot(){
   const empty=document.getElementById("empty"),fitInfo=document.getElementById("fitInfo");
-  document.getElementById("nPoints").textContent=history.length+" punktów";
+  document.getElementById("nPoints").textContent=history.length+" "+t('points');
   if(!history.length){plot.style.display="none";empty.style.display="flex";fitInfo.style.display="none";return}
   empty.style.display="none";plot.style.display="block";fitInfo.style.display="block";
-  const W=plot.clientWidth||500,H=300;plot.width=W;plot.height=H;
+  const W=plot.clientWidth||500,H=280;plot.width=W;plot.height=H;
   const pad={l:48,r:16,t:16,b:40};
-  const energies=history.map(h=>h.energy),dfs=history.map(h=>h.Df);
+  const energies=history.map(h=>h.energy||1),dfs=history.map(h=>h.Df);
   const logE=energies.map(e=>Math.log(Math.max(e,1e-6)));
   let minLE=Math.min(...logE),maxLE=Math.max(...logE),minD=Math.min(...dfs),maxD=Math.max(...dfs);
   if(maxLE-minLE<1e-6){minLE-=.5;maxLE+=.5}if(maxD-minD<1e-6){minD-=.05;maxD+=.05}
@@ -315,7 +503,7 @@ function drawPlot(){
   if(fit&&history.length>=3){const y1=fit.intercept+fit.slope*minLE,y2=fit.intercept+fit.slope*maxLE;
     pctx.strokeStyle="rgba(143,107,255,0.65)";pctx.lineWidth=2;pctx.beginPath();
     pctx.moveTo(xOf(minLE),yOf(y1));pctx.lineTo(xOf(maxLE),yOf(y2));pctx.stroke()}
-  for(const h of history){const le=Math.log(Math.max(h.energy,1e-6));
+  for(const h of history){const le=Math.log(Math.max(h.energy||1,1e-6));
     pctx.fillStyle="#e0c48c";pctx.beginPath();pctx.arc(xOf(le),yOf(h.Df),5.5,0,Math.PI*2);pctx.fill();
     pctx.strokeStyle="rgba(255,255,255,0.3)";pctx.lineWidth=1;pctx.stroke()}
   pctx.fillStyle="#ab9dd8";pctx.font="11px Inter,system-ui";pctx.textAlign="center";
@@ -325,25 +513,138 @@ function drawPlot(){
     fitInfo.className="fit-info "+(good?"ok":"warn");
     fitInfo.innerHTML=`β ≈ <span class="mono">${beta.toFixed(3)}</span> · R² = <span class="mono">${r2.toFixed(3)}</span>`+
       `<span class="badge ${good?"badge-ok":"badge-warn"}">${good?"R² ≥ 0.5":"R² < 0.5"}</span>`+
-      `<br><span style="color:var(--dim);font-size:12px">Symulacja — nie dowód eksperymentalny.</span>`}
-  else{fitInfo.className="fit-info";fitInfo.innerHTML="Zapisz ≥ 3 punkty, żeby zobaczyć regresję."}}
-function savePoint(){history.push({energy:stats.energy,Df:stats.Df,domains:stats.domains,N:+document.getElementById("nModes").value,alpha:+document.getElementById("alpha").value,seed});persistHistory();drawPlot()}
+      `<br><span style="color:var(--dim);font-size:12px">${t('sim_note')}</span>`}
+  else{fitInfo.className="fit-info";fitInfo.innerHTML=t('need3')}
+}
+
+/* ─── actions ─── */
+function savePoint(){
+  history.push({
+    energy:stats.energy,Df:stats.Df,domains:stats.domains,
+    N:+document.getElementById("nModes").value,alpha:+document.getElementById("alpha").value,
+    seed,shape,mode
+  });
+  persistHistory();drawPlot();
+}
 function clearHistory(){history=[];persistHistory();drawPlot()}
 function exportCSV(){
-  if(!history.length){alert("Brak punktów");return}
-  const rows=["energy,Df,domains,N,alpha,seed",...history.map(h=>[h.energy,h.Df,h.domains,h.N,h.alpha,h.seed].join(","))];
+  if(!history.length){alert(t('no_points'));return}
+  const rows=["energy,Df,domains,N,alpha,seed,shape,mode",...history.map(h=>[h.energy,h.Df,h.domains,h.N,h.alpha,h.seed,h.shape||'',h.mode||''].join(","))];
   const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([rows.join("\n")],{type:"text/csv"}));
-  a.download="faem_points.csv";a.click()}
-document.getElementById("nModes").addEventListener("input",render);
-document.getElementById("alpha").addEventListener("input",render);
-document.getElementById("btnPhase").addEventListener("click",()=>{seed++;render()});
+  a.download="faem_points.csv";a.click();
+}
+function exportPNG(){
+  // high-res export with caption
+  const scale=3;const W=RES*scale,H=RES*scale+48;
+  const off=document.createElement('canvas');off.width=W;off.height=H;
+  const octx=off.getContext('2d');
+  octx.fillStyle='#0b0818';octx.fillRect(0,0,W,H);
+  octx.imageSmoothingEnabled=false;
+  octx.drawImage(canvas,0,0,W,RES*scale);
+  octx.fillStyle='#ab9dd8';octx.font=`${12*scale/2}px Inter,system-ui`;
+  const caption=`FAEM · ${shape} · N=${document.getElementById("nModes").value} · α=${(+document.getElementById("alpha").value).toFixed(2)} · Df=${stats.Df.toFixed(3)} · domains=${stats.domains} · fractalvibrationlab.com`;
+  octx.fillText(caption,12,RES*scale+28);
+  const a=document.createElement('a');a.href=off.toDataURL('image/png');a.download=`faem_${shape}_N${document.getElementById("nModes").value}.png`;a.click();
+}
+function shareConfig(){
+  const p=new URLSearchParams({
+    n:document.getElementById("nModes").value,
+    a:document.getElementById("alpha").value,
+    s:seed,shape,lang
+  });
+  const url=location.origin+location.pathname+'?'+p.toString();
+  navigator.clipboard.writeText(url).then(()=>{
+    const btn=document.getElementById('btnShare');
+    const old=btn.innerHTML;btn.innerHTML='✓ '+t('copied');
+    setTimeout(()=>btn.innerHTML=old,1600);
+  }).catch(()=>prompt('URL:',url));
+}
+
+/* ─── presets ─── */
+const PRESETS=[
+  {name:'Low N',n:6,a:1.2,shape:'square'},
+  {name:'Classic',n:14,a:1.5,shape:'square'},
+  {name:'Dense',n:28,a:0.8,shape:'square'},
+  {name:'Circle soft',n:10,a:1.8,shape:'circle'},
+  {name:'Circle dense',n:24,a:1.0,shape:'circle'}
+];
+function buildPresets(){
+  const row=document.getElementById('presetRow');row.innerHTML='';
+  PRESETS.forEach((pr,i)=>{
+    const b=document.createElement('button');b.type='button';b.className='preset-chip';b.textContent=pr.name;
+    b.onclick=()=>{
+      document.getElementById('nModes').value=pr.n;
+      document.getElementById('alpha').value=pr.a;
+      shape=pr.shape;mode='synthetic';
+      document.getElementById('shapeSquare').classList.toggle('active',shape==='square');
+      document.getElementById('shapeCircle').classList.toggle('active',shape==='circle');
+      seed=(seed+1)|0;render();
+      [...row.children].forEach(c=>c.classList.remove('active'));b.classList.add('active');
+    };
+    row.appendChild(b);
+  });
+}
+
+/* ─── upload ─── */
+function handleFile(file){
+  if(!file||!file.type.startsWith('image/'))return;
+  const img=new Image();
+  img.onload=()=>{
+    const tmp=document.createElement('canvas');tmp.width=img.width;tmp.height=img.height;
+    const tctx=tmp.getContext('2d');tctx.drawImage(img,0,0);
+    analyzeImageData(tctx.getImageData(0,0,img.width,img.height));
+  };
+  img.src=URL.createObjectURL(file);
+}
+const zone=document.getElementById('uploadZone'),fileInput=document.getElementById('fileInput');
+zone.addEventListener('click',()=>fileInput.click());
+fileInput.addEventListener('change',e=>{if(e.target.files[0])handleFile(e.target.files[0])});
+zone.addEventListener('dragover',e=>{e.preventDefault();zone.classList.add('drag')});
+zone.addEventListener('dragleave',()=>zone.classList.remove('drag'));
+zone.addEventListener('drop',e=>{e.preventDefault();zone.classList.remove('drag');if(e.dataTransfer.files[0])handleFile(e.dataTransfer.files[0])});
+
+/* ─── shape tabs ─── */
+document.getElementById('shapeSquare').addEventListener('click',()=>{
+  shape='square';mode='synthetic';
+  document.getElementById('shapeSquare').classList.add('active');
+  document.getElementById('shapeCircle').classList.remove('active');
+  render();
+});
+document.getElementById('shapeCircle').addEventListener('click',()=>{
+  shape='circle';mode='synthetic';
+  document.getElementById('shapeCircle').classList.add('active');
+  document.getElementById('shapeSquare').classList.remove('active');
+  render();
+});
+
+/* ─── URL params ─── */
+(function loadURL(){
+  const q=new URLSearchParams(location.search);
+  if(q.has('n'))document.getElementById('nModes').value=+q.get('n')||14;
+  if(q.has('a'))document.getElementById('alpha').value=+q.get('a')||1.5;
+  if(q.has('s'))seed=+q.get('s')||7;
+  if(q.get('shape')==='circle'){shape='circle';document.getElementById('shapeCircle').classList.add('active');document.getElementById('shapeSquare').classList.remove('active')}
+  if(q.get('lang')==='en'||q.get('lang')==='pl')setLang(q.get('lang'));
+})();
+
+/* ─── events ─── */
+document.getElementById("nModes").addEventListener("input",()=>{mode='synthetic';render()});
+document.getElementById("alpha").addEventListener("input",()=>{mode='synthetic';render()});
+document.getElementById("btnPhase").addEventListener("click",()=>{seed++;mode='synthetic';render()});
+document.getElementById("btnSound").addEventListener("click",()=>{playing?stopSound():playSound()});
 document.getElementById("btnSave").addEventListener("click",savePoint);
 document.getElementById("btnClear").addEventListener("click",clearHistory);
 document.getElementById("btnExport").addEventListener("click",exportCSV);
+document.getElementById("btnPng").addEventListener("click",exportPNG);
+document.getElementById("btnShare").addEventListener("click",shareConfig);
 window.addEventListener("resize",()=>{if(history.length)drawPlot()});
+
+buildPresets();
+setLang(lang);
 render();drawPlot();
 </script>
 
+<!-- command palette (shared style) -->
 <style>
 .cmdk-overlay{position:fixed;inset:0;z-index:300;background:rgba(5,3,15,.72);backdrop-filter:blur(4px);display:none;align-items:flex-start;justify-content:center;padding-top:12vh}
 .cmdk-overlay.open{display:flex}
@@ -368,7 +669,6 @@ render();drawPlot();
 .cmdk-hint kbd{font-family:var(--mono,monospace);background:rgba(255,255,255,.08);border-radius:4px;padding:1px 5px}
 @media(max-width:640px){.cmdk-hint{display:none}}
 </style>
-
 <div class="cmdk-hint" id="cmdkHint">Szukaj <kbd>Ctrl</kbd>+<kbd>K</kbd></div>
 <div class="cmdk-overlay" id="cmdkOverlay">
   <div class="cmdk-box">
@@ -380,10 +680,17 @@ render();drawPlot();
     <div class="cmdk-list" id="cmdkList"></div>
   </div>
 </div>
-
 <script>
 (function(){
-  const DEST=[{"t": "Strona główna — FAEM", "d": "Pipeline i wprowadzenie", "tag": "strona", "href": "index.html"}, {"t": "Kalkulator laboratoryjny", "d": "Częstotliwości płytki, fala, tłumienie (Q)", "tag": "narzędzie", "href": "kalkulator.html"}, {"t": "Generator FAEM", "d": "Superpozycja modów, Df, domeny", "tag": "narzędzie", "href": "faem_generator.html"}, {"t": "Chladni — skalowanie nodalne", "d": "Analiza i atlas częstotliwości (z dźwiękiem)", "tag": "notatka", "href": "chladni-skalowanie-nodalne.html"}, {"t": "Struktura jako programowalna częstotliwość", "d": "Notatka koncepcyjna", "tag": "notatka", "href": "struktura-jako-programowalna-czestotliwosc.html"}, {"t": "Optyka — ograniczenia i rozwiązania", "d": "Przegląd", "tag": "notatka", "href": "optyka-ograniczenia-i-nowoczesne-rozwiazania.html"}, {"t": "Kontakt", "d": "Napisz do nas", "tag": "strona", "href": "index.html#contact"}];
+  const DEST=[
+    {"t":"Strona główna — FAEM","d":"Pipeline i wprowadzenie","tag":"strona","href":"index.html"},
+    {"t":"Kalkulator laboratoryjny","d":"Częstotliwości płytki, fala, tłumienie (Q)","tag":"narzędzie","href":"kalkulator.html"},
+    {"t":"Generator FAEM","d":"Superpozycja modów, Df, domeny, dźwięk","tag":"narzędzie","href":"faem_generator.html"},
+    {"t":"Chladni — skalowanie nodalne","d":"Analiza i atlas częstotliwości","tag":"notatka","href":"chladni-skalowanie-nodalne.html"},
+    {"t":"Struktura jako programowalna częstotliwość","d":"Notatka koncepcyjna","tag":"notatka","href":"struktura-jako-programowalna-czestotliwosc.html"},
+    {"t":"Optyka — ograniczenia i rozwiązania","d":"Przegląd","tag":"notatka","href":"optyka-ograniczenia-i-nowoczesne-rozwiazania.html"},
+    {"t":"Kontakt","d":"Napisz do nas","tag":"strona","href":"index.html#contact"}
+  ];
   const overlay=document.getElementById("cmdkOverlay"),input=document.getElementById("cmdkInput"),list=document.getElementById("cmdkList"),hint=document.getElementById("cmdkHint");
   if(!overlay)return;
   let items=DEST.slice(),active=0;
