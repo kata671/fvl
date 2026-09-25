@@ -32,7 +32,56 @@
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
-@media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
+
+/* ===== site-wide motion ===== */
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(22px)}
+  to{opacity:1;transform:translateY(0)}
+}
+@keyframes fadeIn{
+  from{opacity:0} to{opacity:1}
+}
+@keyframes floatY{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-10px)}
+}
+@keyframes glowPulse{
+  0%,100%{box-shadow:0 0 0 0 rgba(157,123,255,.0)}
+  50%{box-shadow:0 0 40px -8px rgba(157,123,255,.35)}
+}
+@keyframes shimmer{
+  0%{background-position:0% 50%}
+  100%{background-position:100% 50%}
+}
+.reveal{opacity:0;transform:translateY(22px);transition:opacity .7s cubic-bezier(.2,.8,.2,1),transform .7s cubic-bezier(.2,.8,.2,1)}
+.reveal.in{opacity:1;transform:translateY(0)}
+.hero-grid{animation:fadeUp .9s cubic-bezier(.2,.8,.2,1) both}
+.hero-art{animation:floatY 7s ease-in-out infinite}
+.btn-primary{position:relative;overflow:hidden}
+.btn-primary::after{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(105deg,transparent 40%,rgba(255,255,255,.18) 50%,transparent 60%);
+  background-size:200% 100%;
+  animation:shimmer 3.5s ease-in-out infinite;
+  pointer-events:none;
+}
+.stage{transition:transform .35s cubic-bezier(.2,.8,.2,1),box-shadow .35s}
+.stage:hover{transform:translateY(-4px)}
+.panel{transition:border-color .3s,box-shadow .3s}
+.panel:hover{border-color:rgba(212,196,255,.35);box-shadow:0 16px 48px -24px rgba(107,63,255,.35)}
+.note-row{transition:transform .25s,background .25s}
+.note-row:hover{transform:translateX(4px)}
+.nav-links a{position:relative}
+.nav-links a::after{
+  content:"";position:absolute;left:13px;right:13px;bottom:4px;height:1.5px;
+  background:linear-gradient(90deg,var(--violet),var(--cyan, #5eead4));
+  transform:scaleX(0);transform-origin:left;transition:transform .25s ease;
+  border-radius:2px;opacity:.85;
+}
+.nav-links a:hover::after{transform:scaleX(1)}
+section{scroll-margin-top:80px}
+
+@media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}.reveal{opacity:1;transform:none}}
 body{
   background:var(--bg);color:var(--text);
   font-family:var(--sans);line-height:1.65;
@@ -267,7 +316,7 @@ footer{padding:52px 0 68px;color:var(--dim);font-size:13px;border-top:1px solid 
   </div>
 </header>
 
-<section id="faem">
+<section id="faem" class="reveal">
   <div class="wrap">
     <div class="eyebrow" data-i18n="faem_eyebrow">Metoda</div>
     <h2 data-i18n="faem_h2">Czym jest FAEM</h2>
@@ -322,7 +371,7 @@ footer{padding:52px 0 68px;color:var(--dim);font-size:13px;border-top:1px solid 
 </section>
 
 
-<section id="uses">
+<section id="uses" class="reveal">
   <div class="wrap">
     <div class="eyebrow" data-i18n="uses_eyebrow">Zastosowania</div>
     <h2 data-i18n="uses_h2">Do czego to służy</h2>
@@ -368,7 +417,7 @@ footer{padding:52px 0 68px;color:var(--dim);font-size:13px;border-top:1px solid 
   </div>
 </section>
 
-<section id="about">
+<section id="about" class="reveal">
   <div class="wrap">
     <div class="eyebrow" data-i18n="about_eyebrow">Lab</div>
     <h2 data-i18n="about_h2">O projekcie</h2>
@@ -400,7 +449,7 @@ footer{padding:52px 0 68px;color:var(--dim);font-size:13px;border-top:1px solid 
   </div>
 </section>
 
-<section id="notes">
+<section id="notes" class="reveal">
   <div class="wrap">
     <div class="eyebrow" data-i18n="notes_eyebrow">Dalej</div>
     <h2 data-i18n="notes_h2">Notatki badawcze</h2>
@@ -434,7 +483,7 @@ footer{padding:52px 0 68px;color:var(--dim);font-size:13px;border-top:1px solid 
   </div>
 </section>
 
-<section id="contact">
+<section id="contact" class="reveal">
   <div class="wrap">
     <div class="eyebrow" data-i18n="contact_eyebrow">Kontakt</div>
     <h2 data-i18n="contact_h2">Napisz do nas</h2>
@@ -679,6 +728,19 @@ function setLang(lang){
 if('serviceWorker' in navigator){
   window.addEventListener('load',()=>{navigator.serviceWorker.register('./sw.js').catch(()=>{});});
 }
+</script>
+
+
+<script>
+(function(){
+  const els=document.querySelectorAll('.reveal');
+  if(!els.length)return;
+  if(!('IntersectionObserver' in window)){els.forEach(e=>e.classList.add('in'));return}
+  const io=new IntersectionObserver((entries)=>{
+    entries.forEach(en=>{if(en.isIntersecting){en.target.classList.add('in');io.unobserve(en.target)}})
+  },{threshold:0.12,rootMargin:'0px 0px -40px 0px'});
+  els.forEach(e=>io.observe(e));
+})();
 </script>
 
 </body>

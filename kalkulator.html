@@ -150,6 +150,19 @@ td.freq{color:var(--text);font-weight:700}
 .tri-field input{background:transparent;border:none;color:var(--text);font-family:var(--mono);font-size:19px;font-weight:700;width:100%;padding:0}
 .tri-field input:focus{outline:none}
 .tri-field .u{font-size:11px;color:var(--dim);margin-top:4px}
+
+/* motion */
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+@keyframes softPulse{0%,100%{box-shadow:0 0 0 0 rgba(157,123,255,0)}50%{box-shadow:0 0 24px -6px rgba(157,123,255,.35)}}
+.wrap{animation:fadeUp .55s cubic-bezier(.2,.8,.2,1) both}
+.panel,.card,.block{transition:border-color .25s,box-shadow .25s,transform .25s}
+.panel:hover,.card:hover{border-color:rgba(180,150,255,.3)}
+.tab{transition:all .22s ease}
+.tab.active{box-shadow:0 0 20px -6px rgba(157,123,255,.4)}
+.val,.result-val,.big{transition:color .2s}
+button{transition:transform .18s,box-shadow .18s,background .18s!important}
+button:active{transform:scale(.97)!important}
+
 </style>
 </head>
 <body>
