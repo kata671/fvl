@@ -60,6 +60,7 @@ footer{margin-top:24px;padding-top:16px;border-top:1px solid var(--border);font-
 </div>
 <div class="wrap">
   <h1 data-i18n="title">Mode Finder</h1>
+  <div id="exampleBar" style="display:none;margin-bottom:12px;padding:10px 14px;border-radius:12px;border:1px solid rgba(94,234,212,.35);background:rgba(94,234,212,.08);font-size:13px;color:var(--muted)"><strong style="color:var(--cyan)">Case FAEM #1</strong> — f₀ z punktu 1146 Hz (dataset domen). <a href="case-faem-1.html">Opis →</a></div>
   <p class="sub" data-i18n="sub">Wpisz zmierzoną f₀ (ze spektrum lub generatora funkcyjnego) oraz geometrię płytki — znajdziemy najbliższe tryby (m,n) z błędem procentowym.</p>
   <div class="grid">
     <div class="panel">
@@ -130,6 +131,7 @@ function run(){
 document.getElementById('btnGo').onclick=run;
 // URL ?f=
 const q=new URLSearchParams(location.search);if(q.has('f'))document.getElementById('f0').value=q.get('f');
+if(q.get('example')==='case1'){const b=document.getElementById('exampleBar');if(b)b.style.display='block';if(!q.has('f'))document.getElementById('f0').value='1146';}
 setLang(lang);run();
 </script>
 </body>

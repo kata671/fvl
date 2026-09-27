@@ -7,6 +7,8 @@ const ASSETS = [
   './spektrum.html',
   './spektrum.js',
   './compare.html',
+  './data/faem-case1-domains.csv',
+  './case-faem-1.html',
   './modes.html',
   './chladni-skalowanie-nodalne.html',
   './manifest.webmanifest'

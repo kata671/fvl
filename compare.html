@@ -158,6 +158,18 @@ bindDrop('dropA','fileA',d=>{dataA=d});
 bindDrop('dropB','fileB',d=>{dataB=d});
 document.getElementById('btnClear').onclick=()=>{dataA=[];dataB=[];renderStats()};
 setLang(lang);renderStats();
+(async function(){
+  const q=new URLSearchParams(location.search);
+  if(q.get('example')!=='case1')return;
+  try{
+    const [a,b]=await Promise.all([
+      fetch('data/faem-case1-spectrum-A.csv').then(r=>r.text()),
+      fetch('data/faem-case1-spectrum-B.csv').then(r=>r.text())
+    ]);
+    dataA=parseCSV(a); dataB=parseCSV(b); renderStats();
+  }catch(e){console.warn(e)}
+})();
+
 </script>
 </body>
 </html>

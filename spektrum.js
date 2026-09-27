@@ -304,3 +304,12 @@ if(btnAudio&&audioFile){
 setLang(lang);
 ctx.fillStyle='#07061a';ctx.fillRect(0,0,cvs.width,cvs.height);
 wctx.fillStyle='#07061a';wctx.fillRect(0,0,wf.width,wf.height);
+
+/* case study example */
+(function(){
+  const q=new URLSearchParams(location.search);
+  if(q.get('example')==='case1'){
+    const bar=document.getElementById('exampleBar');
+    if(bar)bar.style.display='block';
+  }
+})();

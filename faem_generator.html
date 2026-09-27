@@ -993,6 +993,7 @@ document.getElementById('shapeCircle').addEventListener('click',()=>{
 (function loadURL(){
   const q=new URLSearchParams(location.search);
   if(q.has('n'))document.getElementById('nModes').value=+q.get('n')||14;
+  if(q.get('example')==='case1'){try{document.getElementById('nModes').value=q.has('n')?(+q.get('n')||14):14;const el=document.getElementById('modeInfo');if(el)el.textContent=(el.textContent||'')+' · case FAEM #1'}catch(_){}}
   if(q.has('a'))document.getElementById('alpha').value=+q.get('a')||1.5;
   if(q.has('s'))seed=+q.get('s')||7;
   if(q.get('shape')==='circle'){shape='circle';document.getElementById('shapeCircle').classList.add('active');document.getElementById('shapeSquare').classList.remove('active')}
