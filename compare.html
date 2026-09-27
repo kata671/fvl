@@ -163,8 +163,8 @@ setLang(lang);renderStats();
   if(q.get('example')!=='case1')return;
   try{
     const [a,b]=await Promise.all([
-      fetch('data/faem-case1-spectrum-A.csv').then(r=>r.text()),
-      fetch('data/faem-case1-spectrum-B.csv').then(r=>r.text())
+      fetch('faem-case1-spectrum-A.csv').then(r=>r.text()),
+      fetch('faem-case1-spectrum-B.csv').then(r=>r.text())
     ]);
     dataA=parseCSV(a); dataB=parseCSV(b); renderStats();
   }catch(e){console.warn(e)}
