@@ -1,0 +1,10 @@
+cff-version: 1.2.0
+title: Fractal Acoustic-Energy Mapping (FAEM)
+message: If you use this lab or atlas, cite it as below.
+type: software
+authors:
+  - name: Astro_Katt
+    affiliation: Fractal Vibration Lab
+url: https://fractalvibrationlab.com/
+date-released: "2026-09-27"
+version: "0.1"
