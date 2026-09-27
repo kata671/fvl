@@ -2,42 +2,21 @@
 
 **https://fractalvibrationlab.com**
 
-Fractal Acoustic–Energy Mapping: open pipeline for mapping vibration-pattern complexity —
-Chladni nodal scaling, interactive generator, lab calculator.
+Fractal Acoustic–Energy Mapping: otwarte laboratorium. Wzór drgań → N, Df, skalowanie z częstotliwością. Narzędzia w przeglądarce.
 
-## Highlight
+## Atlas
 
-On 8 real square-plate photos (155–6800 Hz):
+Kwadratowa płyta PASCO, **19 częstotliwości** (345–6051 Hz).
 
-**N_domains ∝ f^{0.521 ± 0.054}** · R² = 0.94 · Classical expectation: **0.5**
+Na klatkach z N: **N ∝ f^0.57**, R² = 0.92.
 
-## Tools
+- Atlas: https://fractalvibrationlab.com/case-faem-1.html
+- Metoda: https://fractalvibrationlab.com/faem.html
 
-### Generator (`faem_generator.html`)
-- Square **and circle** geometry
-- Web Audio tone, presets, URL share
-- Image upload → Df + domains
-- High-quality PNG + CSV export
-- How-to + 3 one-click demos
-- Full PL / EN
+## Pliki (wrzucaj do rootu repo)
 
-### Calculator (`kalkulator.html`)
-- Plate resonances (rect / circular), wave converter, Q / ring-down
-- PL / EN UI switch
-- Shareable URL permalinks
+index.html, faem.html, lab.html, case-faem-1.html, faem_generator.html, kalkulator.html, spektrum.html, modes.html, compare.html, pasco-square-freqs.csv, faem-case1-domains.csv, robots.txt, sitemap.xml
 
-### PWA
-- `manifest.webmanifest` + `sw.js` — installable / offline-friendly shell
-
-## Deploy
-
-Upload all files to the **repo root** (GitHub Pages → branch `main` → `/`).
-
-## License
-
-- Site content: **CC BY 4.0**
-- Code: **MIT**
-
-## Cite
+## Cytowanie
 
 Astro_Katt (2026). FAEM — Fractal Vibration Lab. https://fractalvibrationlab.com
