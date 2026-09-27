@@ -160,7 +160,9 @@ h1{
 }
 h1 i{-webkit-text-fill-color:var(--cyan);font-style:italic}
 h1 i{font-style:italic;font-weight:500;color:var(--violet2)}
-.hero-lead{font-size:17px;color:var(--muted);max-width:520px;line-height:1.75;margin-bottom:30px}
+.hero-lead{font-size:17px;color:var(--muted);max-width:520px;line-height:1.75;margin-bottom:22px}
+.hero-path{font-size:13px;color:var(--dim);margin-top:14px;font-family:var(--mono);letter-spacing:.02em}
+.cta-row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
 .cta-row{display:flex;gap:12px;flex-wrap:wrap}
 .btn{
   display:inline-flex;align-items:center;gap:8px;
@@ -307,15 +309,15 @@ footer{padding:52px 0 68px;color:var(--dim);font-size:13px;border-top:1px solid 
       <div class="kicker" data-i18n="kicker">Fractal Acoustic–Energy Mapping</div>
       <h1 data-i18n="hero_title">Mapa złożoności <i>drgań</i></h1>
       <p class="hero-lead" data-i18n="hero_lead">
-        Pipeline badawczy, który przekształca wzory falowe — od figur Chladniego po pola syntetyczne —
-        w mierzalne, porównywalne wielkości. Jeden warsztat, spójna metoda, otwarte narzędzia.
+        Mierzymy złożoność drgań tak, by dało się ją porównać i powtórzyć. Zacznij od Case #1 (dane + wynik), potem weź narzędzia lab.
       </p>
       <div class="cta-row">
-        <a class="btn btn-primary" href="faem_generator.html" data-i18n="cta_gen">Otwórz generator</a>
-        <a class="btn btn-ghost" href="kalkulator.html" data-i18n="cta_kalk">Kalkulator częstotliwości</a>
-        <a class="btn btn-ghost" href="spektrum.html" data-i18n="cta_spec">Live Spectrum</a>
-        <a class="btn btn-ghost" href="case-faem-1.html" data-i18n="cta_case">Case study #1</a>
+        <a class="btn btn-primary" href="case-faem-1.html" data-i18n="cta_start">Start here: Case #1</a>
+        <a class="btn btn-ghost" href="faem_generator.html" data-i18n="cta_gen">Generator</a>
+        <a class="btn btn-ghost" href="spektrum.html" data-i18n="cta_spec">Spektrum</a>
+        <a class="btn btn-ghost" href="kalkulator.html" data-i18n="cta_kalk">Kalkulator</a>
       </div>
+      <p class="hero-path" data-i18n="hero_path">Problem → FAEM → Case #1 → narzędzia · ok. 2 min czytania</p>
     </div>
     <div class="hero-art" aria-hidden="true">
       <canvas id="heroCanvas" width="160" height="160"></canvas>
@@ -562,8 +564,8 @@ pl:{
 nav_wf:"Workflow",nav_faem:"FAEM",nav_gen:"Generator",nav_kalk:"Kalkulator",nav_spec:"Spektrum",nav_modes:"Modes",nav_cmp:"Compare",nav_case:"Case #1",nav_chladni:"Chladni",nav_struktura:"Struktura",nav_optyka:"Optyka",nav_contact:"Kontakt",
 kicker:"Fractal Acoustic–Energy Mapping",
 hero_title:'Mapa złożoności <i>drgań</i>',
-hero_lead:"Pipeline badawczy, który przekształca wzory falowe — od figur Chladniego po pola syntetyczne — w mierzalne, porównywalne wielkości. Jeden warsztat, spójna metoda, otwarte narzędzia.",
-cta_gen:"Otwórz generator",cta_kalk:"Kalkulator częstotliwości",cta_spec:"Live Spectrum",cta_case:"Case study #1",
+hero_lead:"Mierzymy złożoność drgań tak, by dało się ją porównać i powtórzyć. Zacznij od Case #1 (dane + wynik), potem weź narzędzia lab.",
+cta_start:"Start here: Case #1",cta_gen:"Generator",cta_kalk:"Kalkulator",cta_spec:"Spektrum",cta_case:"Case study #1",hero_path:"Problem → FAEM → Case #1 → narzędzia · ok. 2 min czytania",
 wf_eyebrow:"Workflow",wf_h2:"Trzy narzędzia, jedna ścieżka",wf_lead:"Od projektu eksperymentu, przez pomiar tonu, po wzór i Df — w przeglądarce.",wf_1_t:"Kalkulator",wf_1_p:"Policz częstotliwości rezonansowe płytki i ustaw generator funkcyjny w okolicach trybu (m,n).",wf_1_a:"Otwórz kalkulator →",wf_2_t:"Live Spectrum",wf_2_p:"Zmierz f₀ mikrofonem (lub test 440 Hz). Zapisz log sesji CSV. Przejdź jednym kliknięciem dalej.",wf_2_a:"Otwórz spektrum →",wf_3_t:"Generator FAEM",wf_3_p:"Zobacz wzór przy podobnej złożoności, policz Df i domeny, eksportuj PNG / udostępnij link.",wf_3_a:"Otwórz generator →",faem_eyebrow:"Metoda",faem_h2:"Czym jest FAEM",
 faem_lead:"Fractal Acoustic–Energy Mapping to czteroetapowy pipeline: od surowego wzoru drgań, przez ilościowe miary złożoności, po zestawienie z fizyką odniesienia i konkretne zastosowania.",
 faem_c1_t:"Wejście",faem_c1_p:"Zdjęcia płytek Chladniego, nagrania drgań lub pola syntetyczne — superpozycja modów własnych generowana algorytmicznie.",
@@ -590,8 +592,8 @@ en:{
 nav_wf:"Workflow",nav_faem:"FAEM",nav_gen:"Generator",nav_kalk:"Calculator",nav_spec:"Spectrum",nav_modes:"Modes",nav_cmp:"Compare",nav_case:"Case #1",nav_chladni:"Chladni",nav_struktura:"Structure",nav_optyka:"Optics",nav_contact:"Contact",
 kicker:"Fractal Acoustic–Energy Mapping",
 hero_title:'A map of vibration <i>complexity</i>',
-hero_lead:"A research pipeline that turns wave patterns — from Chladni figures to synthetic fields — into measurable, comparable quantities. One workshop, one consistent method, open tools.",
-cta_gen:"Open generator",cta_kalk:"Frequency calculator",cta_spec:"Live Spectrum",cta_case:"Case study #1",
+hero_lead:"We measure vibration complexity so it can be compared and repeated. Start with Case #1 (data + result), then use the lab tools.",
+cta_start:"Start here: Case #1",cta_gen:"Generator",cta_kalk:"Calculator",cta_spec:"Spectrum",cta_case:"Case study #1",hero_path:"Problem → FAEM → Case #1 → tools · ~2 min read",
 wf_eyebrow:"Workflow",wf_h2:"Three tools, one path",wf_lead:"From experiment design, through measuring a tone, to pattern and Df — in the browser.",wf_1_t:"Calculator",wf_1_p:"Compute plate resonances and set the function generator near mode (m,n).",wf_1_a:"Open calculator →",wf_2_t:"Live Spectrum",wf_2_p:"Measure f₀ with the mic (or test 440 Hz). Save a session CSV. Jump to the next tool in one click.",wf_2_a:"Open spectrum →",wf_3_t:"FAEM generator",wf_3_p:"See a pattern at similar complexity, compute Df and domains, export PNG / share a link.",wf_3_a:"Open generator →",faem_eyebrow:"Method",faem_h2:"What FAEM is",
 faem_lead:"Fractal Acoustic–Energy Mapping is a four-stage pipeline: from a raw vibration pattern, through quantitative complexity measures, to a comparison with reference physics and concrete uses.",
 faem_c1_t:"Input",faem_c1_p:"Chladni plate photos, vibration recordings, or synthetic fields — an algorithmically generated superposition of eigenmodes.",
