@@ -42,6 +42,11 @@ td{padding:9px 8px;border-bottom:1px solid rgba(180,150,255,.08);font-family:var
 .note{font-size:13px;color:var(--dim);border-left:2px solid var(--border2);padding-left:12px;margin:16px 0}
 footer{margin-top:36px;padding-top:16px;border-top:1px solid var(--border);font-size:12.5px;color:var(--dim)}
 code{font-family:var(--mono);font-size:12.5px;color:var(--cyan)}
+.checklist{list-style:none;padding:0;margin:14px 0 8px;counter-reset:step}
+.checklist li{position:relative;padding:12px 14px 12px 48px;margin:0 0 8px;border:1px solid var(--border);border-radius:12px;background:rgba(0,0,0,.22);counter-increment:step;color:var(--muted);font-size:14px;line-height:1.55}
+.checklist li::before{content:counter(step);position:absolute;left:12px;top:12px;width:26px;height:26px;border-radius:8px;background:rgba(94,234,212,.12);border:1px solid rgba(94,234,212,.35);color:var(--cyan);font-family:var(--mono);font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center}
+.checklist li strong{color:var(--text)}
+.checklist a{font-weight:600}
 </style>
 </head>
 <body>
@@ -105,14 +110,21 @@ code{font-family:var(--mono);font-size:12.5px;color:var(--cyan)}
     <li>To nie jest kalibracja absolutna częstotliwości laboratoryjnej.</li>
   </ul>
 
-  <h2>5. Odtwórz w narzędziach lab</h2>
-  <p>Poniższe linki ładują przykładowe parametry / wskazują dataset — bez ręcznego przepisywania liczb.</p>
+  <h2>5. Checklist: odtwórz w ~10 minut</h2>
+  <p>Pięć kroków — bez przepisywania liczb. Otwieraj linki w kolejności.</p>
+  <ol class="checklist">
+    <li><strong>Pobierz dane domen.</strong> Plik <a href="faem-case1-domains.csv" download>faem-case1-domains.csv</a> — 8 punktów f → N z tego case’a.</li>
+    <li><strong>Porównaj logi spektrum.</strong> <a href="compare.html?example=case1">Session Compare · A vs B</a> wczyta demo logi (stabilny vs rozstrojony ~1146 Hz).</li>
+    <li><strong>Sprawdź tryb przy f₀.</strong> <a href="modes.html?f=1146&amp;example=case1">Mode Finder · 1146 Hz</a> — najbliższe (m,n) dla przykładowej płytki.</li>
+    <li><strong>Zobacz wzór FAEM.</strong> <a href="faem_generator.html?n=14&amp;example=case1">Generator · N≈14</a> — złożoność w okolicach średnich punktów zestawu.</li>
+    <li><strong>Opcjonalnie: spektrum na żywo.</strong> <a href="spektrum.html?example=case1">Live Spectrum</a> — Test 440 Hz albo własny mikrofon / plik; log CSV możesz wrzucić z powrotem do Compare.</li>
+  </ol>
   <div class="actions">
-    <a class="btn primary" href="faem_generator.html?n=14&amp;example=case1">Generator · przykład FAEM #1</a>
-    <a class="btn" href="modes.html?f=1146&amp;example=case1">Mode Finder · f = 1146 Hz</a>
-    <a class="btn" href="spektrum.html?example=case1">Spektrum · demo logów</a>
-    <a class="btn" href="compare.html?example=case1">Compare · A vs B</a>
+    <a class="btn primary" href="compare.html?example=case1">1. Start: Compare A/B</a>
     <a class="btn" href="faem-case1-domains.csv" download>⬇ Dataset domen</a>
+    <a class="btn" href="modes.html?f=1146&amp;example=case1">Mode Finder</a>
+    <a class="btn" href="faem_generator.html?n=14&amp;example=case1">Generator</a>
+    <a class="btn" href="chladni-skalowanie-nodalne.html">Pełna analiza Chladniego</a>
   </div>
   <p class="note">Cytowanie: Astro_Katt, <em>FAEM — Fractal Vibration Lab</em>, case study #1 (2026), https://fractalvibrationlab.com/case-faem-1.html</p>
   <footer>Fractal Vibration Lab · Case FAEM #1 · open data · Astro_Katt</footer>
