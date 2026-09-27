@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Mode Finder — Fractal Vibration Lab</title>
+<meta name="description" content="Mode Finder: zmierzona f₀ + geometria płytki → najbliższe tryby (m,n) z błędem %."/>
+<meta name="theme-color" content="#05040f"/>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet"/>
+<style>
+:root{--bg:#05040f;--border:rgba(180,150,255,.12);--border2:rgba(180,150,255,.28);--text:#f7f4ff;--muted:#b8aee0;--dim:#7a6fa8;--violet:#9d7bff;--violet2:#d4c4ff;--cyan:#5eead4;--gold:#f0d49a;--ok:#6ee7b7;--radius:18px;--serif:"Fraunces",Georgia,serif;--sans:Inter,system-ui,sans-serif;--mono:"JetBrains Mono",monospace}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:100vh;line-height:1.6;background-image:radial-gradient(ellipse 70% 45% at 15% -5%,rgba(157,123,255,.2),transparent 55%),radial-gradient(ellipse 50% 35% at 90% 10%,rgba(94,234,212,.08),transparent 50%)}
+a{color:var(--violet2);text-decoration:none}a:hover{color:var(--gold)}
+.topbar{position:sticky;top:0;z-index:20;display:flex;justify-content:space-between;align-items:center;padding:12px 20px;background:rgba(5,4,15,.9);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);flex-wrap:wrap;gap:10px}
+.brand{font-family:var(--serif);font-weight:600;font-size:15px}.brand span{color:var(--violet2)}
+.topbar-right{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.topbar a.back{font-size:13px;color:var(--muted)}.topbar a.back:hover{color:var(--violet2)}
+.lang-switch{display:flex;border:1px solid var(--border2);border-radius:8px;overflow:hidden}
+.lang-switch button{background:0;border:0;color:var(--dim);font-size:11px;font-weight:600;padding:5px 10px;cursor:pointer;font-family:inherit}
+.lang-switch button.active{background:rgba(143,107,255,.18);color:var(--violet2)}
+.wrap{max-width:980px;margin:0 auto;padding:24px 20px 70px}
+h1{font-family:var(--serif);font-size:clamp(26px,4vw,34px);font-weight:600;margin-bottom:8px;background:linear-gradient(135deg,#fff,var(--violet2),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.sub{color:var(--muted);font-size:14.5px;max-width:620px;margin-bottom:22px}
+.grid{display:grid;grid-template-columns:1fr 1.1fr;gap:16px}
+@media(max-width:840px){.grid{grid-template-columns:1fr}}
+.panel{background:linear-gradient(155deg,rgba(157,123,255,.07),rgba(16,12,36,.85));border:1px solid var(--border);border-radius:var(--radius);padding:16px}
+.panel-title{font-family:var(--serif);font-size:14px;font-weight:600;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.panel-title .dot{width:6px;height:6px;border-radius:50%;background:var(--cyan);box-shadow:0 0 8px var(--cyan)}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+label.fld{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--dim);font-weight:700;margin-bottom:5px}
+input,select{width:100%;background:rgba(0,0,0,.35);border:1px solid var(--border);border-radius:10px;color:var(--text);padding:10px 12px;font-family:var(--mono);font-size:14px}
+input:focus,select:focus{outline:none;border-color:var(--cyan)}
+.shape-tabs{display:flex;gap:8px;margin-bottom:12px}
+.shape-tabs button{flex:1;padding:10px;border-radius:10px;border:1px solid var(--border);background:0;color:var(--muted);cursor:pointer;font-weight:600}
+.shape-tabs button.active{background:rgba(94,234,212,.12);border-color:var(--cyan);color:var(--cyan)}
+.btn{border:0;border-radius:12px;padding:12px 16px;font-weight:700;cursor:pointer;font-family:inherit;font-size:13px;background:linear-gradient(135deg,#5eead4,#0d9488);color:#042f2e;width:100%;margin-top:8px}
+.btn:hover{filter:brightness(1.05)}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--dim);padding:8px 6px;border-bottom:1px solid var(--border)}
+td{padding:10px 6px;border-bottom:1px solid rgba(180,150,255,.08);font-family:var(--mono)}
+tr.best td{color:var(--gold);font-weight:700;background:rgba(240,212,154,.06)}
+.badge{display:inline-block;font-size:10px;padding:2px 7px;border-radius:99px;background:rgba(94,234,212,.15);color:var(--cyan);font-weight:700}
+.note{margin-top:16px;padding:14px;border:1px dashed var(--border2);border-radius:14px;font-size:12.5px;color:var(--dim);line-height:1.65}
+.note strong{color:var(--violet2)}
+.links{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}
+.links a{font-size:13px;font-weight:600}
+footer{margin-top:24px;padding-top:16px;border-top:1px solid var(--border);font-size:12px;color:var(--dim)}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="brand">Fractal <span>Vibration</span> Lab</div>
+  <div class="topbar-right">
+    <a class="back" href="spektrum.html">Spektrum →</a>
+    <a class="back" href="kalkulator.html">Kalkulator →</a>
+    <a class="back" href="index.html">← Home</a>
+    <div class="lang-switch"><button type="button" id="btnPL" class="active" onclick="setLang('pl')">PL</button><button type="button" id="btnEN" onclick="setLang('en')">EN</button></div>
+  </div>
+</div>
+<div class="wrap">
+  <h1 data-i18n="title">Mode Finder</h1>
+  <p class="sub" data-i18n="sub">Wpisz zmierzoną f₀ (ze spektrum lub generatora funkcyjnego) oraz geometrię płytki — znajdziemy najbliższe tryby (m,n) z błędem procentowym.</p>
+  <div class="grid">
+    <div class="panel">
+      <div class="panel-title"><span class="dot"></span><span data-i18n="panel_in">Wejście</span></div>
+      <div class="shape-tabs">
+        <button type="button" class="active" id="shRect" data-i18n="sh_rect">◻ Prostokąt</button>
+        <button type="button" id="shCirc" data-i18n="sh_circ">◯ Koło</button>
+      </div>
+      <div class="row"><div><label class="fld">f₀ [Hz]</label><input type="number" id="f0" value="440" min="1" step="0.1"/></div>
+        <div><label class="fld" data-i18n="lbl_mat">Materiał</label>
+          <select id="mat"><option value="steel">Stal</option><option value="alu">Aluminium</option><option value="brass">Mosiądz</option><option value="glass">Szkło</option><option value="pmma">PMMA</option></select>
+        </div></div>
+      <div class="row" id="rectRow"><div><label class="fld">a [mm]</label><input type="number" id="a" value="200" min="1"/></div>
+        <div><label class="fld">b [mm]</label><input type="number" id="b" value="200" min="1"/></div></div>
+      <div class="row" id="circRow" style="display:none"><div><label class="fld">R [mm]</label><input type="number" id="R" value="100" min="1"/></div><div></div></div>
+      <div class="row"><div><label class="fld">h [mm]</label><input type="number" id="h" value="1" min="0.01" step="0.01"/></div>
+        <div><label class="fld" data-i18n="lbl_max">Max m,n</label><input type="number" id="maxMN" value="8" min="3" max="12"/></div></div>
+      <button class="btn" id="btnGo" type="button" data-i18n="btn_go">Szukaj trybów</button>
+      <div class="links">
+        <a href="spektrum.html" data-i18n="link_sp">← Ze spektrum</a>
+        <a href="kalkulator.html" data-i18n="link_ca">Kalkulator →</a>
+        <a href="faem_generator.html" data-i18n="link_ge">Generator →</a>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="panel-title"><span class="dot"></span><span data-i18n="panel_out">Najbliższe tryby</span></div>
+      <div id="resultMeta" style="font-size:13px;color:var(--muted);margin-bottom:10px">—</div>
+      <div style="overflow-x:auto">
+        <table>
+          <thead><tr><th>#</th><th>m</th><th>n</th><th>f model</th><th>Δf</th><th>błąd</th></tr></thead>
+          <tbody id="tbody"><tr><td colspan="6" style="color:var(--dim)">—</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="note"><strong data-i18n="note_t">Model.</strong> <span data-i18n="note_p">Prostokąt: cienka płyta podparta swobodnie (Kirchhoff). Koło: zamocowanie sztywne na brzegu (przybliżone pierwiastki). Realna płytka Chladniego (swobodne krawędzie) da inne wartości — to punkt startowy, nie wyrok.</span></div>
+  <footer>Fractal Vibration Lab · Mode Finder · Astro_Katt</footer>
+</div>
+<script>
+const I18N={pl:{title:"Mode Finder",sub:"Wpisz zmierzoną f₀ oraz geometrię płytki — znajdziemy najbliższe tryby (m,n) z błędem procentowym.",panel_in:"Wejście",panel_out:"Najbliższe tryby",sh_rect:"◻ Prostokąt",sh_circ:"◯ Koło",lbl_mat:"Materiał",lbl_max:"Max m,n",btn_go:"Szukaj trybów",link_sp:"← Ze spektrum",link_ca:"Kalkulator →",link_ge:"Generator →",note_t:"Model.",note_p:"Prostokąt: cienka płyta podparta swobodnie (Kirchhoff). Koło: zamocowanie sztywne (przybliżone). Realna płytka Chladniego da inne wartości — punkt startowy."},en:{title:"Mode Finder",sub:"Enter measured f₀ and plate geometry — we list nearest modes (m,n) with percent error.",panel_in:"Input",panel_out:"Nearest modes",sh_rect:"◻ Rectangle",sh_circ:"◯ Circle",lbl_mat:"Material",lbl_max:"Max m,n",btn_go:"Find modes",link_sp:"← From spectrum",link_ca:"Calculator →",link_ge:"Generator →",note_t:"Model.",note_p:"Rectangle: simply-supported thin plate (Kirchhoff). Circle: clamped edge (approximate roots). Real free-edge Chladni plates differ — starting point only."}};
+let lang=localStorage.getItem('faem_lang')||'pl', shape='rect';
+function t(k){return (I18N[lang]||I18N.pl)[k]||k}
+function setLang(l){lang=l;localStorage.setItem('faem_lang',l);document.getElementById('btnPL').classList.toggle('active',l==='pl');document.getElementById('btnEN').classList.toggle('active',l==='en');document.querySelectorAll('[data-i18n]').forEach(el=>el.textContent=t(el.getAttribute('data-i18n')))}
+window.setLang=setLang;
+const MAT={steel:{E:200e9,rho:7850,nu:0.3},alu:{E:69e9,rho:2700,nu:0.33},brass:{E:100e9,rho:8500,nu:0.34},glass:{E:70e9,rho:2500,nu:0.22},pmma:{E:3.2e9,rho:1180,nu:0.37}};
+// circular clamped roots λ_{n,s} approximate table (n radial-ish index, s)
+const CIRC={0:[3.196,6.306,9.439,12.577],1:[4.611,7.799,10.958,14.108],2:[5.906,9.197,12.402,15.579],3:[7.143,10.536,13.795,17.005],4:[8.347,11.836,15.163,18.401]};
+function rectF(m,n,a,b,h,mat){const k=Math.sqrt(mat.E/(12*mat.rho*(1-mat.nu*mat.nu)));return (Math.PI*h/2)*k*((m*m)/(a*a)+(n*n)/(b*b))}
+function circF(n,s,R,h,mat){const lam=(CIRC[n]||[])[s];if(!lam)return NaN;const k=Math.sqrt(mat.E/(12*mat.rho*(1-mat.nu*mat.nu)));return (lam*lam*h)/(2*Math.PI*R*R)*k}
+document.getElementById('shRect').onclick=()=>{shape='rect';document.getElementById('shRect').classList.add('active');document.getElementById('shCirc').classList.remove('active');document.getElementById('rectRow').style.display='';document.getElementById('circRow').style.display='none'};
+document.getElementById('shCirc').onclick=()=>{shape='circ';document.getElementById('shCirc').classList.add('active');document.getElementById('shRect').classList.remove('active');document.getElementById('rectRow').style.display='none';document.getElementById('circRow').style.display=''};
+function run(){
+  const f0=+document.getElementById('f0').value, h=+document.getElementById('h').value/1000, max=+document.getElementById('maxMN').value;
+  const mat=MAT[document.getElementById('mat').value];
+  const list=[];
+  if(shape==='rect'){
+    const a=+document.getElementById('a').value/1000,b=+document.getElementById('b').value/1000;
+    for(let m=1;m<=max;m++)for(let n=1;n<=max;n++){const f=rectF(m,n,a,b,h,mat);if(isFinite(f))list.push({m,n,f,err:Math.abs(f-f0)/f0*100,df:f-f0})}
+  }else{
+    const R=+document.getElementById('R').value/1000;
+    for(let n=0;n<=4;n++)for(let s=0;s<4;s++){const f=circF(n,s,R,h,mat);if(isFinite(f))list.push({m:n,n:s+1,f,err:Math.abs(f-f0)/f0*100,df:f-f0})}
+  }
+  list.sort((a,b)=>a.err-b.err);
+  const top=list.slice(0,12);
+  document.getElementById('resultMeta').textContent=(lang==='pl'?'Cel: ':'Target: ')+f0.toFixed(1)+' Hz · '+(shape==='rect'?'rect':'circ')+' · top '+top.length;
+  document.getElementById('tbody').innerHTML=top.map((r,i)=>`<tr class="${i===0?'best':''}"><td>${i===0?'<span class="badge">BEST</span>':i+1}</td><td>${r.m}</td><td>${r.n}</td><td>${r.f.toFixed(1)} Hz</td><td>${r.df>=0?'+':''}${r.df.toFixed(1)}</td><td>${r.err.toFixed(2)}%</td></tr>`).join('')||'<tr><td colspan="6">—</td></tr>';
+}
+document.getElementById('btnGo').onclick=run;
+// URL ?f=
+const q=new URLSearchParams(location.search);if(q.has('f'))document.getElementById('f0').value=q.get('f');
+setLang(lang);run();
+</script>
+</body>
+</html>

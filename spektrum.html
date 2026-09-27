@@ -75,6 +75,8 @@ footer{margin-top:28px;padding-top:18px;border-top:1px solid var(--border);font-
     <span class="status-dot" id="statusDot"><i></i><span id="statusTxt">idle</span></span>
     <a class="back" href="faem_generator.html" data-i18n="nav_gen">Generator →</a>
     <a class="back" href="kalkulator.html" data-i18n="nav_kalk">Kalkulator →</a>
+    <a class="back" href="modes.html">Modes →</a>
+    <a class="back" href="compare.html">Compare →</a>
     <a class="back" href="index.html" data-i18n="nav_home">← Home</a>
     <div class="lang-switch"><button type="button" id="btnPL" class="active" onclick="setLang('pl')">PL</button><button type="button" id="btnEN" onclick="setLang('en')">EN</button></div>
   </div>
@@ -95,6 +97,8 @@ footer{margin-top:28px;padding-top:18px;border-top:1px solid var(--border);font-
         <button class="btn btn-primary" id="btnMic" type="button">▶ <span data-i18n="btn_start">Start mikrofonu</span></button>
         <button class="btn btn-ghost" id="btnFreeze" type="button" disabled data-i18n="btn_freeze">Zamroź</button>
         <button class="btn btn-ghost" id="btnTone" type="button" data-i18n="btn_tone">Test 440 Hz</button>
+        <button class="btn btn-ghost" id="btnAudio" type="button" data-i18n="btn_audio">⬆ Plik audio</button>
+        <input type="file" id="audioFile" accept="audio/*,.wav,.mp3,.ogg,.m4a" style="display:none"/>
         <button class="btn btn-ghost" id="btnLogCsv" type="button" data-i18n="btn_log">⬇ Log CSV</button>
         <button class="btn btn-ghost" id="btnLogClear" type="button" data-i18n="btn_log_clear">Wyczyść log</button>
         <span id="logCount" style="font-size:12px;color:var(--dim);font-family:var(--mono)">0 próbek</span>
@@ -122,6 +126,8 @@ footer{margin-top:28px;padding-top:18px;border-top:1px solid var(--border);font-
         <div class="links">
           <a class="tool-link" id="linkCalc" href="kalkulator.html"><div><div data-i18n="link_calc">Kalkulator</div><span id="calcHint">f → tryb (m,n)</span></div><span>→</span></a>
           <a class="tool-link" id="linkGen" href="faem_generator.html"><div><div data-i18n="link_gen">Generator FAEM</div><span id="genHint">N z spektrum</span></div><span>→</span></a>
+          <a class="tool-link" id="linkModes" href="modes.html"><div><div data-i18n="link_modes">Mode Finder</div><span id="modesHint">f₀ → (m,n)</span></div><span>→</span></a>
+          <a class="tool-link" href="compare.html"><div><div data-i18n="link_cmp">Session Compare</div><span data-i18n="link_cmp_h">2× CSV log</span></div><span>→</span></a>
         </div>
         <div class="section-lbl" data-i18n="sec_est">Szacunek złożoności</div>
         <div class="stats">

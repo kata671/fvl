@@ -6,6 +6,8 @@ const ASSETS = [
   './kalkulator.html',
   './spektrum.html',
   './spektrum.js',
+  './compare.html',
+  './modes.html',
   './chladni-skalowanie-nodalne.html',
   './manifest.webmanifest'
 ];
