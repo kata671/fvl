@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>FAEM — Fractal Acoustic–Energy Mapping</title>
+<meta name="description" content="FAEM: metoda Fractal Vibration Lab. Wzór drgań → N, Df, skalowanie z częstotliwością. Otwarty protokół, atlas PASCO, narzędzia w przeglądarce."/>
+<meta name="theme-color" content="#05040f"/>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+:root{--bg:#05040f;--text:#f7f4ff;--muted:#b8aee0;--dim:#7a6fa8;--cyan:#5eead4;--gold:#f0d49a;--violet2:#d4c4ff;--border:rgba(180,150,255,.14);--serif:"Fraunces",Georgia,serif;--sans:Inter,system-ui,sans-serif;--mono:"JetBrains Mono",monospace}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);line-height:1.7;background-image:radial-gradient(ellipse 80% 40% at 10% -10%,rgba(157,123,255,.2),transparent 55%)}
+a{color:var(--violet2)}a:hover{color:var(--gold)}
+.top{position:sticky;top:0;display:flex;justify-content:space-between;padding:12px 20px;background:rgba(5,4,15,.9);border-bottom:1px solid var(--border);backdrop-filter:blur(12px)}
+.brand{font-family:var(--serif);font-weight:600}.brand span{color:var(--violet2)}
+.top nav a{margin-left:14px;font-size:13px;color:var(--muted);text-decoration:none}
+.wrap{max-width:720px;margin:0 auto;padding:36px 20px 80px}
+.eyebrow{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--cyan);font-weight:700;margin-bottom:12px}
+h1{font-family:var(--serif);font-size:clamp(28px,5vw,40px);line-height:1.15;margin-bottom:14px;background:linear-gradient(135deg,#fff,var(--violet2),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+h2{font-family:var(--serif);font-size:22px;margin:32px 0 10px}
+.lead{font-size:18px;color:var(--muted);margin-bottom:22px}
+p,li{color:var(--muted);font-size:15.5px}ul{padding-left:1.15em;margin:8px 0 16px}li{margin:6px 0}
+.eq{font-family:var(--mono);color:var(--gold);font-size:15px;margin:12px 0;padding:12px 14px;border:1px solid var(--border);border-radius:12px;background:rgba(0,0,0,.25)}
+.btn{display:inline-flex;padding:11px 16px;border-radius:12px;font-weight:700;font-size:13px;text-decoration:none;color:#042f2e;background:linear-gradient(135deg,#5eead4,#0d9488);margin:6px 8px 0 0}
+.btn.ghost{background:transparent;color:var(--text);border:1px solid var(--border)}
+footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--border);font-size:12.5px;color:var(--dim)}
+</style>
+</head>
+<body>
+<div class="top">
+  <div class="brand">Fractal <span>Vibration</span> Lab</div>
+  <nav>
+    <a href="case-faem-1.html">Case PASCO</a>
+    <a href="lab.html">Lab</a>
+    <a href="index.html">Home</a>
+  </nav>
+</div>
+<div class="wrap">
+  <div class="eyebrow">Metoda · FAEM v0.1</div>
+  <h1>Fractal Acoustic–Energy Mapping</h1>
+  <p class="lead">FAEM to sposób, w jaki ten lab czyta drganie: nie jako obrazek, tylko jako wielkość. Wzór na płycie staje się N, Df i relacją z częstotliwością — da się porównać sesję z sesją.</p>
+
+  <h2>Co mierzymy</h2>
+  <ul>
+    <li><strong style="color:var(--text)">N</strong> — liczba domen (obszarów między liniami węzłowymi).</li>
+    <li><strong style="color:var(--text)">Df</strong> — wymiar fraktalny linii węzłowych (box-counting w generatorze).</li>
+    <li><strong style="color:var(--text)">f</strong> — częstotliwość wymuszenia.</li>
+  </ul>
+  <div class="eq">N ∝ f<sup>β</sup>　　teoria klasyczna: β ≈ 0.5</div>
+
+  <h2>Protokół</h2>
+  <ul>
+    <li>Ustal geometrię i źródło f (katalog płyty albo pomiar).</li>
+    <li>Dla każdej f: stabilny wzór → N (z klatki albo z generatora).</li>
+    <li>Regresja log N vs log f. Raportuj β, niepewność, R² i n.</li>
+    <li>Spektrum i Mode Finder służą do f₀ i (m,n) — nie zastępują N.</li>
+  </ul>
+
+  <h2>Pierwszy atlas</h2>
+  <p>Kwadratowa płyta PASCO, 19 rezonansów (345–6051 Hz). Na klatkach z N: β ≈ 0.57, R² = 0.92. FAEM nie kończy się na tym atlasie — atlas jest pierwszą publiczną aplikacją metody.</p>
+
+  <p>
+    <a class="btn" href="case-faem-1.html">Otwórz atlas PASCO</a>
+    <a class="btn ghost" href="faem_generator.html">Generator</a>
+    <a class="btn ghost" href="lab.html">Lab desk</a>
+  </p>
+  <footer>FAEM · Fractal Vibration Lab · Astro_Katt · 2026</footer>
+</div>
+</body>
+</html>
