@@ -984,6 +984,21 @@ function applyURLState(){
   if(p.has("dq"))dQ.value=p.get("dq");
   updateDecay();
 
+  // bridge from Live Spectrum: ?f=440
+  if(p.has("f")){
+    const fv=parseFloat(p.get("f"));
+    if(fv>0&&isFinite(fv)){
+      wF.value=String(fv);
+      dF0.value=String(fv);
+      recomputeFromFV();
+      updateDecay();
+      if(!p.has("tab")){
+        const btn=document.querySelector('#mainTabs .tab[data-view="wave"]');
+        if(btn)btn.click();
+      }
+    }
+  }
+
   const tab=p.get("tab");
   if(tab==="wave"||tab==="decay"){
     const btn=document.querySelector('#mainTabs .tab[data-view="'+tab+'"]');

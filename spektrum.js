@@ -1,6 +1,6 @@
 const I18N={
-pl:{nav_gen:"Generator →",nav_kalk:"Kalkulator →",nav_home:"← Strona główna",title:"Live Spectrum Lab",sub:"Mikrofon → FFT na żywo → częstotliwość dominantna, harmoniczne i most do kalkulatora oraz generatora FAEM.",panel_spec:"Spektrum",panel_read:"Odczyt",panel_bridge:"Most FAEM",btn_start:"Start mikrofonu",btn_stop:"Stop",btn_freeze:"Zamroź",btn_unfreeze:"Odmroź",btn_tone:"Test 440 Hz",lbl_level:"Poziom wejścia",sec_fft:"Parametry FFT",lbl_fft:"Rozmiar FFT",lbl_smooth:"Wygładzanie",hint_f0:"Częstotliwość szczytowa",lbl_note:"Nota",hint_note:"Najbliższy ton",lbl_cent:"Odstrojenie",hint_cent:"Od nuty",hint_rms:"Poziom",sec_harm:"Harmoniczne / piki",bridge_p:"Użyj f0 w kalkulatorze albo generatorze z N z bogactwa spektrum.",link_calc:"Kalkulator",link_gen:"Generator FAEM",sec_est:"Szacunek złożoności",lbl_peaks:"Piki",note_t:"Uwaga.",note_p:"Nie certyfikowany analizator — f0 to punkt startowy do FAEM.",st_idle:"idle",st_live:"LIVE",st_frozen:"frozen",st_tone:"tone test",err_mic:"Brak dostępu do mikrofonu (HTTPS + uprawnienia).",err_secure:"Wymagany HTTPS lub localhost."},
-en:{nav_gen:"Generator →",nav_kalk:"Calculator →",nav_home:"← Home",title:"Live Spectrum Lab",sub:"Microphone → live FFT → dominant frequency, harmonics, and a bridge to the calculator and FAEM generator.",panel_spec:"Spectrum",panel_read:"Readout",panel_bridge:"FAEM bridge",btn_start:"Start mic",btn_stop:"Stop",btn_freeze:"Freeze",btn_unfreeze:"Unfreeze",btn_tone:"Test 440 Hz",lbl_level:"Input level",sec_fft:"FFT settings",lbl_fft:"FFT size",lbl_smooth:"Smoothing",hint_f0:"Peak frequency",lbl_note:"Note",hint_note:"Nearest pitch",lbl_cent:"Detune",hint_cent:"From note",hint_rms:"Level",sec_harm:"Harmonics / peaks",bridge_p:"Use f0 in the calculator or generator with N from spectral richness.",link_calc:"Calculator",link_gen:"FAEM generator",sec_est:"Complexity estimate",lbl_peaks:"Peaks",note_t:"Note.",note_p:"Not a calibrated analyser — treat f0 as a starting point for FAEM.",st_idle:"idle",st_live:"LIVE",st_frozen:"frozen",st_tone:"tone test",err_mic:"Microphone access denied (HTTPS + permissions).",err_secure:"HTTPS or localhost required."}
+pl:{nav_gen:"Generator →",nav_kalk:"Kalkulator →",nav_home:"← Strona główna",title:"Live Spectrum Lab",sub:"Mikrofon → FFT na żywo → częstotliwość dominantna, harmoniczne i most do kalkulatora oraz generatora FAEM.",panel_spec:"Spektrum",panel_read:"Odczyt",panel_bridge:"Most FAEM",btn_start:"Start mikrofonu",btn_stop:"Stop",btn_freeze:"Zamroź",btn_unfreeze:"Odmroź",btn_tone:"Test 440 Hz",lbl_level:"Poziom wejścia",sec_fft:"Parametry FFT",lbl_fft:"Rozmiar FFT",lbl_smooth:"Wygładzanie",hint_f0:"Częstotliwość szczytowa",lbl_note:"Nota",hint_note:"Najbliższy ton",lbl_cent:"Odstrojenie",hint_cent:"Od nuty",hint_rms:"Poziom",sec_harm:"Harmoniczne / piki",bridge_p:"Użyj f0 w kalkulatorze albo generatorze z N z bogactwa spektrum.",link_calc:"Kalkulator",link_gen:"Generator FAEM",sec_est:"Szacunek złożoności",lbl_peaks:"Piki",note_t:"Uwaga.",note_p:"Nie certyfikowany analizator — f0 to punkt startowy do FAEM.",st_idle:"idle",st_live:"LIVE",st_frozen:"frozen",st_tone:"tone test",err_mic:"Brak dostępu do mikrofonu (HTTPS + uprawnienia).",err_secure:"Wymagany HTTPS lub localhost.",btn_log:"⬇ Log CSV",btn_log_clear:"Wyczyść log",log_samples:"próbek"},
+en:{nav_gen:"Generator →",nav_kalk:"Calculator →",nav_home:"← Home",title:"Live Spectrum Lab",sub:"Microphone → live FFT → dominant frequency, harmonics, and a bridge to the calculator and FAEM generator.",panel_spec:"Spectrum",panel_read:"Readout",panel_bridge:"FAEM bridge",btn_start:"Start mic",btn_stop:"Stop",btn_freeze:"Freeze",btn_unfreeze:"Unfreeze",btn_tone:"Test 440 Hz",lbl_level:"Input level",sec_fft:"FFT settings",lbl_fft:"FFT size",lbl_smooth:"Smoothing",hint_f0:"Peak frequency",lbl_note:"Note",hint_note:"Nearest pitch",lbl_cent:"Detune",hint_cent:"From note",hint_rms:"Level",sec_harm:"Harmonics / peaks",bridge_p:"Use f0 in the calculator or generator with N from spectral richness.",link_calc:"Calculator",link_gen:"FAEM generator",sec_est:"Complexity estimate",lbl_peaks:"Peaks",note_t:"Note.",note_p:"Not a calibrated analyser — treat f0 as a starting point for FAEM.",st_idle:"idle",st_live:"LIVE",st_frozen:"frozen",st_tone:"tone test",err_mic:"Microphone access denied (HTTPS + permissions).",err_secure:"HTTPS or localhost required.",btn_log:"⬇ Log CSV",btn_log_clear:"Clear log",log_samples:"samples"}
 };
 let lang=localStorage.getItem('faem_lang')||'pl';
 function t(k){return (I18N[lang]||I18N.pl)[k]||k}
@@ -191,8 +191,50 @@ function drawWaterfall(){
   }
   octx.putImageData(row,0,0);wctx.drawImage(wfOff,0,0);
 }
+
+/* session log — sample every 0.5s while running */
+const sessionLog=[];
+let lastLogT=0;
+function pushLogSample(info){
+  if(!info||!(info.f0>0))return;
+  const now=performance.now();
+  if(now-lastLogT<500)return;
+  lastLogT=now;
+  sessionLog.push({
+    t: new Date().toISOString(),
+    f0: +info.f0.toFixed(3),
+    rms_db: +info.db.toFixed(2),
+    peaks: info.top.length,
+    nest: info.nest,
+    note: freqToNote(info.f0).name
+  });
+  const el=document.getElementById('logCount');
+  if(el)el.textContent=sessionLog.length+' '+(t('log_samples')||'samples');
+}
+function exportLogCSV(){
+  if(!sessionLog.length){alert(lang==='pl'?'Brak próbek w logu — uruchom pomiar.':'No samples — start a measurement.');return}
+  const header='timestamp,f0_Hz,rms_dB,peaks,N_est,note\n';
+  const body=sessionLog.map(r=>[r.t,r.f0,r.rms_db,r.peaks,r.nest,r.note].join(',')).join('\n');
+  const blob=new Blob([header+body],{type:'text/csv'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='faem_spectrum_log_'+new Date().toISOString().slice(0,19).replace(/[:T]/g,'-')+'.csv';
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+function clearLog(){
+  sessionLog.length=0;lastLogT=0;
+  const el=document.getElementById('logCount');
+  if(el)el.textContent='0 '+(t('log_samples')||'samples');
+}
+const btnLog=document.getElementById('btnLogCsv');
+const btnLogClr=document.getElementById('btnLogClear');
+if(btnLog)btnLog.addEventListener('click',exportLogCSV);
+if(btnLogClr)btnLogClr.addEventListener('click',clearLog);
+
 function updateReadout(info){
   if(!info)return;
+  pushLogSample(info);
   const note=freqToNote(info.f0);
   document.getElementById('vF0').innerHTML=(info.f0>0?info.f0.toFixed(1):'—')+' <small>Hz</small>';
   document.getElementById('vNote').textContent=note.name;

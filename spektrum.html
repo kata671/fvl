@@ -95,6 +95,9 @@ footer{margin-top:28px;padding-top:18px;border-top:1px solid var(--border);font-
         <button class="btn btn-primary" id="btnMic" type="button">▶ <span data-i18n="btn_start">Start mikrofonu</span></button>
         <button class="btn btn-ghost" id="btnFreeze" type="button" disabled data-i18n="btn_freeze">Zamroź</button>
         <button class="btn btn-ghost" id="btnTone" type="button" data-i18n="btn_tone">Test 440 Hz</button>
+        <button class="btn btn-ghost" id="btnLogCsv" type="button" data-i18n="btn_log">⬇ Log CSV</button>
+        <button class="btn btn-ghost" id="btnLogClear" type="button" data-i18n="btn_log_clear">Wyczyść log</button>
+        <span id="logCount" style="font-size:12px;color:var(--dim);font-family:var(--mono)">0 próbek</span>
       </div>
       <div class="err" id="errBox"></div>
       <div class="section-lbl" data-i18n="sec_fft">Parametry FFT</div>
