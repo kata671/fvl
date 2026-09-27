@@ -1,0 +1,20 @@
+freq_Hz,domains_N,has_frame,source,note
+345,5,yes,PASCO square plate,frame: center+4 corners
+1033,9,yes,PASCO square plate,frame: 4+4+center
+1820,9,yes,PASCO square plate,frame: 8 loops+center
+2041,16,yes,PASCO square plate,2 frames same mode
+3240,,no,PASCO square plate,PASCO catalog — no frame in this atlas yet
+3835,,no,PASCO square plate,PASCO catalog — no frame in this atlas yet
+3975,,no,PASCO square plate,PASCO catalog — no frame in this atlas yet
+4049,,no,PASCO square plate,PASCO catalog — no frame in this atlas yet
+4129,,no,PASCO square plate,PASCO catalog — no frame in this atlas yet
+4173,22,yes,PASCO square plate,frame: lattice
+4221,19,yes,PASCO square plate,frame: organic loops
+4280,18,yes,PASCO square plate,frame: ladder
+4444,,no,PASCO square plate,PASCO catalog — no frame in this atlas yet
+4671,,no,PASCO square plate,PASCO catalog — no frame in this atlas yet
+4840,,no,PASCO square plate,PASCO catalog — no frame in this atlas yet
+5201,25,yes,PASCO square plate,frame: multi-ring floral
+5284,,no,PASCO square plate,PASCO catalog — no frame in this atlas yet
+5907,,no,PASCO square plate,PASCO catalog — no frame in this atlas yet
+6051,,no,PASCO square plate,PASCO catalog — no frame in this atlas yet

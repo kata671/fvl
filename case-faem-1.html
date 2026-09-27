@@ -3,131 +3,114 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Case study FAEM #1 — Fractal Vibration Lab</title>
-<meta name="description" content="FAEM case study #1: skalowanie domen Chladniego na płytce kwadratowej, 8 punktów, N∝f^0.52, R²=0.94. Dane otwarte."/>
+<title>Atlas rezonansów — płyta kwadratowa PASCO · Fractal Vibration Lab</title>
+<meta name="description" content="Katalog 19 częstotliwości rezonansowych kwadratowej płyty Chladniego (PASCO, 345–6051 Hz). 9 klatek z pomiarem N. Nie test na 8 zdjęciach."/>
 <meta name="theme-color" content="#05040f"/>
-<meta property="og:title" content="Case study FAEM #1 — Fractal Vibration Lab"/>
-<meta property="og:description" content="Open case: nodal domains vs frequency on a square plate. Dataset + tools."/>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet"/>
 <style>
-:root{--bg:#05040f;--border:rgba(180,150,255,.12);--border2:rgba(180,150,255,.28);--text:#f7f4ff;--muted:#b8aee0;--dim:#7a6fa8;--violet:#9d7bff;--violet2:#d4c4ff;--cyan:#5eead4;--gold:#f0d49a;--radius:18px;--serif:"Fraunces",Georgia,serif;--sans:Inter,system-ui,sans-serif;--mono:"JetBrains Mono",monospace}
+:root{--bg:#05040f;--border:rgba(180,150,255,.12);--border2:rgba(180,150,255,.28);--text:#f7f4ff;--muted:#b8aee0;--dim:#7a6fa8;--violet2:#d4c4ff;--cyan:#5eead4;--gold:#f0d49a;--radius:18px;--serif:"Fraunces",Georgia,serif;--sans:Inter,system-ui,sans-serif;--mono:"JetBrains Mono",monospace}
 *{box-sizing:border-box;margin:0;padding:0}
 body{background:var(--bg);color:var(--text);font-family:var(--sans);line-height:1.65;background-image:radial-gradient(ellipse 70% 40% at 12% -5%,rgba(157,123,255,.18),transparent 55%)}
 a{color:var(--violet2);text-decoration:none}a:hover{color:var(--gold)}
 .topbar{position:sticky;top:0;z-index:20;display:flex;justify-content:space-between;align-items:center;padding:12px 20px;background:rgba(5,4,15,.9);backdrop-filter:blur(14px);border-bottom:1px solid var(--border);flex-wrap:wrap;gap:10px}
 .brand{font-family:var(--serif);font-weight:600;font-size:15px}.brand span{color:var(--violet2)}
-.topbar-right{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.topbar-right{display:flex;gap:12px;flex-wrap:wrap}
 .topbar a.back{font-size:13px;color:var(--muted)}
-.wrap{max-width:820px;margin:0 auto;padding:28px 20px 80px}
+.wrap{max-width:860px;margin:0 auto;padding:28px 20px 80px}
 .eyebrow{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--cyan);font-weight:700;margin-bottom:10px}
 h1{font-family:var(--serif);font-size:clamp(26px,4.5vw,36px);font-weight:600;line-height:1.15;margin-bottom:12px;background:linear-gradient(135deg,#fff,var(--violet2),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.lead{font-size:16px;color:var(--muted);margin-bottom:22px}
-.meta{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px}
-.chip{font-size:12px;padding:5px 11px;border-radius:99px;border:1px solid var(--border2);color:var(--muted);font-family:var(--mono)}
+.lead{font-size:16px;color:var(--muted);margin-bottom:20px}
+.chip{display:inline-block;font-size:12px;padding:5px 11px;border-radius:99px;border:1px solid var(--border2);color:var(--muted);font-family:var(--mono);margin:0 6px 8px 0}
 .chip strong{color:var(--gold)}
 h2{font-family:var(--serif);font-size:20px;margin:28px 0 10px}
 p,li{color:var(--muted);font-size:15px}
-ul{padding-left:1.2em;margin:8px 0 12px}
-li{margin:4px 0}
-table{width:100%;border-collapse:collapse;margin:12px 0 16px;font-size:13.5px}
+ul{padding-left:1.2em;margin:8px 0 12px}li{margin:4px 0}
+table{width:100%;border-collapse:collapse;margin:12px 0 16px;font-size:13px}
 th{text-align:left;font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--dim);padding:8px;border-bottom:1px solid var(--border)}
-td{padding:9px 8px;border-bottom:1px solid rgba(180,150,255,.08);font-family:var(--mono);color:var(--text)}
+td{padding:8px;border-bottom:1px solid rgba(180,150,255,.08);font-family:var(--mono);color:var(--text)}
+tr.framed td{background:rgba(94,234,212,.06)}
 .box{border:1px solid var(--border);border-radius:var(--radius);padding:16px 18px;background:rgba(28,20,56,.4);margin:16px 0}
-.box h3{font-size:14px;margin-bottom:8px;color:var(--violet2)}
 .eq{font-family:var(--mono);font-size:15px;color:var(--gold);margin:8px 0}
-.actions{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0}
-.btn{display:inline-flex;align-items:center;gap:8px;padding:11px 16px;border-radius:12px;font-weight:700;font-size:13px;border:1px solid var(--border2);background:rgba(157,123,255,.12);color:var(--text)}
+.btn{display:inline-flex;padding:11px 16px;border-radius:12px;font-weight:700;font-size:13px;border:1px solid var(--border2);background:rgba(157,123,255,.12);color:var(--text);margin:4px 6px 4px 0}
 .btn.primary{background:linear-gradient(135deg,#5eead4,#0d9488);color:#042f2e;border:0}
-.btn:hover{filter:brightness(1.06)}
 .note{font-size:13px;color:var(--dim);border-left:2px solid var(--border2);padding-left:12px;margin:16px 0}
 footer{margin-top:36px;padding-top:16px;border-top:1px solid var(--border);font-size:12.5px;color:var(--dim)}
 code{font-family:var(--mono);font-size:12.5px;color:var(--cyan)}
-.checklist{list-style:none;padding:0;margin:14px 0 8px;counter-reset:step}
-.checklist li{position:relative;padding:12px 14px 12px 48px;margin:0 0 8px;border:1px solid var(--border);border-radius:12px;background:rgba(0,0,0,.22);counter-increment:step;color:var(--muted);font-size:14px;line-height:1.55}
-.checklist li::before{content:counter(step);position:absolute;left:12px;top:12px;width:26px;height:26px;border-radius:8px;background:rgba(94,234,212,.12);border:1px solid rgba(94,234,212,.35);color:var(--cyan);font-family:var(--mono);font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center}
-.checklist li strong{color:var(--text)}
-.checklist a{font-weight:600}
 </style>
 </head>
 <body>
 <div class="topbar">
   <div class="brand">Fractal <span>Vibration</span> Lab</div>
   <div class="topbar-right">
-    <a class="back" href="chladni-skalowanie-nodalne.html">Pełna analiza →</a>
-    <a class="back" href="faem-case1-domains.csv">Dataset CSV</a>
+    
+    <a class="back" href="pasco-square-freqs.csv">CSV</a>
+    <a class="back" href="lab.html">Lab</a>
     <a class="back" href="index.html">← Home</a>
   </div>
 </div>
 <div class="wrap">
-  <div class="eyebrow">Case study · FAEM #1 · v0.1</div>
-  <h1>Skorelowane domeny z częstotliwością na płytce kwadratowej</h1>
-  <p class="lead">Pytanie: czy liczba domen nodalnych na realnych zdjęciach Chladniego rośnie jak √f — zgodnie z klasycznym prawem — gdy zastosujemy ten sam pipeline zliczania?</p>
-  <div class="meta">
-    <span class="chip"><strong>n = 8</strong> zdjęć</span>
-    <span class="chip">155 – 6800 Hz</span>
-    <span class="chip">N ∝ f<sup>0.521</sup></span>
-    <span class="chip">R² = <strong>0.94</strong></span>
-  </div>
+  <div class="eyebrow">Case FAEM · płyta kwadratowa PASCO</div>
+  <h1>19 częstotliwości rezonansowych kwadratowej płyty Chladniego</h1>
+  <p class="lead">Publiczny katalog PASCO dla płyty kwadratowej (345–6051 Hz). Do 8 z tych f mamy podpisane klatki i zliczenie domen. Reszta katalogu zostaje jako lista rezonansów do odtworzenia — bez udawania, że cały atlas to osiem fotek.</p>
+  <span class="chip"><strong>19</strong> częstotliwości PASCO</span>
+  <span class="chip"><strong>8</strong> unikalnych f z klatką + N</span>
+  <span class="chip">9 klatek (2041 Hz ×2)</span>
+  <span class="chip">N ∝ f<sup>0.57</sup> · R² = 0.92 <small>(tylko klatki)</small></span>
 
-  <h2>1. Pytanie badawcze</h2>
-  <p>Dla cienkiej płyty oczekuje się, że złożoność geometryczna wzoru (tu: liczba domen między liniami węzłowymi) skaluje się w przybliżeniu jak √f. Sprawdzamy to na <strong style="color:var(--text)">jednym zestawie zdjęć</strong> płytki kwadratowej, bez ręcznego „dopasowywania” definicji domen między punktami.</p>
+  <h2>Źródło listy</h2>
+  <p>PASCO Scientific — <em>Best frequencies to use for the square Chladni plates</em>.
+  Te same wartości widać w dokumentacji zestawu i w nagraniach z płytą PASCO (m.in. klatki 345, 1033, 1820, 2041, 4173, 4221, 4280, 5201 Hz).</p>
+  <p>Pełny plik: <a href="pasco-square-freqs.csv"><code>pasco-square-freqs.csv</code></a></p>
 
-  <h2>2. Dane</h2>
-  <p>Osiem klatek przy znanych częstotliwościach wzbudzenia. Dla każdej policzono liczbę domen <em>N</em> (spójne obszary tła po progowaniu).</p>
+  <h2>Katalog</h2>
   <table>
-    <thead><tr><th>f [Hz]</th><th>N (domeny)</th></tr></thead>
+    <thead><tr><th>f [Hz]</th><th>Klatka</th><th>N (domeny)</th><th>Uwaga</th></tr></thead>
     <tbody>
-      <tr><td>155</td><td>3</td></tr>
-      <tr><td>467.5</td><td>8</td></tr>
-      <tr><td>1146</td><td>8</td></tr>
-      <tr><td>2250</td><td>13</td></tr>
-      <tr><td>2593</td><td>16</td></tr>
-      <tr><td>4930</td><td>16</td></tr>
-      <tr><td>6197</td><td>24</td></tr>
-      <tr><td>6800</td><td>28</td></tr>
+      <tr class="framed"><td>345</td><td>tak</td><td>5</td><td>środek + 4 narożniki</td></tr>
+      <tr class="framed"><td>1033</td><td>tak</td><td>9</td><td>4+4+romb</td></tr>
+      <tr class="framed"><td>1820</td><td>tak</td><td>9</td><td>8 pętli + środek</td></tr>
+      <tr class="framed"><td>2041</td><td>tak ×2</td><td>16</td><td>8 płatków + 8 zewn.</td></tr>
+      <tr><td>3240</td><td>—</td><td>—</td><td>katalog PASCO</td></tr>
+      <tr><td>3835</td><td>—</td><td>—</td><td>katalog PASCO</td></tr>
+      <tr><td>3975</td><td>—</td><td>—</td><td>katalog PASCO</td></tr>
+      <tr><td>4049</td><td>—</td><td>—</td><td>katalog PASCO</td></tr>
+      <tr><td>4129</td><td>—</td><td>—</td><td>katalog PASCO</td></tr>
+      <tr class="framed"><td>4173</td><td>tak</td><td>22</td><td>siatka / fale</td></tr>
+      <tr class="framed"><td>4221</td><td>tak</td><td>19</td><td>pętle</td></tr>
+      <tr class="framed"><td>4280</td><td>tak</td><td>18</td><td>drabina ~3×6</td></tr>
+      <tr><td>4444</td><td>—</td><td>—</td><td>katalog PASCO</td></tr>
+      <tr><td>4671</td><td>—</td><td>—</td><td>katalog PASCO</td></tr>
+      <tr><td>4840</td><td>—</td><td>—</td><td>katalog PASCO</td></tr>
+      <tr class="framed"><td>5201</td><td>tak</td><td>25</td><td>wielopierścieniowy</td></tr>
+      <tr><td>5284</td><td>—</td><td>—</td><td>katalog PASCO (słynna klatka brusspup)</td></tr>
+      <tr><td>5907</td><td>—</td><td>—</td><td>katalog PASCO</td></tr>
+      <tr><td>6051</td><td>—</td><td>—</td><td>katalog PASCO</td></tr>
     </tbody>
   </table>
-  <p>Plik otwarty: <a href="faem-case1-domains.csv"><code>faem-case1-domains.csv</code></a></p>
-  <p>Dodatkowo — demonstracyjne logi spektrum (syntetyczne, wokół rezonansu ~1146 Hz):</p>
-  <ul>
-    <li><a href="faem-case1-spectrum-A.csv"><code>faem-case1-spectrum-A.csv</code></a> — stabilniejszy ton</li>
-    <li><a href="faem-case1-spectrum-B.csv"><code>faem-case1-spectrum-B.csv</code></a> — lekko rozstrojony</li>
-  </ul>
 
-  <h2>3. Wynik</h2>
+  <h2>Regresja tylko na klatkach z N</h2>
   <div class="box">
-    <h3>Regresja log–log</h3>
-    <div class="eq">N ∝ f<sup>0.521 ± 0.054</sup>　　R² = 0.94</div>
-    <p style="margin:0;font-size:13.5px">Teoria √f odpowiada wykładnikowi 0.5. Wynik empiryczny leży w zgodzie z klasycznym skalowaniem w granicach niepewności dopasowania.</p>
+    <div class="eq">N ∝ f<sup>0.572 ± 0.070</sup>　　R² = 0.92　　n = 8</div>
+    <p style="margin:0;font-size:13.5px">Teoria √f = wykładnik 0.5. Różnica ≈ 1 SE. W oknie 4173–4280 Hz N <em>spada</em> (22→19→18): to różne rodziny modów, nie monotoniczny wzrost z f.</p>
   </div>
-  <p>Szczegóły metody, atlas i wykres: <a href="chladni-skalowanie-nodalne.html">Chladni — skalowanie nodalne</a>.</p>
 
-  <h2>4. Ograniczenia</h2>
+  <h2>Czego ten atlas nie jest</h2>
   <ul>
-    <li>Mała próba (n=8) — wynik orientacyjny, nie uniwersalne prawo.</li>
-    <li>Definicja „domeny” zależy od progu i morfologii; inny pipeline da inne N.</li>
-    <li>Płytka, mocowanie i piasek wpływają na widoczność linii węzłowych.</li>
-    <li>To nie jest kalibracja absolutna częstotliwości laboratoryjnej.</li>
+    <li>Nie jest „testem na 8 zdjęciach” jako całym labem.</li>
+    <li>Nie jest własnym pomiarem FAEM od zera — lista f pochodzi z katalogu PASCO, N z klatek liczono wzrokowo.</li>
+    <li>N nie jest z automatycznego pipeline’u; przy wysokich f niepewność jest duża.</li>
+    <li>Poprzedni zestaw 155–6800 Hz został wycofany — jeden katalog: PASCO 345–6051 Hz.</li>
   </ul>
 
-  <h2>5. Checklist: odtwórz w ~10 minut</h2>
-  <p>Pięć kroków — bez przepisywania liczb. Otwieraj linki w kolejności.</p>
-  <ol class="checklist">
-    <li><strong>Pobierz dane domen.</strong> Plik <a href="faem-case1-domains.csv" download>faem-case1-domains.csv</a> — 8 punktów f → N z tego case’a.</li>
-    <li><strong>Porównaj logi spektrum.</strong> <a href="compare.html?example=case1">Session Compare · A vs B</a> wczyta demo logi (stabilny vs rozstrojony ~1146 Hz).</li>
-    <li><strong>Sprawdź tryb przy f₀.</strong> <a href="modes.html?f=1146&amp;example=case1">Mode Finder · 1146 Hz</a> — najbliższe (m,n) dla przykładowej płytki.</li>
-    <li><strong>Zobacz wzór FAEM.</strong> <a href="faem_generator.html?n=14&amp;example=case1">Generator · N≈14</a> — złożoność w okolicach średnich punktów zestawu.</li>
-    <li><strong>Opcjonalnie: spektrum na żywo.</strong> <a href="spektrum.html?example=case1">Live Spectrum</a> — Test 440 Hz albo własny mikrofon / plik; log CSV możesz wrzucić z powrotem do Compare.</li>
-  </ol>
-  <div class="actions">
-    <a class="btn primary" href="compare.html?example=case1">1. Start: Compare A/B</a>
-    <a class="btn" href="faem-case1-domains.csv" download>⬇ Dataset domen</a>
-    <a class="btn" href="modes.html?f=1146&amp;example=case1">Mode Finder</a>
-    <a class="btn" href="faem_generator.html?n=14&amp;example=case1">Generator</a>
-    <a class="btn" href="chladni-skalowanie-nodalne.html">Pełna analiza Chladniego</a>
-  </div>
-  <p class="note">Cytowanie: Astro_Katt, <em>FAEM — Fractal Vibration Lab</em>, case study #1 (2026), https://fractalvibrationlab.com/case-faem-1.html</p>
-  <footer>Fractal Vibration Lab · Case FAEM #1 · open data · Astro_Katt</footer>
+  <p>
+    <a class="btn primary" href="modes.html?f=2041">Mode Finder · 2041 Hz</a>
+    <a class="btn" href="modes.html?f=345">Mode Finder · 345 Hz</a>
+    <a class="btn" href="spektrum.html">Live Spectrum</a>
+    <a class="btn" href="pasco-square-freqs.csv" download>⬇ CSV 19 f</a>
+    
+  </p>
+  <p class="note">Źródło listy f: PASCO Knowledge Base, square Chladni plate. N: zliczenie wzrokowe klatek dostarczonych do lab (2026).</p>
+  <footer>Fractal Vibration Lab · Atlas PASCO · 19 f · Astro_Katt</footer>
 </div>
 </body>
 </html>

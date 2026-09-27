@@ -291,7 +291,8 @@ footer{padding:52px 0 68px;color:var(--dim);font-size:13px;border-top:1px solid 
         <a href="compare.html" data-i18n="nav_cmp">Compare</a>
         <a href="lab.html" data-i18n="nav_lab">Lab</a>
         <a href="lab.html" data-i18n="ft_lab">Lab desk</a>
-      <a href="case-faem-1.html" data-i18n="nav_case">Case #1</a>
+      <a href="case-faem-1.html" data-i18n="nav_case">Case PASCO</a>
+        <a href="case-faem-2.html" data-i18n="nav_atlas">Atlas 19f</a>
         <a href="chladni-skalowanie-nodalne.html" data-i18n="nav_chladni">Chladni</a>
         <a href="struktura-jako-programowalna-czestotliwosc.html" data-i18n="nav_struktura">Struktura</a>
         <a href="optyka-ograniczenia-i-nowoczesne-rozwiazania.html" data-i18n="nav_optyka">Optyka</a>
@@ -311,15 +312,16 @@ footer{padding:52px 0 68px;color:var(--dim);font-size:13px;border-top:1px solid 
       <div class="kicker" data-i18n="kicker">Fractal Acoustic–Energy Mapping</div>
       <h1 data-i18n="hero_title">Mapa złożoności <i>drgań</i></h1>
       <p class="hero-lead" data-i18n="hero_lead">
-        Mierzymy złożoność drgań tak, by dało się ją porównać i powtórzyć. Zacznij od Case #1 (dane + wynik), potem weź narzędzia lab.
+        Mierzymy złożoność drgań tak, by dało się ją porównać i powtórzyć. Zacznij od katalogu PASCO (19 f, 345–6051 Hz) i klatek z N, potem narzędzia.
       </p>
       <div class="cta-row">
-        <a class="btn btn-primary" href="case-faem-1.html" data-i18n="cta_start">Start here: Case #1</a>
+        <a class="btn btn-primary" href="case-faem-1.html" data-i18n="cta_start">Start here: Case PASCO</a>
         <a class="btn btn-ghost" href="faem_generator.html" data-i18n="cta_gen">Generator</a>
         <a class="btn btn-ghost" href="spektrum.html" data-i18n="cta_spec">Spektrum</a>
         <a class="btn btn-ghost" href="kalkulator.html" data-i18n="cta_kalk">Kalkulator</a>
+        <a class="btn btn-ghost" href="case-faem-2.html" data-i18n="cta_atlas">Atlas 19 f</a>
       </div>
-      <p class="hero-path" data-i18n="hero_path">Problem → FAEM → Case #1 → narzędzia · ok. 2 min czytania</p>
+      <p class="hero-path" data-i18n="hero_path">Problem → FAEM → katalog PASCO 19 f → narzędzia</p>
     </div>
     <div class="hero-art" aria-hidden="true">
       <canvas id="heroCanvas" width="160" height="160"></canvas>
@@ -407,11 +409,11 @@ footer{padding:52px 0 68px;color:var(--dim);font-size:13px;border-top:1px solid 
     <div class="teaser">
       <div class="teaser-text">
         <h3 data-i18n="teaser_t">Pierwszy test: płytka kwadratowa</h3>
-        <p data-i18n="teaser_p"><strong>8 zdjęć, 155–6800 Hz</strong> — zgodność ze skalowaniem Chladniego, metoda i ograniczenia w pełnej notatce.</p>
+        <p data-i18n="teaser_p"><strong>19 częstotliwości PASCO, 345–6051 Hz</strong> — 8 f z klatką i N; N∝f^0.57, R² = 0.92.</p>
       </div>
       <a href="chladni-skalowanie-nodalne.html" class="teaser-stat">
-        f<sup>0.521</sup>
-        <span data-i18n="teaser_stat_lbl">R² = 0.94 · czytaj analizę</span>
+        f<sup>0.57</sup>
+        <span data-i18n="teaser_stat_lbl">R² = 0.92 · atlas PASCO</span>
       </a>
     </div>
   </div>
@@ -563,19 +565,19 @@ footer{padding:52px 0 68px;color:var(--dim);font-size:13px;border-top:1px solid 
 <script>
 const I18N={
 pl:{
-nav_wf:"Workflow",nav_faem:"FAEM",nav_gen:"Generator",nav_kalk:"Kalkulator",nav_spec:"Spektrum",nav_modes:"Modes",nav_cmp:"Compare",nav_lab:"Lab",nav_case:"Case #1",nav_chladni:"Chladni",nav_struktura:"Struktura",nav_optyka:"Optyka",nav_contact:"Kontakt",
+nav_wf:"Workflow",nav_faem:"FAEM",nav_gen:"Generator",nav_kalk:"Kalkulator",nav_spec:"Spektrum",nav_modes:"Modes",nav_cmp:"Compare",nav_lab:"Lab",nav_case:"Case PASCO",nav_chladni:"Chladni",nav_struktura:"Struktura",nav_optyka:"Optyka",nav_contact:"Kontakt",
 kicker:"Fractal Acoustic–Energy Mapping",
 hero_title:'Mapa złożoności <i>drgań</i>',
-hero_lead:"Mierzymy złożoność drgań tak, by dało się ją porównać i powtórzyć. Zacznij od Case #1 (dane + wynik), potem weź narzędzia lab.",
-cta_start:"Start here: Case #1",cta_gen:"Generator",cta_kalk:"Kalkulator",cta_spec:"Spektrum",cta_case:"Case study #1",hero_path:"Problem → FAEM → Case #1 → narzędzia · ok. 2 min czytania",
+hero_lead:"Mierzymy złożoność drgań tak, by dało się ją porównać i powtórzyć. Zacznij od katalogu PASCO (19 f, 345–6051 Hz) i klatek z N, potem narzędzia.",
+cta_start:"Start here: Case PASCO",cta_gen:"Generator",cta_kalk:"Kalkulator",cta_atlas:"Atlas 19 f",cta_spec:"Spektrum",cta_case:"Case PASCO",hero_path:"Problem → FAEM → katalog PASCO 19 f → narzędzia",
 wf_eyebrow:"Workflow",wf_h2:"Trzy narzędzia, jedna ścieżka",wf_lead:"Od projektu eksperymentu, przez pomiar tonu, po wzór i Df — w przeglądarce.",wf_1_t:"Kalkulator",wf_1_p:"Policz częstotliwości rezonansowe płytki i ustaw generator funkcyjny w okolicach trybu (m,n).",wf_1_a:"Otwórz kalkulator →",wf_2_t:"Live Spectrum",wf_2_p:"Zmierz f₀ mikrofonem (lub test 440 Hz). Zapisz log sesji CSV. Przejdź jednym kliknięciem dalej.",wf_2_a:"Otwórz spektrum →",wf_3_t:"Generator FAEM",wf_3_p:"Zobacz wzór przy podobnej złożoności, policz Df i domeny, eksportuj PNG / udostępnij link.",wf_3_a:"Otwórz generator →",faem_eyebrow:"Metoda",faem_h2:"Czym jest FAEM",
 faem_lead:"Fractal Acoustic–Energy Mapping to czteroetapowy pipeline: od surowego wzoru drgań, przez ilościowe miary złożoności, po zestawienie z fizyką odniesienia i konkretne zastosowania.",
 faem_c1_t:"Wejście",faem_c1_p:"Zdjęcia płytek Chladniego, nagrania drgań lub pola syntetyczne — superpozycja modów własnych generowana algorytmicznie.",
 faem_c2_t:"Miary",faem_c2_p:'<strong>Wymiar fraktalny</strong> metodą box-counting (Df), liczba domen między liniami węzłowymi, rozkład mocy w oknie częstotliwości.',
 faem_c3_t:"Fizyka odniesienia",faem_c3_p:'<strong>Prawo Chladniego / Rayleigha</strong>: złożoność geometryczna wzoru rośnie z częstotliwością w przybliżeniu jak √f — punkt odniesienia dla każdego pomiaru.',
 faem_c4_t:"Zastosowania",faem_c4_p:"Wizualizacja rezonansów, materiał edukacyjny, testowanie hipotez skalowania, projektowanie własnych eksperymentów akustycznych.",
-teaser_t:"Pierwszy test: płytka kwadratowa",teaser_p:'<strong>8 zdjęć, 155–6800 Hz</strong> — zgodność ze skalowaniem Chladniego, metoda i ograniczenia w pełnej notatce.',
-teaser_stat_lbl:"R² = 0.94 · czytaj analizę",
+teaser_t:"Płyta kwadratowa PASCO",teaser_p:'<strong>19 częstotliwości PASCO, 345–6051 Hz</strong> — 8 f z klatką i N; N∝f^0.57, R² = 0.92.',
+teaser_stat_lbl:"R² = 0.92 · atlas PASCO",
 uses_eyebrow:"Zastosowania",uses_h2:"Do czego to służy",uses_lead:"FAEM zamienia wzory drgań w liczby, które można porównywać, powtarzać i uczyć — bez zamykania metody w czarnej skrzynce.",uses_1_t:"Edukacja i demonstracje",uses_1_p:"Pokaż, że rezonans ma geometrię: od klasycznych figur Chladniego po mierzalny wymiar fraktalny i liczbę domen.",uses_2_t:"Projektowanie eksperymentu",uses_2_p:"Kalkulator podpowiada częstotliwości startowe; generator pozwala oszacować złożoność wzoru zanim włączysz wzbudnik.",uses_3_t:"Badania i hipotezy",uses_3_p:"Testuj skalowanie N∝f^α, porównuj geometrie (kwadrat / koło) i sprawdzaj, czy Df rośnie razem z energią modów.",uses_4_t:"Sztuka i eksploracja",uses_4_p:"Generuj i eksportuj wzory, udostępniaj konfigurację linkiem, buduj własne serie punktów w przeglądarce.",gen_blurb_t:"Generator 2.0",gen_blurb_p:"Kwadrat i koło, dźwięk, upload zdjęcia z automatycznym Df, presety, eksport PNG i udostępnianie parametrów przez URL — w pełni PL/EN.",about_eyebrow:"Lab",about_h2:"O projekcie",
 about_lead:"Fractal Vibration Lab prowadzi otwarte badania nad mapowaniem złożoności wzorów drgań. Wyniki i narzędzia są dostępne publicznie — do edukacji, replikacji i dalszego rozwoju.",
 about_body:'<strong>Autor: Astro_Katt.</strong> Fractal Vibration Lab dokumentuje w pełni jawny pipeline analityczny — metodę, dane i ograniczenia bez skrótów — i pokazuje pierwsze odtworzenie klasycznego skalowania Chladniego na realnym zbiorze zdjęć. Każdy wynik można <strong>zweryfikować, powtórzyć i rozwinąć</strong>.',
@@ -591,19 +593,19 @@ footer_tag:"Open research · PL / EN",footer_lic:"Treść: CC BY 4.0 · Kod gene
 ft_gen:"Generator",ft_kalk:"Kalkulator",ft_chladni:"Chladni"
 },
 en:{
-nav_wf:"Workflow",nav_faem:"FAEM",nav_gen:"Generator",nav_kalk:"Calculator",nav_spec:"Spectrum",nav_modes:"Modes",nav_cmp:"Compare",nav_lab:"Lab",nav_case:"Case #1",nav_chladni:"Chladni",nav_struktura:"Structure",nav_optyka:"Optics",nav_contact:"Contact",
+nav_wf:"Workflow",nav_faem:"FAEM",nav_gen:"Generator",nav_kalk:"Calculator",nav_spec:"Spectrum",nav_modes:"Modes",nav_cmp:"Compare",nav_lab:"Lab",nav_case:"Case PASCO",nav_chladni:"Chladni",nav_struktura:"Structure",nav_optyka:"Optics",nav_contact:"Contact",
 kicker:"Fractal Acoustic–Energy Mapping",
 hero_title:'A map of vibration <i>complexity</i>',
-hero_lead:"We measure vibration complexity so it can be compared and repeated. Start with Case #1 (data + result), then use the lab tools.",
-cta_start:"Start here: Case #1",cta_gen:"Generator",cta_kalk:"Calculator",cta_spec:"Spectrum",cta_case:"Case study #1",hero_path:"Problem → FAEM → Case #1 → tools · ~2 min read",
+hero_lead:"We measure vibration complexity so it can be compared and repeated. Start with the PASCO catalog (19 frequencies, 345–6051 Hz) and framed N, then the tools.",
+cta_start:"Start here: Case PASCO",cta_gen:"Generator",cta_kalk:"Calculator",cta_atlas:"Atlas 19 f",cta_spec:"Spectrum",cta_case:"Case PASCO",hero_path:"Problem → FAEM → PASCO 19-freq catalog → tools",
 wf_eyebrow:"Workflow",wf_h2:"Three tools, one path",wf_lead:"From experiment design, through measuring a tone, to pattern and Df — in the browser.",wf_1_t:"Calculator",wf_1_p:"Compute plate resonances and set the function generator near mode (m,n).",wf_1_a:"Open calculator →",wf_2_t:"Live Spectrum",wf_2_p:"Measure f₀ with the mic (or test 440 Hz). Save a session CSV. Jump to the next tool in one click.",wf_2_a:"Open spectrum →",wf_3_t:"FAEM generator",wf_3_p:"See a pattern at similar complexity, compute Df and domains, export PNG / share a link.",wf_3_a:"Open generator →",faem_eyebrow:"Method",faem_h2:"What FAEM is",
 faem_lead:"Fractal Acoustic–Energy Mapping is a four-stage pipeline: from a raw vibration pattern, through quantitative complexity measures, to a comparison with reference physics and concrete uses.",
 faem_c1_t:"Input",faem_c1_p:"Chladni plate photos, vibration recordings, or synthetic fields — an algorithmically generated superposition of eigenmodes.",
 faem_c2_t:"Measures",faem_c2_p:'<strong>Fractal dimension</strong> via box-counting (Df), the number of domains between nodal lines, power distribution in a frequency window.',
 faem_c3_t:"Reference physics",faem_c3_p:"<strong>Chladni's / Rayleigh's law</strong>: geometric complexity grows with frequency roughly as √f — the reference point for every measurement.",
 faem_c4_t:"Uses",faem_c4_p:"Resonance visualisation, teaching material, scaling-hypothesis testing, designing your own acoustic experiments.",
-teaser_t:"First test: a square plate",teaser_p:'<strong>8 photos, 155–6800 Hz</strong> — agreement with Chladni scaling; method and limitations in the full note.',
-teaser_stat_lbl:"R² = 0.94 · read the analysis",
+teaser_t:"PASCO square plate",teaser_p:'<strong>19 PASCO frequencies, 345–6051 Hz</strong> — agreement with Chladni scaling; method and limitations in the full note.',
+teaser_stat_lbl:"R² = 0.92 · read the analysis",
 uses_eyebrow:"Uses",uses_h2:"What it is for",uses_lead:"FAEM turns vibration patterns into numbers you can compare, repeat and teach — without locking the method in a black box.",uses_1_t:"Teaching & demos",uses_1_p:"Show that resonance has geometry: from classic Chladni figures to measurable fractal dimension and domain count.",uses_2_t:"Experiment design",uses_2_p:"The calculator suggests starting frequencies; the generator estimates pattern complexity before you power the driver.",uses_3_t:"Research & hypotheses",uses_3_p:"Test N∝f^α scaling, compare geometries (square / circle) and check whether Df grows with modal energy.",uses_4_t:"Art & exploration",uses_4_p:"Generate and export patterns, share configs via URL, build your own point series in the browser.",gen_blurb_t:"Generator 2.0",gen_blurb_p:"Square and circle, sound, image upload with automatic Df, presets, PNG export and shareable URL parameters — full PL/EN.",about_eyebrow:"Lab",about_h2:"About",
 about_lead:"Fractal Vibration Lab runs open research on mapping the complexity of vibration patterns. Results and tools are public — for education, replication and further work.",
 about_body:'<strong>Author: Astro_Katt.</strong> Fractal Vibration Lab documents a fully transparent analysis pipeline — method, data and limitations laid open — and shows a first recovery of classical Chladni scaling on a real image set. Every result can be <strong>verified, reproduced and extended</strong>.',

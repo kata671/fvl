@@ -6,7 +6,7 @@
 <title>Chladni — skalowanie nodalne | Fractal Vibration Lab</title>
 <meta name="description" content="Test prawa Chladniego na realnych zdjęciach płytki kwadratowej: metoda, wynik, atlas częstotliwości, sposób powtórzenia."/>
 <meta name="theme-color" content="#0a0818"/>
-<meta property="og:image" content="https://fractalvibrationlab.com/chladni_law_test_plot.png"/>
+<meta property="og:image" content="https://fractalvibrationlab.com/case-faem-1.html"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
@@ -118,7 +118,7 @@ footer{margin-top:64px;padding-top:26px;border-top:1px solid var(--border);font-
 
   <div class="lab-name">Fractal Vibration Lab · Analiza</div>
   <h1>Chladni — skalowanie nodalne</h1>
-  <p class="subtitle">Test klasycznego prawa Chladniego na realnych zdjęciach płytki kwadratowej, 155–6800 Hz.</p>
+  <p class="subtitle">Test skalowania N∝√f na katalogu PASCO płyty kwadratowej (345–6051 Hz) i klatkach z N.</p>
 
   <p>
     Figury Chladniego pokazują, że wzór drgań płytki komplikuje się wraz z częstotliwością w sposób
@@ -129,19 +129,19 @@ footer{margin-top:64px;padding-top:26px;border-top:1px solid var(--border);font-
 
   <h2>Wynik</h2>
   <div class="panel result">
-    <div class="tag">8 zdjęć · 155–6800 Hz</div>
-    <div class="eq">N<sub>domains</sub> ∝ f<sup>0.521 ± 0.054</sup>　·　R² = 0.94</div>
+    <div class="tag">8 f z klatką · katalog PASCO 19 f</div>
+    <div class="eq">N<sub>domains</sub> ∝ f<sup>0.572 ± 0.070</sup>　·　R² = 0.92</div>
     <p class="muted" style="margin:0">Teoria (płyty okrągłe): wykładnik 0,5 — zmierzony wynik mieści się w granicach niepewności.</p>
   </div>
 
-  <div class="plot-box">
-    <img src="chladni_law_test_plot.png" alt="Wykres skalowania Chladniego: N vs f w skali log–log" width="800"/>
-    <p class="plot-cap">N ~ f<sup>0.521</sup> (czerwona) vs teoria N ~ f<sup>0.5</sup> (szara).</p>
+  <div class="plot-box" style="display:none">
+    <img src="case-faem-1.html" alt="" width="800"/>
+    <p class="plot-cap">N ~ f<sup>0.57</sup> (czerwona) vs teoria N ~ f<sup>0.5</sup> (szara).</p>
   </div>
 
   <h2>Metoda</h2>
   <ul>
-    <li>8 zdjęć rzeczywistej płytki kwadratowej (źródło: skullsinthestars.com)</li>
+    <li>Katalog 19 f: PASCO square Chladni plate. N z klatek (zliczanie wzrokowe), nie z pipeline Otsu.</li>
     <li>Automatyczne wykrycie granic, przycięcie, progowanie Otsu</li>
     <li>Domykanie morfologiczne skalowane do rozdzielczości obrazu</li>
     <li>Zliczenie domen tła; odrzucenie szumu (&lt; 0,3% powierzchni)</li>
@@ -151,14 +151,14 @@ footer{margin-top:64px;padding-top:26px;border-top:1px solid var(--border);font-
   <h2>Atlas częstotliwości</h2>
   <p class="muted" style="margin-bottom:6px">Punkty użyte w teście skalowania.</p>
   <div class="atlas-strip" id="atlasStrip">
-    <button class="chip" type="button" data-freq="155"><span class="play">▶</span><b>155 Hz</b> · N=3</button>
-    <button class="chip" type="button" data-freq="467.5"><span class="play">▶</span><b>467.5 Hz</b> · N=8</button>
-    <button class="chip" type="button" data-freq="1146"><span class="play">▶</span><b>1146 Hz</b> · N=8</button>
-    <button class="chip" type="button" data-freq="2250"><span class="play">▶</span><b>2250 Hz</b> · N=13</button>
-    <button class="chip" type="button" data-freq="2593"><span class="play">▶</span><b>2593 Hz</b> · N=16</button>
-    <button class="chip" type="button" data-freq="4930"><span class="play">▶</span><b>4930 Hz</b> · N=16</button>
-    <button class="chip" type="button" data-freq="6197"><span class="play">▶</span><b>6197 Hz</b> · N=24</button>
-    <button class="chip" type="button" data-freq="6800"><span class="play">▶</span><b>6800 Hz</b> · N=28</button>
+    <button class="chip" type="button" data-freq="345"><span class="play">▶</span><b>345 Hz</b> · N=5</button>
+    <button class="chip" type="button" data-freq="1033"><span class="play">▶</span><b>1033 Hz</b> · N=9</button>
+    <button class="chip" type="button" data-freq="1820"><span class="play">▶</span><b>1820 Hz</b> · N=9</button>
+    <button class="chip" type="button" data-freq="2041"><span class="play">▶</span><b>2041 Hz</b> · N=16</button>
+    <button class="chip" type="button" data-freq="4173"><span class="play">▶</span><b>4173 Hz</b> · N=22</button>
+    <button class="chip" type="button" data-freq="4221"><span class="play">▶</span><b>4221 Hz</b> · N=19</button>
+    <button class="chip" type="button" data-freq="4280"><span class="play">▶</span><b>4280 Hz</b> · N=18</button>
+    <button class="chip" type="button" data-freq="5201"><span class="play">▶</span><b>5201 Hz</b> · N=25</button>
   </div>
   <p class="atlas-hint">
     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 9v6h4l5 5V4L7 9H3z"/><path d="M16 8a5 5 0 0 1 0 8"/></svg>
@@ -168,22 +168,22 @@ footer{margin-top:64px;padding-top:26px;border-top:1px solid var(--border);font-
     <table>
       <thead><tr><th>Częstotliwość (Hz)</th><th>Liczba domen</th></tr></thead>
       <tbody>
-        <tr><td>155</td><td>3</td></tr>
-        <tr><td>467.5</td><td>8</td></tr>
-        <tr><td>1146</td><td>8</td></tr>
-        <tr><td>2250</td><td>13</td></tr>
-        <tr><td>2593</td><td>16</td></tr>
-        <tr><td>4930</td><td>16</td></tr>
-        <tr><td>6197</td><td>24</td></tr>
-        <tr><td>6800</td><td>28</td></tr>
+        <tr><td>345</td><td>5</td></tr>
+        <tr><td>1033</td><td>9</td></tr>
+        <tr><td>1820</td><td>9</td></tr>
+        <tr><td>2041</td><td>16</td></tr>
+        <tr><td>4173</td><td>22</td></tr>
+        <tr><td>4221</td><td>19</td></tr>
+        <tr><td>4280</td><td>18</td></tr>
+        <tr><td>5201</td><td>25</td></tr>
       </tbody>
     </table>
   </div>
 
   <h2>Ograniczenia</h2>
   <ul>
-    <li>n = 8 — mała próba</li>
-    <li>Jedna płytka, jedno źródło zdjęć</li>
+    <li>n = 8 klatek z N (z 19 f w katalogu) — nadal mała próba do N</li>
+    <li>Jedna geometria katalogu PASCO; N wzrokowe, nie automatyczne</li>
     <li>Teoria klasyczna dotyczy płyt okrągłych; tutaj geometria jest kwadratowa</li>
     <li>Parametr domykania morfologicznego skalibrowany spójnie — jeden z możliwych wyborów</li>
   </ul>

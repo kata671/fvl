@@ -1,9 +1,9 @@
-freq_Hz,domains_N,note
-155,3,square plate low mode
-467.5,8,
-1146,8,
-2250,13,
-2593,16,
-4930,16,
-6197,24,
-6800,28,highest in set
+freq_Hz,domains_N,source,note
+345,5,PASCO frame,center + 4 corners
+1033,9,PASCO frame,4+4+diamond
+1820,9,PASCO frame,8 loops + center
+2041,16,PASCO frame x2,8 inner + 8 outer
+4173,22,PASCO frame,lattice
+4221,19,PASCO frame,organic loops
+4280,18,PASCO frame,ladder
+5201,25,PASCO frame,multi-ring
