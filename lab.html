@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Lab desk — Fractal Vibration Lab</title>
+<meta name="description" content="Biurko lab: status FAEM v0.1, mapa narzędzi, Case #1, cytowanie. Fractal Vibration Lab — Astro_Katt."/>
+<meta name="theme-color" content="#05040f"/>
+<meta property="og:title" content="Lab desk — Fractal Vibration Lab"/>
+<meta property="og:description" content="Open lab status: FAEM method, tools, Case #1, citation."/>
+<meta property="og:url" content="https://fractalvibrationlab.com/lab.html"/>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --bg:#05040f;--border:rgba(180,150,255,.14);--border2:rgba(180,150,255,.28);
+  --text:#f7f4ff;--muted:#b8aee0;--dim:#7a6fa8;
+  --violet:#9d7bff;--violet2:#d4c4ff;--cyan:#5eead4;--gold:#f0d49a;
+  --radius:18px;--serif:"Fraunces",Georgia,serif;--sans:Inter,system-ui,sans-serif;--mono:"JetBrains Mono",monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  background:var(--bg);color:var(--text);font-family:var(--sans);line-height:1.65;min-height:100vh;
+  background-image:
+    radial-gradient(ellipse 75% 45% at 8% -8%,rgba(157,123,255,.22),transparent 55%),
+    radial-gradient(ellipse 50% 35% at 95% 0%,rgba(94,234,212,.08),transparent 50%);
+}
+a{color:var(--violet2);text-decoration:none}
+a:hover{color:var(--gold)}
+.topbar{
+  position:sticky;top:0;z-index:20;display:flex;justify-content:space-between;align-items:center;
+  padding:12px 20px;background:rgba(5,4,15,.9);backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--border);flex-wrap:wrap;gap:10px;
+}
+.brand{font-family:var(--serif);font-weight:600;font-size:15px}
+.brand span{color:var(--violet2)}
+.topbar-right{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.topbar a.back{font-size:13px;color:var(--muted);font-weight:500}
+.lang-switch{display:flex;border:1px solid var(--border2);border-radius:8px;overflow:hidden}
+.lang-switch button{background:0;border:0;color:var(--dim);font-size:11px;font-weight:600;padding:5px 10px;cursor:pointer;font-family:inherit}
+.lang-switch button.active{background:rgba(143,107,255,.18);color:var(--violet2)}
+.wrap{max-width:760px;margin:0 auto;padding:36px 20px 90px}
+.eyebrow{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--cyan);font-weight:700;margin-bottom:12px}
+h1{
+  font-family:var(--serif);font-size:clamp(28px,5vw,40px);font-weight:600;line-height:1.12;margin-bottom:14px;
+  background:linear-gradient(135deg,#fff 10%,var(--violet2) 55%,var(--cyan));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.lead{font-size:17px;color:var(--muted);margin-bottom:28px;max-width:36em}
+.badge-row{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:32px}
+.badge{
+  font-family:var(--mono);font-size:11.5px;padding:5px 11px;border-radius:99px;
+  border:1px solid var(--border2);color:var(--muted);
+}
+.badge strong{color:var(--gold)}
+.card{
+  border:1px solid var(--border);border-radius:var(--radius);padding:18px 20px;
+  background:linear-gradient(155deg,rgba(157,123,255,.06),rgba(16,12,36,.75));
+  margin-bottom:14px;
+}
+.card h2{font-family:var(--serif);font-size:17px;font-weight:600;margin-bottom:8px;color:var(--text)}
+.card p,.card li{font-size:14.5px;color:var(--muted)}
+.card ul{padding-left:1.15em;margin:8px 0 0}
+.card li{margin:4px 0}
+.eq{font-family:var(--mono);font-size:14px;color:var(--gold);margin:10px 0}
+.tools{display:grid;gap:8px;margin-top:10px}
+.tool{
+  display:flex;justify-content:space-between;align-items:baseline;gap:12px;
+  padding:11px 13px;border-radius:12px;border:1px solid var(--border);
+  background:rgba(0,0,0,.25);font-size:13.5px;color:var(--text);font-weight:600;
+  transition:border-color .2s,background .2s;
+}
+.tool:hover{border-color:var(--cyan);background:rgba(94,234,212,.06);color:var(--cyan)}
+.tool span{font-weight:500;color:var(--dim);font-size:12.5px;text-align:right}
+.quote{
+  border-left:2px solid var(--cyan);padding:4px 0 4px 16px;margin:18px 0;
+  font-family:var(--serif);font-size:18px;line-height:1.45;color:var(--violet2);font-style:italic;
+}
+pre{
+  background:rgba(0,0,0,.4);border:1px solid var(--border);border-radius:12px;
+  padding:14px 16px;overflow-x:auto;font-family:var(--mono);font-size:11.5px;
+  color:var(--muted);line-height:1.5;margin-top:10px;
+}
+.btn-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+.btn{
+  display:inline-flex;padding:11px 16px;border-radius:12px;font-weight:700;font-size:13px;
+  border:1px solid var(--border2);background:rgba(157,123,255,.12);color:var(--text);
+}
+.btn.primary{background:linear-gradient(135deg,#a78bfa,#6b3fff);border:0;color:#fff}
+.btn:hover{filter:brightness(1.06)}
+footer{margin-top:40px;padding-top:18px;border-top:1px solid var(--border);font-size:12.5px;color:var(--dim)}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="brand">Fractal <span>Vibration</span> Lab</div>
+  <div class="topbar-right">
+    <a class="back" href="case-faem-1.html" data-i18n="nav_case">Case #1 →</a>
+    <a class="back" href="index.html" data-i18n="nav_home">← Home</a>
+    <div class="lang-switch">
+      <button type="button" id="btnPL" class="active" onclick="setLang('pl')">PL</button>
+      <button type="button" id="btnEN" onclick="setLang('en')">EN</button>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="eyebrow" data-i18n="eyebrow">Lab desk · FAEM v0.1</div>
+  <h1 data-i18n="title">To nie jest strona z gadżetami.<br/>To biurko laboratorium.</h1>
+  <p class="lead" data-i18n="lead">
+    Fractal Vibration Lab powstało, żeby złożoność drgań dało się zmierzyć, porównać i powtórzyć —
+    bez czarnej skrzynki i bez czekania na „duży grant”. Najpierw wynik. Potem narzędzia.
+  </p>
+  <div class="badge-row">
+    <span class="badge"><strong>FAEM</strong> · open method</span>
+    <span class="badge">Case #1 · R² = <strong>0.94</strong></span>
+    <span class="badge">tools · browser-only</span>
+    <span class="badge">Astro_Katt · 2026</span>
+  </div>
+
+  <div class="quote" data-i18n="quote">
+    Mierzymy złożoność drgań tak, jak inne laby mierzą temperaturę — jawnie, powtarzalnie, w zasięgu przeglądarki.
+  </div>
+
+  <div class="card">
+    <h2 data-i18n="h_status">Status</h2>
+    <p data-i18n="p_status">
+      Wersja publiczna <strong style="color:var(--text)">FAEM v0.1</strong>: metoda opisana, pierwszy case z otwartymi danymi,
+      warsztat pięciu narzędzi, wejście przez Case #1. To wystarczy, żeby ktoś obcy odtworzył wynik w około 10 minut.
+    </p>
+  </div>
+
+  <div class="card">
+    <h2 data-i18n="h_case">Kotwica: Case #1</h2>
+    <p data-i18n="p_case">Płytka kwadratowa, 8 zdjęć Chladniego, 155–6800 Hz. Liczba domen nodalnych vs częstotliwość:</p>
+    <div class="eq">N ∝ f<sup>0.521 ± 0.054</sup> · R² = 0.94</div>
+    <p data-i18n="p_case2">Zgodne z klasycznym skalowaniem √f w granicach niepewności. Ograniczenia są zapisane celowo — mała próba, zależność od progu domen.</p>
+    <div class="btn-row">
+      <a class="btn primary" href="case-faem-1.html" data-i18n="btn_case">Otwórz Case #1</a>
+      <a class="btn" href="compare.html?example=case1" data-i18n="btn_rep">Replikuj (Compare A/B)</a>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2 data-i18n="h_tools">Mapa warsztatu</h2>
+    <div class="tools">
+      <a class="tool" href="kalkulator.html"><div data-i18n="t1">Kalkulator</div><span data-i18n="t1s">przed eksperymentem</span></a>
+      <a class="tool" href="spektrum.html"><div data-i18n="t2">Live Spectrum</div><span data-i18n="t2s">pomiar · log CSV</span></a>
+      <a class="tool" href="modes.html"><div data-i18n="t3">Mode Finder</div><span data-i18n="t3s">f₀ → (m,n)</span></a>
+      <a class="tool" href="compare.html"><div data-i18n="t4">Session Compare</div><span data-i18n="t4s">dwa logi obok siebie</span></a>
+      <a class="tool" href="faem_generator.html"><div data-i18n="t5">Generator FAEM</div><span data-i18n="t5s">wzór · Df · domeny</span></a>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2 data-i18n="h_cite">Cytowanie</h2>
+    <p data-i18n="p_cite">Jeśli korzystasz z metody, danych lub tooli — prosimy o wskazanie źródła.</p>
+    <pre>@misc{astrokatt2026faem,
+  author = {Astro_Katt},
+  title  = {FAEM --- Fractal Vibration Lab},
+  year   = {2026},
+  url    = {https://fractalvibrationlab.com},
+  note   = {Case study \#1: nodal domains vs frequency on a square plate}
+}</pre>
+  </div>
+
+  <div class="card">
+    <h2 data-i18n="h_next">Co jest poza zakresem v0.1</h2>
+    <ul>
+      <li data-i18n="n1">To nie jest certyfikowany analizator akustyczny.</li>
+      <li data-i18n="n2">Case #1 to mała próba — wynik orientacyjny, nie uniwersalne prawo.</li>
+      <li data-i18n="n3">Kolejny sensowny krok badawczy: Case #2 na nowych, własnych pomiarach — nie kolejny suwak w UI.</li>
+    </ul>
+  </div>
+
+  <div class="btn-row">
+    <a class="btn primary" href="case-faem-1.html" data-i18n="btn_start">Start here: Case #1</a>
+    <a class="btn" href="index.html" data-i18n="btn_home">Strona główna</a>
+    <a class="btn" href="mailto:fractalvibrationlab@gmail.com">Email</a>
+  </div>
+
+  <footer data-i18n="foot">Fractal Vibration Lab · desk · FAEM v0.1 · Astro_Katt</footer>
+</div>
+
+<script>
+const I18N={
+pl:{
+nav_case:"Case #1 →",nav_home:"← Home",eyebrow:"Lab desk · FAEM v0.1",
+title:"To nie jest strona z gadżetami.\nTo biurko laboratorium.",
+lead:"Fractal Vibration Lab powstało, żeby złożoność drgań dało się zmierzyć, porównać i powtórzyć — bez czarnej skrzynki i bez czekania na „duży grant”. Najpierw wynik. Potem narzędzia.",
+quote:"Mierzymy złożoność drgań tak, jak inne laby mierzą temperaturę — jawnie, powtarzalnie, w zasięgu przeglądarki.",
+h_status:"Status",p_status:"Wersja publiczna FAEM v0.1: metoda opisana, pierwszy case z otwartymi danymi, warsztat pięciu narzędzi, wejście przez Case #1. To wystarczy, żeby ktoś obcy odtworzył wynik w około 10 minut.",
+h_case:"Kotwica: Case #1",p_case:"Płytka kwadratowa, 8 zdjęć Chladniego, 155–6800 Hz. Liczba domen nodalnych vs częstotliwość:",
+p_case2:"Zgodne z klasycznym skalowaniem √f w granicach niepewności. Ograniczenia są zapisane celowo — mała próba, zależność od progu domen.",
+btn_case:"Otwórz Case #1",btn_rep:"Replikuj (Compare A/B)",
+h_tools:"Mapa warsztatu",t1:"Kalkulator",t1s:"przed eksperymentem",t2:"Live Spectrum",t2s:"pomiar · log CSV",t3:"Mode Finder",t3s:"f₀ → (m,n)",t4:"Session Compare",t4s:"dwa logi obok siebie",t5:"Generator FAEM",t5s:"wzór · Df · domeny",
+h_cite:"Cytowanie",p_cite:"Jeśli korzystasz z metody, danych lub tooli — prosimy o wskazanie źródła.",
+h_next:"Co jest poza zakresem v0.1",n1:"To nie jest certyfikowany analizator akustyczny.",n2:"Case #1 to mała próba — wynik orientacyjny, nie uniwersalne prawo.",n3:"Kolejny sensowny krok badawczy: Case #2 na nowych, własnych pomiarach — nie kolejny suwak w UI.",
+btn_start:"Start here: Case #1",btn_home:"Strona główna",foot:"Fractal Vibration Lab · desk · FAEM v0.1 · Astro_Katt"
+},
+en:{
+nav_case:"Case #1 →",nav_home:"← Home",eyebrow:"Lab desk · FAEM v0.1",
+title:"This is not a gadget page.\nThis is a lab desk.",
+lead:"Fractal Vibration Lab exists so vibration complexity can be measured, compared and repeated — without a black box and without waiting for a big grant. Result first. Tools second.",
+quote:"We measure vibration complexity the way other labs measure temperature — openly, repeatably, in a browser.",
+h_status:"Status",p_status:"Public release FAEM v0.1: method described, first case with open data, a five-tool workshop, entry via Case #1. Enough for a stranger to reproduce the result in about 10 minutes.",
+h_case:"Anchor: Case #1",p_case:"Square plate, 8 Chladni photos, 155–6800 Hz. Nodal domain count vs frequency:",
+p_case2:"Consistent with classical √f scaling within fit uncertainty. Limits are stated on purpose — small sample, domain threshold dependence.",
+btn_case:"Open Case #1",btn_rep:"Replicate (Compare A/B)",
+h_tools:"Workshop map",t1:"Calculator",t1s:"before the experiment",t2:"Live Spectrum",t2s:"measurement · CSV log",t3:"Mode Finder",t3s:"f₀ → (m,n)",t4:"Session Compare",t4s:"two logs side by side",t5:"FAEM generator",t5s:"pattern · Df · domains",
+h_cite:"Citation",p_cite:"If you use the method, data or tools — please cite the source.",
+h_next:"Out of scope for v0.1",n1:"This is not a calibrated acoustic analyser.",n2:"Case #1 is a small sample — indicative, not a universal law.",n3:"The next research step that matters: Case #2 on new original measurements — not another UI slider.",
+btn_start:"Start here: Case #1",btn_home:"Home",foot:"Fractal Vibration Lab · desk · FAEM v0.1 · Astro_Katt"
+}};
+let lang=localStorage.getItem('faem_lang')||'pl';
+function t(k){return (I18N[lang]||I18N.pl)[k]||k}
+function setLang(l){
+  lang=l;localStorage.setItem('faem_lang',l);
+  document.getElementById('btnPL').classList.toggle('active',l==='pl');
+  document.getElementById('btnEN').classList.toggle('active',l==='en');
+  document.documentElement.lang=l;
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const v=t(el.getAttribute('data-i18n'));
+    if(el.getAttribute('data-i18n')==='title')el.innerHTML=v.replace('\n','<br/>');
+    else el.textContent=v;
+  });
+}
+window.setLang=setLang;
+setLang(lang);
+</script>
+</body>
+</html>
