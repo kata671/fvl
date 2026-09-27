@@ -170,6 +170,7 @@ button:active{transform:scale(.97)!important}
   <div class="brand">Fractal <span>Vibration</span> Lab</div>
   <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">
     <a class="back" href="faem_generator.html" data-i18n="nav_gen">Generator →</a>
+    <a class="back" href="spektrum.html">Spektrum →</a>
     <a class="back" href="index.html" data-i18n="nav_home">← Strona główna</a>
     <div class="lang-switch" role="group" aria-label="Language" style="display:flex;border:1px solid var(--border2);border-radius:8px;overflow:hidden;background:rgba(143,107,255,.05)">
       <button type="button" id="btnPL" class="active" onclick="setLang('pl')" style="background:transparent;border:none;color:var(--dim);font-size:11px;font-weight:600;padding:5px 10px;cursor:pointer;font-family:inherit">PL</button>
@@ -1046,7 +1047,7 @@ updateDecay();
 
 <script>
 (function(){
-  const DEST=[{"t": "Strona główna — FAEM", "d": "Pipeline i wprowadzenie", "tag": "strona", "href": "index.html"}, {"t": "Generator FAEM", "d": "Kwadrat/koło, Df, domeny, dźwięk, upload", "tag": "narzędzie", "href": "faem_generator.html"}, {"t": "Kalkulator laboratoryjny", "d": "Częstotliwości płytki, fala, tłumienie (Q)", "tag": "narzędzie", "href": "kalkulator.html"}, {"t": "Chladni — skalowanie nodalne", "d": "Analiza i atlas częstotliwości (z dźwiękiem)", "tag": "notatka", "href": "chladni-skalowanie-nodalne.html"}, {"t": "Struktura jako programowalna częstotliwość", "d": "Notatka koncepcyjna", "tag": "notatka", "href": "struktura-jako-programowalna-czestotliwosc.html"}, {"t": "Optyka — ograniczenia i rozwiązania", "d": "Przegląd", "tag": "notatka", "href": "optyka-ograniczenia-i-nowoczesne-rozwiazania.html"}, {"t": "Kontakt", "d": "Napisz do nas", "tag": "strona", "href": "index.html#contact"}];
+  const DEST=[{"t": "Strona główna — FAEM", "d": "Pipeline i wprowadzenie", "tag": "strona", "href": "index.html"}, {"t": "Generator FAEM", "d": "Kwadrat/koło, Df, domeny, dźwięk, upload", "tag": "narzędzie", "href": "faem_generator.html"}, {"t": "Live Spectrum Lab", "d": "Mikrofon → FFT → f0", "tag": "narzędzie", "href": "spektrum.html"}, {"t": "Kalkulator laboratoryjny", "d": "Częstotliwości płytki, fala, tłumienie (Q)", "tag": "narzędzie", "href": "kalkulator.html"}, {"t": "Chladni — skalowanie nodalne", "d": "Analiza i atlas częstotliwości (z dźwiękiem)", "tag": "notatka", "href": "chladni-skalowanie-nodalne.html"}, {"t": "Struktura jako programowalna częstotliwość", "d": "Notatka koncepcyjna", "tag": "notatka", "href": "struktura-jako-programowalna-czestotliwosc.html"}, {"t": "Optyka — ograniczenia i rozwiązania", "d": "Przegląd", "tag": "notatka", "href": "optyka-ograniczenia-i-nowoczesne-rozwiazania.html"}, {"t": "Kontakt", "d": "Napisz do nas", "tag": "strona", "href": "index.html#contact"}];
   const overlay=document.getElementById("cmdkOverlay"),input=document.getElementById("cmdkInput"),list=document.getElementById("cmdkList"),hint=document.getElementById("cmdkHint");
   if(!overlay)return;
   let items=DEST.slice(),active=0;

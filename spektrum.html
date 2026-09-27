@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Live Spectrum Lab — Fractal Vibration Lab</title>
+<meta name="description" content="Analizator spektrum na żywo: mikrofon → FFT → f0, harmoniczne, most do kalkulatora i generatora FAEM."/>
+<link rel="manifest" href="manifest.webmanifest"/>
+<meta name="theme-color" content="#05040f"/>
+<meta property="og:title" content="Live Spectrum Lab — Fractal Vibration Lab"/>
+<meta property="og:description" content="Microphone → live FFT → peak frequency, harmonics, FAEM bridge."/>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet"/>
+<style>
+:root{--bg:#05040f;--border:rgba(180,150,255,.12);--border2:rgba(180,150,255,.28);--text:#f7f4ff;--muted:#b8aee0;--dim:#7a6fa8;--violet:#9d7bff;--violet2:#d4c4ff;--cyan:#5eead4;--gold:#f0d49a;--danger:#f87171;--radius:18px;--serif:"Fraunces",Georgia,serif;--sans:Inter,system-ui,sans-serif;--mono:"JetBrains Mono",ui-monospace,monospace}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:100vh;line-height:1.6;background-image:radial-gradient(ellipse 80% 50% at 10% -8%,rgba(157,123,255,.22),transparent 55%),radial-gradient(ellipse 55% 40% at 95% 5%,rgba(94,234,212,.1),transparent 48%)}
+a{color:var(--violet2);text-decoration:none}a:hover{color:var(--gold)}
+.topbar{position:sticky;top:0;z-index:40;display:flex;justify-content:space-between;align-items:center;padding:12px 20px;background:rgba(5,4,15,.88);backdrop-filter:blur(18px);border-bottom:1px solid var(--border);gap:12px;flex-wrap:wrap}
+.brand{font-family:var(--serif);font-weight:600;font-size:15px}.brand span{color:var(--violet2)}
+.topbar-right{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.topbar a.back{font-size:13px;color:var(--muted);font-weight:500}.topbar a.back:hover{color:var(--violet2)}
+.lang-switch{display:flex;border:1px solid var(--border2);border-radius:8px;overflow:hidden}
+.lang-switch button{background:transparent;border:none;color:var(--dim);font-size:11px;font-weight:600;padding:5px 10px;cursor:pointer;font-family:inherit}
+.lang-switch button.active{background:rgba(143,107,255,.18);color:var(--violet2)}
+.status-dot{display:inline-flex;align-items:center;gap:7px;font-size:12px;color:var(--dim);font-family:var(--mono)}
+.status-dot i{width:7px;height:7px;border-radius:50%;background:var(--dim)}
+.status-dot.live i{background:var(--cyan);box-shadow:0 0 10px var(--cyan);animation:blink 1.6s ease-in-out infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.35}}
+.wrap{max-width:1100px;margin:0 auto;padding:24px 20px 80px}
+h1{font-family:var(--serif);font-size:clamp(26px,4vw,34px);font-weight:600;margin-bottom:8px;background:linear-gradient(135deg,#fff 20%,var(--violet2) 55%,var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.sub{color:var(--muted);font-size:14.5px;max-width:640px;margin-bottom:22px;line-height:1.7}
+.grid{display:grid;grid-template-columns:1.35fr 1fr;gap:18px}
+@media(max-width:900px){.grid{grid-template-columns:1fr}}
+.panel{background:linear-gradient(155deg,rgba(157,123,255,.07),rgba(16,12,36,.8));border:1px solid var(--border);border-radius:var(--radius);padding:16px;box-shadow:0 16px 40px -20px rgba(0,0,0,.45)}
+.panel-title{font-family:var(--serif);font-size:14px;font-weight:600;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.panel-title .dot{width:6px;height:6px;border-radius:50%;background:var(--cyan);box-shadow:0 0 8px var(--cyan)}
+.spectrum-frame{border-radius:14px;overflow:hidden;background:#07061a;box-shadow:0 0 0 1px rgba(180,150,255,.2)}
+canvas#spectrum{width:100%;height:220px;display:block}
+canvas#waterfall{width:100%;height:120px;display:block;margin-top:8px;border-radius:10px}
+.controls{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
+button.btn{border:none;border-radius:12px;padding:11px 16px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:8px;transition:all .2s}
+.btn-primary{background:linear-gradient(135deg,#5eead4,#0d9488);color:#042f2e}
+.btn-primary.recording{background:linear-gradient(135deg,#f87171,#ef4444);color:#fff}
+.btn-ghost{background:rgba(157,123,255,.1);color:var(--text);border:1px solid var(--border2)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.stat{background:rgba(0,0,0,.28);border:1px solid var(--border);border-radius:12px;padding:12px}
+.stat .lbl{font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--cyan);font-weight:700;margin-bottom:4px}
+.stat .val{font-family:var(--mono);font-size:22px;font-weight:700}
+.stat .val small{font-size:12px;color:var(--dim);font-weight:500}
+.stat .hint{font-size:11.5px;color:var(--muted);margin-top:4px}
+.harm-row{display:flex;gap:6px;flex-wrap:wrap}
+.harm-chip{font-family:var(--mono);font-size:11px;padding:5px 9px;border-radius:8px;background:rgba(157,123,255,.1);border:1px solid var(--border);color:var(--muted)}
+.harm-chip strong{color:var(--gold)}
+.section-lbl{font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--dim);font-weight:700;margin:14px 0 8px}
+.slider-row label{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-bottom:5px;font-weight:600}
+.slider-row label .v{color:var(--gold);font-family:var(--mono)}
+input[type=range]{width:100%;height:5px;accent-color:var(--cyan)}
+.links{display:flex;flex-direction:column;gap:8px;margin-top:12px}
+.links a.tool-link{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;border-radius:12px;border:1px solid var(--border);background:rgba(0,0,0,.25);color:var(--text);font-size:13px;font-weight:600}
+.links a.tool-link:hover{border-color:var(--cyan);color:var(--cyan)}
+.links a.tool-link span{font-size:12px;color:var(--muted);font-weight:500}
+.note{margin-top:18px;padding:14px 16px;border:1px dashed var(--border2);border-radius:14px;font-size:12.5px;color:var(--dim);line-height:1.65}
+.note strong{color:var(--violet2)}
+.meter-bg{height:6px;border-radius:99px;background:rgba(255,255,255,.06);overflow:hidden}
+.meter-fill{height:100%;width:0%;border-radius:99px;background:linear-gradient(90deg,var(--cyan),var(--violet));transition:width .08s linear}
+.err{color:var(--danger);font-size:13px;margin-top:10px;display:none}.err.show{display:block}
+footer{margin-top:28px;padding-top:18px;border-top:1px solid var(--border);font-size:12.5px;color:var(--dim)}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="brand">Fractal <span>Vibration</span> Lab</div>
+  <div class="topbar-right">
+    <span class="status-dot" id="statusDot"><i></i><span id="statusTxt">idle</span></span>
+    <a class="back" href="faem_generator.html" data-i18n="nav_gen">Generator →</a>
+    <a class="back" href="kalkulator.html" data-i18n="nav_kalk">Kalkulator →</a>
+    <a class="back" href="index.html" data-i18n="nav_home">← Home</a>
+    <div class="lang-switch"><button type="button" id="btnPL" class="active" onclick="setLang('pl')">PL</button><button type="button" id="btnEN" onclick="setLang('en')">EN</button></div>
+  </div>
+</div>
+<div class="wrap">
+  <h1 data-i18n="title">Live Spectrum Lab</h1>
+  <p class="sub" data-i18n="sub">Mikrofon → FFT na żywo → częstotliwość dominantna, harmoniczne i most do kalkulatora oraz generatora FAEM.</p>
+  <div class="grid">
+    <div class="panel">
+      <div class="panel-title"><span class="dot"></span><span data-i18n="panel_spec">Spektrum</span></div>
+      <div class="spectrum-frame"><canvas id="spectrum" width="800" height="220"></canvas></div>
+      <canvas id="waterfall" width="800" height="120"></canvas>
+      <div style="margin-top:10px">
+        <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--dim);margin-bottom:4px"><span data-i18n="lbl_level">Poziom wejścia</span><span id="lvlTxt">— dB</span></div>
+        <div class="meter-bg"><div class="meter-fill" id="lvlFill"></div></div>
+      </div>
+      <div class="controls">
+        <button class="btn btn-primary" id="btnMic" type="button">▶ <span data-i18n="btn_start">Start mikrofonu</span></button>
+        <button class="btn btn-ghost" id="btnFreeze" type="button" disabled data-i18n="btn_freeze">Zamroź</button>
+        <button class="btn btn-ghost" id="btnTone" type="button" data-i18n="btn_tone">Test 440 Hz</button>
+      </div>
+      <div class="err" id="errBox"></div>
+      <div class="section-lbl" data-i18n="sec_fft">Parametry FFT</div>
+      <div class="slider-row"><label><span data-i18n="lbl_fft">Rozmiar FFT</span> <span class="v" id="fftLbl">2048</span></label><input type="range" id="fftSize" min="10" max="13" step="1" value="11"/></div>
+      <div class="slider-row"><label><span data-i18n="lbl_smooth">Wygładzanie</span> <span class="v" id="smLbl">0.70</span></label><input type="range" id="smoothing" min="0" max="95" step="5" value="70"/></div>
+    </div>
+    <div>
+      <div class="panel">
+        <div class="panel-title"><span class="dot"></span><span data-i18n="panel_read">Odczyt</span></div>
+        <div class="stats">
+          <div class="stat"><div class="lbl">f0</div><div class="val" id="vF0">— <small>Hz</small></div><div class="hint" data-i18n="hint_f0">Częstotliwość szczytowa</div></div>
+          <div class="stat"><div class="lbl" data-i18n="lbl_note">Nota</div><div class="val" id="vNote">—</div><div class="hint" data-i18n="hint_note">Najbliższy ton</div></div>
+          <div class="stat"><div class="lbl" data-i18n="lbl_cent">Odstrojenie</div><div class="val" id="vCent">— <small>cent</small></div><div class="hint" data-i18n="hint_cent">Od nuty</div></div>
+          <div class="stat"><div class="lbl">RMS</div><div class="val" id="vRms">— <small>dB</small></div><div class="hint" data-i18n="hint_rms">Poziom</div></div>
+        </div>
+        <div class="section-lbl" data-i18n="sec_harm">Harmoniczne / piki</div>
+        <div class="harm-row" id="harmRow"><span class="harm-chip">—</span></div>
+      </div>
+      <div class="panel" style="margin-top:14px">
+        <div class="panel-title"><span class="dot"></span><span data-i18n="panel_bridge">Most FAEM</span></div>
+        <p style="font-size:13px;color:var(--muted)" data-i18n="bridge_p">Użyj f0 w kalkulatorze albo generatorze z N z bogactwa spektrum.</p>
+        <div class="links">
+          <a class="tool-link" id="linkCalc" href="kalkulator.html"><div><div data-i18n="link_calc">Kalkulator</div><span id="calcHint">f → tryb (m,n)</span></div><span>→</span></a>
+          <a class="tool-link" id="linkGen" href="faem_generator.html"><div><div data-i18n="link_gen">Generator FAEM</div><span id="genHint">N z spektrum</span></div><span>→</span></a>
+        </div>
+        <div class="section-lbl" data-i18n="sec_est">Szacunek złożoności</div>
+        <div class="stats">
+          <div class="stat"><div class="lbl" data-i18n="lbl_peaks">Piki</div><div class="val" id="vPeaks">—</div></div>
+          <div class="stat"><div class="lbl">Nest</div><div class="val" id="vNest">—</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="note"><strong data-i18n="note_t">Uwaga.</strong> <span data-i18n="note_p">Nie certyfikowany analizator — f0 to punkt startowy do FAEM.</span></div>
+  <footer>Fractal Vibration Lab · Live Spectrum · Astro_Katt</footer>
+</div>
+<script src="spektrum.js"></script>
+</body>
+</html>

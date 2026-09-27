@@ -4,6 +4,8 @@ const ASSETS = [
   './index.html',
   './faem_generator.html',
   './kalkulator.html',
+  './spektrum.html',
+  './spektrum.js',
   './chladni-skalowanie-nodalne.html',
   './manifest.webmanifest'
 ];
